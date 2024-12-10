@@ -23,8 +23,8 @@ class UserRepository extends Repository
     {
         $query = sprintf(
             'INSERT INTO `%s` 
-                (`firstname`,`lastname`,`password`,`email`) 
-                VALUES (:firstname,:lastname,:password,:email)',
+                (`first_name`,`last_name`,`password`,`email`) 
+                VALUES (:first_name,:last_name,:password,:email)',
             $this->getTableName()
         );
 
@@ -33,8 +33,8 @@ class UserRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
+            'first_name' => $user->getfirst_name(),
+            'last_name' => $user->getlast_name(),
             'password' => $user->getPassword(),
             'email' => $user->getEmail()
         ]);
@@ -66,6 +66,33 @@ class UserRepository extends Repository
     }
 
     /**
+     * Récupère un user par son email
+     * @param string $email
+     * @return User|null
+     */
+    public function getByEmail(string $email): ?User
+    {
+        $query = sprintf(
+            'SELECT * FROM `%s` WHERE `email`=:email',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return null; }
+
+        $success = $sth->execute(['email' => $email]);
+
+        if(!$success) { return null; }
+
+        if($sth->rowCount() === 0) { return null; }
+
+        $user = new User($sth->fetch());
+        
+        return $user;
+    }
+
+    /**
      * Met à jour un user en base de données
      * @param User $user
      * @return User|null
@@ -74,7 +101,7 @@ class UserRepository extends Repository
     {
         $query = sprintf(
             'UPDATE `%s` 
-                SET `firstname`=:firstname,`lastname`=:lastname,`email`=:email,`password`=:password
+                SET `first_name`=:first_name,`last_name`=:last_name,`email`=:email,`password`=:password
                 WHERE `id`=:id',
             $this->getTableName()
         );
@@ -85,8 +112,8 @@ class UserRepository extends Repository
 
         $success = $sth->execute([
             'id' => $user->getId(),
-            'firstname' => $user->getFirstname(),
-            'lastname' => $user->getLastname(),
+            'first_name' => $user->getfirst_name(),
+            'last_name' => $user->getlast_name(),
             'email' => $user->getEmail(),
             'password' => $user->getPassword()
         ]);

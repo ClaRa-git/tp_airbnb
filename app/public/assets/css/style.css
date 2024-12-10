@@ -27,6 +27,15 @@ h2 {
     align-items: center;
 }
 
+.error {
+    color: red;
+    border: 1px solid red;
+    padding: 10px;
+    border-radius: 20px;
+    margin: 10px;
+    background-color: rgb(255, 150, 150);
+}
+
 form {
     border-radius: 20px;
     padding: 20px;

@@ -64,6 +64,7 @@ final class App
 
         // Page de création de compte
         $this->router->get('/inscription', [UserController::class, 'displaySubscribe']);
+        $this->router->post('/inscription', [UserController::class, 'processSubscribe']);
 
         // Page de login
         $this->router->get('/login', [UserController::class, 'displayLogin']);

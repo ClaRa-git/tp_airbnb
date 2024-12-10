@@ -5,19 +5,19 @@ namespace App\Model\Entity;
 use Symplefony\Model\Entity;
 class User extends Entity
 { 
-    protected string $firstname;
-    public function getFirstname(): string { return $this->firstname; }
-    public function setFirstname(int $value): self
+    protected string $first_name;
+    public function getfirst_name(): string { return $this->first_name; }
+    public function setfirst_name(int $value): self
     {
-        $this->firstname = $value;
+        $this->first_name = $value;
         return $this;
     }
 
-    protected string $lastname;
-    public function getLastname(): string { return $this->lastname; }
-    public function setLastname(int $value): self
+    protected string $last_name;
+    public function getlast_name(): string { return $this->last_name; }
+    public function setlast_name(int $value): self
     {
-        $this->lastname = $value;
+        $this->last_name = $value;
         return $this;
     }
 

@@ -1,6 +1,15 @@
+<div>
+    <a href="/">🔙 Retour</a>
+</div>
 <h1>Créer mon compte</h1>
 
-<form action="/create-account" method="post">
+<form action="/inscription" id="form-create-user" method="post">
+
+    <!-- gestion des messages d'erreur -->
+    <?php if (isset($_GET['error'])): ?>
+        <p class="error"><?php echo $_GET['error'] ?></p>
+    <?php endif; ?>
+
     <div>
         <label for="first_name">Prénom</label>
         <input type="text" id="first_name" name="first_name" required>
