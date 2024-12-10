@@ -48,7 +48,7 @@ class Rental extends Entity
         return $this;
     }
 
-    // Foreign key de la table type_logement
+    // Foreign key / Liaison avec la table type_logement
     protected int $type_logement;
     public function getTypeLogementId(): int
     {
@@ -63,7 +63,7 @@ class Rental extends Entity
         $this->type_logement = $id;
     }
 
-    // Foreign key de la table addresses
+    // Foreign key / Liaison avec la table addresses
     protected int $address_id;
     public function getAddressId(): int
     {
