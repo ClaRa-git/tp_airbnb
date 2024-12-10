@@ -1,0 +1,35 @@
+<div id="top-container">
+    <div>
+        <a href="/inscription">Créer un compte</a>
+    </div>
+    <div>
+        <a href="/login">Se connecter</a>
+    </div>
+</div>
+<main>
+    <h1>Accueil</h1>
+
+    <?php if(!$isOwner): ?>
+        <div>
+            <h2>Liste des biens disponibles :</h2>
+        </div>
+        <?php else: ?>
+        <div>
+            <h2>Liste de vos biens :</h2>
+        </div>
+    <?php endif ?>
+    
+    <?php if (!empty($rentals)): ?>
+        <div class="rentals-list">
+            <?php foreach ($rentals as $rental): ?>
+                <div class="post-rental">
+                    <a href="/rental/<?php echo $rental->getId() ?>">
+                        <?php echo $rental->getTitle() ?>
+                    </a>
+                </div>
+            <?php endforeach ?>
+        </div>
+    <?php else: ?>
+        <div>Aucun bien proposé.</div>
+    <?php endif ?>
+</main>

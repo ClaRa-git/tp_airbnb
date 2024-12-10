@@ -118,6 +118,35 @@ class RentalRepository extends Repository
     public function getById(int $id): ?Rental { return $this->readById(Rental::class, $id); }
 
     /**
+     * Récupère toutes les annonces d'un user par son id
+     * @param int $id
+     * @return array
+     */
+    public function getAllForOwner(int $id): array
+    {
+        $query = sprintf(
+            'SELECT * FROM %s WHERE owner_id=:id',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return []; }
+
+        $success = $sth->execute([
+            'id' => $id
+        ]);
+
+        if(!$success) { return []; }
+
+        $rentals = [];
+
+        while($rental = $sth->fetch()) { $rentals[] = new Rental($rental); }
+
+        return $rentals;
+    }
+
+    /**
      * Supprime une annonce par son id
      * @param int $id
      * @return bool

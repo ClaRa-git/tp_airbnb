@@ -58,6 +58,9 @@ final class App
         // -- Formats des paramètres --
         // {id} doit être un nombre
         $this->router->pattern('id', '\d+');
+
+        // -- Pages communes --
+        $this->router->get('/', [RentalController::class, 'displayRentals']);
     }
 
     // Démarrage du routeur
