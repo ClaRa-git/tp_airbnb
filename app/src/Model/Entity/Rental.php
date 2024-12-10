@@ -10,22 +10,22 @@ class Rental extends Entity
 {
     protected string $title;
     public function getTitle(): string { return $this->title; }
-    public function setTitle(int $value): self
+    public function setTitle(string $value): self
     {
         $this->title = $value;
         return $this;
     }
 
-    protected string $price;
-    public function getPrice(): string { return $this->price; }
-    public function setPrice(int $value): self
+    protected float $price;
+    public function getPrice(): float { return $this->price; }
+    public function setPrice(float $value): self
     {
         $this->price = $value;
         return $this;
     }
 
-    protected string $surface;
-    public function getSurface(): string { return $this->surface; }
+    protected int $surface;
+    public function getSurface(): int { return $this->surface; }
     public function setSurface(int $value): self
     {
         $this->surface = $value;
@@ -34,7 +34,7 @@ class Rental extends Entity
 
     protected string $description;
     public function getDescription(): string { return $this->description; }
-    public function setDescription(int $value): self
+    public function setDescription(string $value): self
     {
         $this->description = $value;
         return $this;
@@ -49,49 +49,50 @@ class Rental extends Entity
     }
 
     // Foreign key / Liaison avec la table type_logement
-    protected int $type_logement;
-    public function getTypeLogementId(): int
+    protected TypeLogement $type_logement;
+    public function getTypeLogementId(): TypeLogement
     {
-        if(!isset($this->type_logement)) {
-            $this->type_logement = RepoManager::getRM()->getTypeLogementRepo()->getById($this->id);
+        if(!isset($this->type_logement_id)) {
+            $this->type_logement = RepoManager::getRM()->getTypeLogementRepo()->getTypeForRental($this->id);
         }
 
         return $this->type_logement;
     }
-    public function setTypeLogement(int $id): void
+    public function setTypeLogement(TypeLogement $type_logement): self
     {
-        $this->type_logement = $id;
+        $this->type_logement = $type_logement;
+        return $this;
     }
 
     // Foreign key / Liaison avec la table addresses
-    protected int $address_id;
-    public function getAddressId(): int
+    protected Address $address;
+    public function getAddress(): Address
     {
         if(!isset($this->address_id)) {
-            $this->address_id = RepoManager::getRM()->getAddressRepo()->getById($this->id);
+            $this->address = RepoManager::getRM()->getAddressRepo()->getAddressForRental($this->id);
         }
 
-        return $this->address_id;
+        return $this->address;
     }
-    public function setAddressId(int $value): self
+    public function setAddressId(Address $value): self
     {
-        $this->address_id = $value;
+        $this->address = $value;
         return $this;
     }
 
     // Foreign key / Liaison avec la table users
-    protected int $owner_id;
-    public function getOwnerId(): int
+    protected int $owner;
+    public function getOwner(): int
     {
         if(!isset($this->owner_id)) {
-            $this->owner_id = RepoManager::getRM()->getUserRepo()->getById($this->id);
+            $this->owner = RepoManager::getRM()->getUserRepo()->getUserForRental($this->id);
         }
-        
-        return $this->owner_id;
+
+        return $this->owner;
     }
-    public function setOwnerId(int $value): self
+    public function setOwner(User $value): self
     {
-        $this->owner_id = $value;
+        $this->owner = $value;
         return $this;
     }
 }

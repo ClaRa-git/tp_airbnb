@@ -1,5 +1,10 @@
 <h1>Se connecter</h1>
 
+<!-- gestion des messages d'erreur -->
+<?php if (isset($_GET['error'])): ?>
+    <p class="error"><?php echo $_GET['error'] ?></p>
+<?php endif; ?>
+
 <form action="/login" method="post">
     <div>
         <label for="email">Adresse email</label>

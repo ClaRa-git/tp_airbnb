@@ -12,6 +12,11 @@ use Symplefony\View;
 
 class UserController extends Controller
 {
+    /**
+     * Créer un nouvel utilisateur
+     * @param ServerRequest $request
+     * @return void
+     */
     public function create(ServerRequest $request): void
     {
         $user_data = $request->getParsedBody();
@@ -115,6 +120,70 @@ class UserController extends Controller
                 $this->redirect('/login');
             }
         }
+    }
+
+    /**
+     * Traitement du formulaire de connexion
+     * pas de paramètre
+     * @return void
+     */
+    public function processLogin(): void
+    {
+        // On vérifie que l'on recoit bien les données du formulaire
+        if (isset($_POST['email']) && isset($_POST['password'])) {
+
+            // On sécurise les données
+            $email = strtolower($this->secureData($_POST['email']));
+            $password = $this->secureData($_POST['password']);
+
+            // On vérifie si les données sont vides
+            if (empty($email) || empty($password)) {
+                $this->redirect('/login?error=Veuillez remplir tous les champs');
+            }
+
+            // On vérifie le format de l'email
+            if (!$this->validEmail($email)) {
+                $this->redirect('/login?error=Le format de l\'email est incorrect');
+            }
+
+            // On récupère l'utilisateur
+            $user = RepoManager::getRM()->getUserRepo()->getByEmail($email);
+
+            // On vérifie si l'utilisateur existe
+            if ($user == null) {
+                $this->redirect('/login?error=Cet email n\'existe pas');
+            }
+
+            // On vérifie le mot de passe
+            if (!password_verify($password, $user->getPassword())) {
+                $this->redirect('/login?error=Le mot de passe est incorrect');
+            }
+
+            session_start();
+
+            // On connecte l'utilisateur
+            $_SESSION['type'] = 'user';
+            $_SESSION['user_id'] = $user->getId();
+            $_SESSION['user_email'] = $user->getEmail();
+            $_SESSION['user_first_name'] = $user->getfirst_name();
+            $_SESSION['user_last_name'] = $user->getlast_name();
+            $user->setPassword("");
+
+            $this->redirect('/');
+        }
+    }
+
+    /**
+     * Déconnexion de l'utilisateur
+     * pas de paramètre
+     * @return void
+     */
+    public function processLogout(): void
+    {
+        session_start();
+        session_destroy();
+
+        $this->redirect('/');
     }
 
     /**

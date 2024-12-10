@@ -10,9 +10,17 @@ class UserRepository extends Repository
 {
     /**
      * Retourne le nom de la table en base de données
+     * pas de paramètre
      * @return string
      */
     protected function getTableName(): string { return 'users'; }
+
+    /**
+     * Retourne le nom de la table rental
+     * pas de paramètre
+     * @return string
+     */
+    private function getRentalName(): string { return 'rental'; }
 
     /**
      * Crée un nouvel utilisateur en base de données
@@ -121,5 +129,35 @@ class UserRepository extends Repository
         if(!$success) { return null; }
 
         return $user;
+    }
+
+    /**
+     * Récupère un user pour une location
+     * @param int $id
+     * @return User|null
+     */
+    public function getUserForRental(int $id): ?User
+    {
+        $query = sprintf(
+            'SELECT u.* FROM `%1$s` as u
+            JOIN `%2$s` as r ON u.id = r.user_id
+            WHERE r.id = :id',
+            $this->getTableName(),
+            $this->getRentalName()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return null; }
+
+        $success = $sth->execute(['id' => $id]);
+
+        if(!$success) { return null; }
+
+        $user_data = $sth->fetch();
+
+        if(!$user_data) { return null; }
+
+        return new User($user_data);
     }
 }

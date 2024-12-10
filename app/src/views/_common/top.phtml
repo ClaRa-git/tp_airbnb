@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -12,3 +14,24 @@
 </head>
 
 <body>
+
+<!-- TODO: Gestion de l'affichage des boutons de connexion et d'inscription et de déconnexion par la session -->
+    <div id="top-container">
+        <?php if (isset($_SESSION['user_email'])): ?>
+            <div>
+                Bonjour <?php echo $_SESSION['user_first_name'] ?>
+            </div>
+            <div>
+                <a href="/logout">Se déconnecter</a>
+            </div>
+        <?php else: ?>
+            <div id="top-container">
+            <div>
+                <a href="/inscription">Créer un compte</a>
+            </div>
+            <div>
+                <a href="/login">Se connecter</a>
+            </div>
+        </div>
+        <?php endif ?>
+    </div>

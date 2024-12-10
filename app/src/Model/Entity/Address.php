@@ -16,7 +16,7 @@ class Address extends Entity
 
     protected string $street;
     public function getStreet(): string { return $this->street; }
-    public function setStreet(int $value): self
+    public function setStreet(string $value): self
     {
         $this->street = $value;
         return $this;
@@ -24,7 +24,7 @@ class Address extends Entity
 
     protected string $city;
     public function getCity(): string { return $this->city; }
-    public function setCity(int $value): self
+    public function setCity(string $value): self
     {
         $this->city = $value;
         return $this;
@@ -32,15 +32,15 @@ class Address extends Entity
 
     protected string $country;
     public function getCountry(): string { return $this->country; }
-    public function setCountry(int $value): self
+    public function setCountry(string $value): self
     {
         $this->country = $value;
         return $this;
     }
 
-    protected string $complement;
-    public function getComplement(): string { return $this->complement; }
-    public function setComplement(int $value): self
+    protected ?string $complement;
+    public function getComplement(): ?string { return $this->complement; }
+    public function setComplement(string $value): ?self
     {
         $this->complement = $value;
         return $this;

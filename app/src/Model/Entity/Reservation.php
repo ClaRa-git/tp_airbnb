@@ -28,10 +28,6 @@ class Reservation extends Entity
     protected int $user_id;
     public function getUserId(): int
     {
-        if(!isset($this->user_id)) {
-            $this->user_id = RepoManager::getRM()->getUserRepo()->getById($this->id);
-        }
-
         return $this->user_id;
     }
     public function setUserId(int $value): self
@@ -44,10 +40,6 @@ class Reservation extends Entity
     protected int $rental_id;
     public function getRentalId(): int
     {
-        if(!isset($this->rental_id)) {
-            $this->rental_id = RepoManager::getRM()->getRentalRepo()->getById($this->id);
-        }
-
         return $this->rental_id;
     }
     public function setRentalId(int $value): self

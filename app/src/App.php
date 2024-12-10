@@ -68,6 +68,10 @@ final class App
 
         // Page de login
         $this->router->get('/login', [UserController::class, 'displayLogin']);
+        $this->router->post('/login', [UserController::class, 'processLogin']);
+
+        // Page de logout
+        $this->router->get('/logout', [UserController::class, 'processLogout']);
 
         // Page d'affichage d'une location
         $this->router->get('/rental/{id}', [RentalController::class, 'show']);
