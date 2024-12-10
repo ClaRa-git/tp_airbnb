@@ -178,7 +178,6 @@ class UserController extends Controller
      */
     public function processLogout(): void
     {
-        session_start();
         session_destroy();
 
         $this->redirect('/');
