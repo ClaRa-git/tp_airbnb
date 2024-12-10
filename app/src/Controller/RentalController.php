@@ -38,7 +38,7 @@ class RentalController extends Controller
     }
 
     /**
-     * Affiche le détail d'une location
+     * Affiche le détail d'une location grace à son id
      * @param int
      * @return void
      */

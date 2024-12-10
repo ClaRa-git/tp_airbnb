@@ -61,6 +61,9 @@ final class App
 
         // -- Pages communes --
         $this->router->get('/', [RentalController::class, 'displayRentals']);
+
+        // Page d'affichage d'une location
+        $this->router->get('/rental/{id}', [RentalController::class, 'show']);
     }
 
     // Démarrage du routeur
