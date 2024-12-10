@@ -1,0 +1,26 @@
+<main>
+    <h1>Réservations</h1>
+
+    <h2>Mes réservations</h2>
+    <?php
+
+    use App\Model\Repository\RepoManager;
+
+    if (!empty($reservations)): ?>
+        <ul>
+            <?php foreach ($reservations as $reservation): ?>
+                <li>
+                    <div class="post-rental">
+                        <a href="/rental/<?php echo $reservation->getRentalId() ?>">
+                            <?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd() ?>
+                            <?php echo RepoManager::getRM()->getRentalRepo()->getRentalForReservation($reservation->getRentalId())->getTitle() ?>
+                        </a>
+                    </div>
+                </li>
+            <?php endforeach ?>
+            <br>
+        </ul>
+    <?php else: ?>
+        <div>Aucune réservation.</div>
+    <?php endif ?>
+</main>

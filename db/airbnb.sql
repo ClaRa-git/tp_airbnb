@@ -101,6 +101,7 @@ DROP TABLE IF EXISTS `rentals`;
 
 CREATE TABLE `rentals` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
+    `title` varchar(50) NOT NULL,
     `price` decimal(6, 2) NOT NULL,
     `surface` int(11) NOT NULL,
     `description` text NOT NULL,

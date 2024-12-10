@@ -7,7 +7,8 @@
 // Déclaration du namespace de ce fichier
 namespace App;
 
-use App\Controller\PageController;
+use App\Controller\RentalController;
+use App\Controller\ReservationController;
 use App\Controller\UserController;
 use Exception;
 use Throwable;
@@ -57,6 +58,21 @@ final class App
         // -- Formats des paramètres --
         // {id} doit être un nombre
         $this->router->pattern('id', '\d+');
+
+        // -- Pages communes --
+        $this->router->get('/', [RentalController::class, 'displayRentals']);
+
+        // Page de création de compte
+        $this->router->get('/inscription', [UserController::class, 'displaySubscribe']);
+
+        // Page de login
+        $this->router->get('/login', [UserController::class, 'displayLogin']);
+
+        // Page d'affichage d'une location
+        $this->router->get('/rental/{id}', [RentalController::class, 'show']);
+
+        // Page de liste des réservations
+        $this->router->get('/reservations', [ReservationController::class, 'show']);
     }
 
     // Démarrage du routeur
