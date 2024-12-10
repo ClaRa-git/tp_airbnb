@@ -4,7 +4,7 @@ namespace App\Model\Entity;
 
 use Symplefony\Model\Entity;
 class User extends Entity
-{
+{ 
     protected string $firstname;
     public function getFirstname(): string { return $this->firstname; }
     public function setFirstname(int $value): self

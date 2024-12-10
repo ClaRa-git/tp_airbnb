@@ -56,7 +56,7 @@ class UserRepository extends Repository
     }
 
     /**
-     * Récupère un utilisateur par son id
+     * Récupère un user par son id
      * @param int $id
      * @return User|null
      */
@@ -66,7 +66,7 @@ class UserRepository extends Repository
     }
 
     /**
-     * Met à jour un utilisateur en base de données
+     * Met à jour un user en base de données
      * @param User $user
      * @return User|null
      */
