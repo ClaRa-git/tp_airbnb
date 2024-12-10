@@ -26,6 +26,6 @@ class AuthController extends Controller
     public static function isLogged(): bool
     {
         // TODO: Le vrai contrôle de session
-        return false;
+        return true;
     }
 }

@@ -62,15 +62,17 @@ final class App
         // -- Pages communes --
         $this->router->get('/', [RentalController::class, 'displayRentals']);
 
-        // -- Page de connexion --
-        $this->router->get('/login', [UserController::class, 'displayLogin']);
-
-        // -- Page de création d'un compte --
+        // Page de création de compte
         $this->router->get('/inscription', [UserController::class, 'displaySubscribe']);
+
+        // Page de login
+        $this->router->get('/login', [UserController::class, 'displayLogin']);
 
         // Page d'affichage d'une location
         $this->router->get('/rental/{id}', [RentalController::class, 'show']);
 
+        // Page de liste des réservations
+        $this->router->get('/reservations', [ReservationController::class, 'show']);
     }
 
     // Démarrage du routeur
