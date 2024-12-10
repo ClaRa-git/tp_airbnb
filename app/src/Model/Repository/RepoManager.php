@@ -24,6 +24,9 @@ class RepoManager
     private ReservationRepository $reservation_repository;
     public function getReservationRepo(): ReservationRepository { return $this->reservation_repository; }
 
+    private EquipmentRepository $equipment_repository;
+    public function getEquipmentRepo(): EquipmentRepository { return $this->equipment_repository; }
+
     private function __construct()
     {
         $pdo = Database::getPDO();
@@ -33,5 +36,6 @@ class RepoManager
         $this->type_logement_repository = new TypeLogementRepository($pdo);
         $this->address_repository = new AddressRepository($pdo);
         $this->reservation_repository = new ReservationRepository($pdo);
+        $this->equipment_repository = new EquipmentRepository($pdo);
     }
 }

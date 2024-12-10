@@ -68,14 +68,14 @@ class RentalRepository extends Repository
     public function getAddress(int $id): ?Address { return RepoManager::getRM()->getAddressRepo()->getById($id); }
 
     /**
-     * Récupère le propriétaire (user) par son id
+     * Récupère l'user par son id
      * @param int $id
      * @return User|null
      */
     public function getOwner(int $id): ?User { return RepoManager::getRM()->getUserRepo()->getById($id); }
 
     /**
-     * Récupère toutes les locations d'un propriétaire par son id
+     * Récupère toutes les locations d'un user par son id
      * @param int $id
      * @return array
      */
