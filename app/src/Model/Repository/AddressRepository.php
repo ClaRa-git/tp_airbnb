@@ -15,13 +15,6 @@ class AddressRepository extends Repository
     protected function getTableName(): string { return 'addresses'; }
 
     /**
-     * Retourne le nom de la table Rental
-     * pas de paramètre
-     * @return string
-     */
-    private function getRentalName(): string { return 'rentals'; }
-
-    /**
      * Crée une nouvelle adresse en base de données
      * @param Address $address
      * @return Address|null

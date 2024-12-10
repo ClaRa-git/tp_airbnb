@@ -14,17 +14,7 @@ class TypeLogementRepository extends Repository
      */
     protected function getTableName(): string
     {
-        return 'type_logement';
-    }
-
-    /**
-     * Retourne le nom de la table Rental
-     * pas de paramètre
-     * @return string
-     */
-    private function getRentalName(): string
-    {
-        return 'rental';
+        return 'types_logement';
     }
 
     /**
@@ -47,33 +37,4 @@ class TypeLogementRepository extends Repository
         return $this->readAll(TypeLogement::class);
     }
 
-    /**
-     * Récupère le type de logement d'une annonce
-     * @param int $id
-     * @return TypeLogement
-     */
-    public function getTypeForRental(int $id): ?TypeLogement
-    {
-        $query = sprintf(
-            'SELECT tl.* FROM `%1$s` as tl
-            JOIN `%2$s` as r ON tl.id = r.type_logement_id
-            WHERE r.id = :id',
-            $this->getTableName(),
-            $this->getRentalName()
-        );
-
-        $sth = $this->pdo->prepare($query);
-
-        if(!$sth) { return null;}
-
-        $success = $sth->execute([
-            'id' => $id
-        ]);
-
-        if(!$success) { return null;}
-
-        $type_logement_data = $sth->fetch();
-
-        return new TypeLogement($type_logement_data);
-    }
 }
