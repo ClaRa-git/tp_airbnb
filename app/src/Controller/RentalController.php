@@ -17,22 +17,13 @@ class RentalController extends Controller
     {
         $view = new View('rental:user:list');
 
-        // TODO: renvoyer toutes les locations et faire le tri dans la page d'arrivée
-        // plus de traitement ici
-        // Si l'utilisateur est connecté et est propriétaire
-        if(AuthController::isOwner()) {
-            $data = [
-                'title' => 'Mes locations - Airbnb.com',
-                'isOwner' => true,
-                'rentals' => RepoManager::getRM()->getRentalRepo()->getAllForOwner(2) // $_SESSION['user_id']
-            ];
-        } else { // Si l'utilisateur n'est pas connecté
-            $data = [
-                'title' => 'Locations - Airbnb.com',
-                'isOwner' => false,
-                'rentals' => RepoManager::getRM()->getRentalRepo()->getAll()
-            ];
-        }
+        $isOwner = AuthController::isOwner();
+
+        $data = [
+            'title' => 'Locations - Airbnb.com',
+            'isOwner' => $isOwner,
+            'rentals' => RepoManager::getRM()->getRentalRepo()->getAll() 
+        ];
 
         $view->render($data);
     }

@@ -42,6 +42,7 @@ final class App
     // Démarrage de l'application
     public function start(): void
     {
+        session_start();
         $this->registerRoutes();
         $this->startRouter();
     }

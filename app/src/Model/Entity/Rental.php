@@ -48,12 +48,20 @@ class Rental extends Entity
         return $this;
     }
 
+    protected int $type_logement_id;
+    public function getTypeLogementId(): int { return $this->type_logement_id; }
+    public function setTypeLogementId(int $value): self
+    {
+        $this->type_logement_id = $value;
+        return $this;
+    }
+
     // Foreign key / Liaison avec la table type_logement
     protected TypeLogement $type_logement;
-    public function getTypeLogementId(): TypeLogement
+    public function getTypeLogement(): TypeLogement
     {
         if(!isset($this->type_logement_id)) {
-            $this->type_logement = RepoManager::getRM()->getTypeLogementRepo()->getTypeForRental($this->id);
+            $this->type_logement = RepoManager::getRM()->getTypeLogementRepo()->getById($this->type_logement_id);
         }
 
         return $this->type_logement;
@@ -64,28 +72,44 @@ class Rental extends Entity
         return $this;
     }
 
+    protected int $address_id;
+    public function getAddressId(): int { return $this->address_id; }
+    public function setAddressId(int $value): self
+    {
+        $this->address_id = $value;
+        return $this;
+    }
+
     // Foreign key / Liaison avec la table addresses
     protected Address $address;
     public function getAddress(): Address
     {
         if(!isset($this->address_id)) {
-            $this->address = RepoManager::getRM()->getAddressRepo()->getAddressForRental($this->id);
+            $this->address = RepoManager::getRM()->getAddressRepo()->getById($this->address_id);
         }
 
         return $this->address;
     }
-    public function setAddressId(Address $value): self
+    public function setAddress(Address $value): self
     {
         $this->address = $value;
         return $this;
     }
 
+    protected int $owner_id;
+    public function getOwnerId(): int { return $this->owner_id; }
+    public function setOwnerId(int $value): self
+    {
+        $this->owner_id = $value;
+        return $this;
+    }
+
     // Foreign key / Liaison avec la table users
-    protected int $owner;
-    public function getOwner(): int
+    protected User $owner;
+    public function getOwner(): User
     {
         if(!isset($this->owner_id)) {
-            $this->owner = RepoManager::getRM()->getUserRepo()->getUserForRental($this->id);
+            $this->owner = RepoManager::getRM()->getUserRepo()->getById($this->owner_id);
         }
 
         return $this->owner;

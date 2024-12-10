@@ -159,8 +159,6 @@ class UserController extends Controller
                 $this->redirect('/login?error=Le mot de passe est incorrect');
             }
 
-            session_start();
-
             // On connecte l'utilisateur
             $_SESSION['type'] = 'user';
             $_SESSION['user_id'] = $user->getId();

@@ -106,36 +106,6 @@ class AddressRepository extends Repository
     }
 
     /**
-     * Récupère l'adresse d'une location
-     * @param int $id
-     * @return Address|null
-     */
-    public function getAddressForRental(int $id): ?Address
-    {
-        $query = sprintf(
-            'SELECT a.* FROM `%1$s` as a
-            JOIN `%2$s` as r ON a.id = r.address_id
-            WHERE r.id = :id',
-            $this->getTableName(),
-            $this->getRentalName()
-        );
-
-        $sth = $this->pdo->prepare($query);
-
-        if(!$sth) { return null; }
-
-        $success = $sth->execute(['id' => $id]);
-
-        if(!$success) { return null; }
-
-        $address_data = $sth->fetch();
-
-        if(!$address_data) { return null; }
-
-        return new Address($address_data);
-    }
-
-    /**
      * Supprime une adresse en base de données
      * Ne supprimera l'adresse que si elle n'est pas liée à une location
      * @param int $id
