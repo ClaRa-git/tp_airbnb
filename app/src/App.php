@@ -7,6 +7,7 @@
 // Déclaration du namespace de ce fichier
 namespace App;
 
+use App\Controller\AddressController;
 use App\Controller\RentalController;
 use App\Controller\ReservationController;
 use App\Controller\UserController;
@@ -76,6 +77,10 @@ final class App
 
         // Page d'affichage d'une location
         $this->router->get('/rental/{id}', [RentalController::class, 'show']);
+
+        // Page de création d'une location
+        $this->router->get('/rental/add', [RentalController::class, 'displayAddRental']);
+        $this->router->post('/rental/add', [RentalController::class, 'processAddRental']);
 
         // Page de liste des réservations
         $this->router->get('/reservations', [ReservationController::class, 'show']);

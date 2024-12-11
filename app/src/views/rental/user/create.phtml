@@ -1,0 +1,66 @@
+<div>
+    <a href="/">🔙 Retour</a>
+</div>
+
+<h1>Créer une location</h1>
+
+<form action="/rental/add" id="form-create-rental" method="post">
+
+    <!-- gestion des messages d'erreur -->
+    <?php if (isset($_GET['error'])): ?>
+        <p class="error"><?php echo $_GET['error'] ?></p>
+    <?php endif; ?>
+
+    <div>
+        <label for="input-title">Titre :</label>
+        <input type="text" name="title" id="input-title">
+    </div>
+    <div>
+        <label for="input-price">Prix :</label>
+        <input type="number" name="price" id="input-price">
+    </div>
+    <div>
+        <label for="input-surface">Surface</label>
+        <input type="number" name="surface" id="input-surface">
+    </div>
+    <div>
+        <label for="input-description">Description :</label>
+        <textarea name="description" id="input-description"></textarea>
+    </div>
+    <div>
+        <label for="input-beddings">Nombre de couchage :</label>
+        <input type="number" name="beddings" id="input-beddings">
+    </div>
+    <div>
+        <label for="input-number-address">Numéro de rue :</label>
+        <input type="number" name="number-address" id="input-number-address">
+    </div>
+    <div>
+        <label for="input-street">Rue :</label>
+        <input type="text" name="street" id="input-street">
+    </div>
+    <div>
+        <label for="input-city">Ville :</label>
+        <input type="text" name="city" id="input-city">
+    </div>
+    <div>
+        <label for="iniput-country">Pays :</label>
+        <input type="text" name="country" id="input-country">
+    </div>
+    <div>
+        <label for="input-complement">Complément d'adresse :</label>
+        <input type="text" name="complement" id="input-complement">
+    </div>
+    <div>
+        <label for="input-type-logement">Type de logement :</label>
+        <!-- TODO: récupérer les types de logement depuis la base de données -->
+        <select name="type-logement" id="input-type-logement">
+            <option value="1">Appartement</option>
+            <option value="2">Maison</option>
+            <option value="3">Studio</option>
+        </select>
+    </div>
+    <div>
+        <button type="submit">Ajouter</button>
+    </div>
+</form>

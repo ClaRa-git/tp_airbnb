@@ -16,13 +16,6 @@ class UserRepository extends Repository
     protected function getTableName(): string { return 'users'; }
 
     /**
-     * Retourne le nom de la table rental
-     * pas de paramètre
-     * @return string
-     */
-    private function getRentalName(): string { return 'rentals'; }
-
-    /**
      * Crée un nouvel utilisateur en base de données
      * @param User $user
      * @return User|null

@@ -27,8 +27,8 @@ class RentalRepository extends Repository
     {
         $query = sprintf(
             'INSERT INTO %s
-            (title, price, surface, description, type_logement_id, address_id, owner_id) 
-            VALUES (:title, :price, :surface, :description, :type_logement_id, :address_id, :owner_id)',
+            (title, price, surface, description, beddings, type_logement_id, address_id, owner_id) 
+            VALUES (:title, :price, :surface, :description, :beddings, :type_logement_id, :address_id, :owner_id)',
             $this->getTableName()
         );
 
@@ -41,6 +41,7 @@ class RentalRepository extends Repository
             'price' => $rental->getPrice(),
             'surface' => $rental->getSurface(),
             'description' => $rental->getDescription(),
+            'beddings' => $rental->getBeddings(),
             'type_logement_id' => $rental->getTypeLogementId(),
             'address_id' => $rental->getAddressId(),
             'owner_id' => $rental->getOwnerId()

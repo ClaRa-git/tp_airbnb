@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
+use App\Tools\Functions;
 use Laminas\Diactoros\ServerRequest;
 
 use Symplefony\Controller;
@@ -26,8 +27,7 @@ class UserController extends Controller
         $user_created = RepoManager::getRM()->getUserRepo()->create($user);
 
         if (is_null($user_created)) {
-            // TODO: gérer une erreur
-            $this->redirect('/user/inscription');
+            $this->redirect('/user/inscription?error=Une erreur est survenue lors de la création de votre compte');
         }
 
         $this->redirect('/user/login');
@@ -66,7 +66,7 @@ class UserController extends Controller
     }
 
     /**
-     * Traitement du formulaire de connexion
+     * Traitement du formulaire d'inscription
      * pas de paramètre
      * @return void
      */
@@ -76,24 +76,23 @@ class UserController extends Controller
         if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
 
             // On sécurise les données
-            $first_name = $this->secureData($_POST['first_name']);
-            $last_name = $this->secureData($_POST['last_name']);
-            $email = strtolower($this->secureData($_POST['email']));
-            $password = $this->secureData($_POST['password']);
+            $first_name = Functions::secureData($_POST['first_name']);
+            $last_name = Functions::secureData($_POST['last_name']);
+            $email = strtolower(Functions::secureData($_POST['email']));
+            $password = Functions::secureData($_POST['password']);
 
             $pass_hash = password_hash($password, PASSWORD_BCRYPT);
 
             // On vérifie si les données sont vides
             if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
-                $error = 'Veuillez remplir tous les champs';                
                 $this->redirect('/inscription?error=Veuillez remplir tous les champs');
 
             // On vérifie le format de l'email
-            } else if (!$this->validEmail($email)) {
+            } else if (!Functions::validEmail($email)) {
                 $this->redirect('/inscription?error=Le format de l\'email est incorrect');
 
             // On vérifie le format du mot de passe
-            } else if (!$this->validPassword($password)) {
+            } else if (!Functions::validPassword($password)) {
                 $this->redirect('/inscription?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
             } else {
                 // On vérifie si l'email n'est pas déjà utilisé
@@ -133,8 +132,8 @@ class UserController extends Controller
         if (isset($_POST['email']) && isset($_POST['password'])) {
 
             // On sécurise les données
-            $email = strtolower($this->secureData($_POST['email']));
-            $password = $this->secureData($_POST['password']);
+            $email = strtolower(Functions::secureData($_POST['email']));
+            $password = Functions::secureData($_POST['password']);
 
             // On vérifie si les données sont vides
             if (empty($email) || empty($password)) {
@@ -142,7 +141,7 @@ class UserController extends Controller
             }
 
             // On vérifie le format de l'email
-            if (!$this->validEmail($email)) {
+            if (!Functions::validEmail($email)) {
                 $this->redirect('/login?error=Le format de l\'email est incorrect');
             }
 
@@ -182,35 +181,4 @@ class UserController extends Controller
 
         $this->redirect('/');
     }
-
-    /**
-     * Méthode qui vérifie le format de l'email
-     * @param string $email
-     * @return bool
-     */
-    public function validEmail($email): bool
-    {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
-    }
-
-    /**
-     * Méthode qui vérifie que le mdp contient au moins 8 caractères, une majuscule, une minuscule et un chiffre
-     * @param string $password
-     * @return bool
-     */
-    public function validPassword($password): bool
-    {
-        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password);
-    }
-
-    /**
-     * Méthode qui sécurise les données
-     * @param string $data
-     * @return string
-     */
-    public function secureData($data): string
-    {
-        return htmlspecialchars(stripslashes(trim($data))); // htmlspecialchars() convertit les caractères spéciaux en entités HTML, stripslashes() supprime les antislashs et trim() supprime les espaces inutiles en début et fin de chaîne
-    }
-
 }
