@@ -6,7 +6,7 @@ use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
 use App\Tools\Functions;
 use Laminas\Diactoros\ServerRequest;
-
+use Symplefony\AbstractSession;
 use Symplefony\Controller;
 use Symplefony\View;
 
@@ -159,12 +159,9 @@ class UserController extends Controller
             }
 
             // On connecte l'utilisateur
-            $_SESSION['type'] = 'user';
-            $_SESSION['user_id'] = $user->getId();
-            $_SESSION['user_email'] = $user->getEmail();
-            $_SESSION['user_first_name'] = $user->getfirst_name();
-            $_SESSION['user_last_name'] = $user->getlast_name();
+            AbstractSession::set('type', 'user');
             $user->setPassword("");
+            AbstractSession::set('user', $user);
 
             $this->redirect('/');
         }
