@@ -5,35 +5,43 @@ namespace App\Model\Entity;
 use Symplefony\Model\Entity;
 class User extends Entity
 { 
-    protected string $first_name;
-    public function getfirst_name(): string { return $this->first_name; }
-    public function setfirst_name(string $value): self
+    protected string $firstName;
+    public function getFirstName(): string { return $this->firstName; }
+    public function setFirstName(string $firstName): self
     {
-        $this->first_name = $value;
+        $this->firstName = $firstName;
         return $this;
     }
 
-    protected string $last_name;
-    public function getlast_name(): string { return $this->last_name; }
-    public function setlast_name(string $value): self
+    protected string $lastName;
+    public function getLastName(): string { return $this->lastName; }
+    public function setLastName(string $lastName): self
     {
-        $this->last_name = $value;
+        $this->lastName = $lastName;
         return $this;
     }
 
     protected string $password;
     public function getPassword(): string { return $this->password; }
-    public function setPassword(string $value): self
+    public function setPassword(string $password): self
     {
-        $this->password = $value;
+        $this->password = $password;
         return $this;
     }
 
     protected string $email;
     public function getEmail(): string { return $this->email; }
-    public function setEmail(string $value): self
+    public function setEmail(string $email): self
     {
-        $this->email = $value;
+        $this->email = $email;
+        return $this;
+    }
+
+    protected int $typeAccount;
+    public function getTypeAccount(): int { return $this->typeAccount; }
+    public function typeAccount(int $typeAccount): self
+    {
+        $this->typeAccount = $typeAccount;
         return $this;
     }
 }

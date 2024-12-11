@@ -2,9 +2,12 @@
     <h1>Réservations</h1>
 
     <h2>Mes réservations</h2>
-    <?php
 
-    use App\Model\Repository\RepoManager;
+    <?php use App\Model\Repository\RepoManager; ?>
+
+    <a href="/reservation/add">Faire une réservation</a>
+
+    <?php
 
     if (!empty($reservations)): ?>
         <ul>

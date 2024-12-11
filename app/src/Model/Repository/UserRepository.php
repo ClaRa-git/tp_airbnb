@@ -24,8 +24,8 @@ class UserRepository extends Repository
     {
         $query = sprintf(
             'INSERT INTO `%s` 
-                (`first_name`,`last_name`,`password`,`email`) 
-                VALUES (:first_name,:last_name,:password,:email)',
+                (`firstName`,`lastName`,`password`,`email`, `typeAccount`)	 
+                VALUES (:firstName,:lastName,:password,:email,:typeAccount)',
             $this->getTableName()
         );
 
@@ -34,10 +34,11 @@ class UserRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'first_name' => $user->getfirst_name(),
-            'last_name' => $user->getlast_name(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
             'password' => $user->getPassword(),
-            'email' => $user->getEmail()
+            'email' => $user->getEmail(),
+            'typeAccount' => $user->getTypeAccount()
         ]);
 
         if(!$success) { return null; }
@@ -102,7 +103,7 @@ class UserRepository extends Repository
     {
         $query = sprintf(
             'UPDATE `%s` 
-                SET `first_name`=:first_name,`last_name`=:last_name,`email`=:email,`password`=:password
+                SET `firstName`=:firstName,`lastName`=:lastName,`email`=:email,`password`=:password,`typeAccount`=:typeAccount
                 WHERE `id`=:id',
             $this->getTableName()
         );
@@ -113,10 +114,11 @@ class UserRepository extends Repository
 
         $success = $sth->execute([
             'id' => $user->getId(),
-            'first_name' => $user->getfirst_name(),
-            'last_name' => $user->getlast_name(),
+            'firstName' => $user->getFirstName(),
+            'lastName' => $user->getLastName(),
             'email' => $user->getEmail(),
-            'password' => $user->getPassword()
+            'password' => $user->getPassword(),
+            'typeAccount' => $user->getTypeAccount()
         ]);
 
         if(!$success) { return null; }

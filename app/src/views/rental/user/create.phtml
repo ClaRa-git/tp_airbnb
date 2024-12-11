@@ -1,3 +1,5 @@
+<?php use App\Model\Repository\RepoManager; ?>
+
 <div>
     <a href="/">🔙 Retour</a>
 </div>
@@ -7,7 +9,9 @@
 <form action="/rental/add" id="form-create-rental" method="post">
 
     <!-- gestion des messages d'erreur -->
-    <?php if (isset($_GET['error'])): ?>
+    <?php
+
+    if (isset($_GET['error'])): ?>
         <p class="error"><?php echo $_GET['error'] ?></p>
     <?php endif; ?>
 
@@ -55,9 +59,10 @@
         <label for="input-type-logement">Type de logement :</label>
         <!-- TODO: récupérer les types de logement depuis la base de données -->
         <select name="type-logement" id="input-type-logement">
-            <option value="1">Appartement</option>
-            <option value="2">Maison</option>
-            <option value="3">Studio</option>
+            <?php $types = RepoManager::getRM()->getTypeLogementRepo()->getAll();
+                foreach($types as $type) {
+                    echo "<option value='".$type->getId()."'>".$type->getName()."</option>";
+                } ?>
         </select>
     </div>
     <div>

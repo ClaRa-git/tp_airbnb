@@ -8,27 +8,27 @@ use Symplefony\Model\Entity;
 
 class Reservation extends Entity
 {
-    protected string $begin_date;
-    public function getDateStart(): string { return $this->begin_date; }
-    public function setDateStart(string $value): self
+    protected string $beginDate;
+    public function getDateStart(): string { return $this->beginDate; }
+    public function setDateStart(string $beginDate): self
     {
-        $this->begin_date = $value;
+        $this->beginDate = $beginDate;
         return $this;
     }
 
-    protected string $end_date;
-    public function getDateEnd(): string { return $this->end_date; }
-    public function setDateEnd(string $value): self
+    protected string $endDate;
+    public function getDateEnd(): string { return $this->endDate; }
+    public function setDateEnd(string $endDate): self
     {
-        $this->end_date = $value;
+        $this->endDate = $endDate;
         return $this;
     }
 
     protected int $user_id;
     public function getUserId(): int { return $this->user_id; }
-    public function setUserId(int $value): self
+    public function setUserId(int $user_id): self
     {
-        $this->user_id = $value;
+        $this->user_id = $user_id;
         return $this;
     }
 
@@ -47,9 +47,9 @@ class Reservation extends Entity
 
     protected int $rental_id;
     public function getRentalId(): int { return $this->rental_id; }
-    public function setRentalId(int $value): self
+    public function setRentalId(int $rental_id): self
     {
-        $this->rental_id = $value;
+        $this->rental_id = $rental_id;
         return $this;
     }
 

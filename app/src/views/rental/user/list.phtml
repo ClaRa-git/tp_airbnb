@@ -1,27 +1,32 @@
-<main>
-    <h1>Accueil</h1>
 
-    <?php if(!$isOwner): ?>
-        <div>
-            <h2>Liste des biens disponibles :</h2>
-        </div>
-        <?php else: ?>
-        <div>
-            <h2>Liste de vos biens :</h2>
-        </div>
-    <?php endif ?>
-    
-    <?php if (!empty($rentals)): ?>
-        <div class="rentals-list">
-            <?php foreach ($rentals as $rental): ?>
-                <div class="post-rental">
-                    <a href="/rental/<?php echo $rental->getId() ?>">
-                        <?php echo $rental->getTitle() ?>
-                    </a>
-                </div>
-            <?php endforeach ?>
-        </div>
-    <?php else: ?>
-        <div>Aucun bien proposé.</div>
-    <?php endif ?>
-</main>
+<h1>Accueil</h1>
+
+<?php if($forOwner): ?>
+    <div>
+        <a href="/rental/add">Ajouter une location</a>
+    </div>
+<?php endif ?>
+
+<?php if(!$forOwner): ?>
+    <div>
+        <h2>Liste des biens disponibles :</h2>
+    </div>
+<?php else: ?>
+    <div>
+        <h2>Locations mise en ligne :</h2>
+    </div>
+<?php endif ?>
+
+<?php if (!empty($rentals)): ?>
+    <div class="rentals-list">
+        <?php foreach ($rentals as $rental): ?>
+            <div class="post-rental">
+                <a href="/rental/<?php echo $rental->getId() ?>">
+                    <?php echo $rental->getTitle() ?>
+                </a>
+            </div>
+        <?php endforeach ?>
+    </div>
+<?php else: ?>
+    <div>Aucun bien proposé.</div>
+<?php endif ?>

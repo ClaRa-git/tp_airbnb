@@ -9,16 +9,14 @@ body {
     height: 100vh;
     display: flex;
     flex-direction: column;
-    align-items: center;
-    justify-content: center;
 }
 
-h1,
-h2 {
+h1,h2 {
     text-align: center;
 }
 
 #top-container {
+    background-color: coral;
     padding: 20px;
     width: 100%;
     display: flex;
@@ -26,6 +24,8 @@ h2 {
     justify-content: space-between;
     align-items: center;
 }
+
+
 
 .error {
     color: red;

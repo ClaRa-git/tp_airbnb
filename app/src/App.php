@@ -64,9 +64,12 @@ final class App
         // -- Pages communes --
         $this->router->get('/', [RentalController::class, 'displayRentals']);
 
+        // Page d'affichage des locations d'un utlisateur
+        $this->router->get('/rentals/users/{id}', [RentalController::class, 'displayRentalsByOwner']);
+
         // Page de création de compte
-        $this->router->get('/inscription', [UserController::class, 'displaySubscribe']);
-        $this->router->post('/inscription', [UserController::class, 'processSubscribe']);
+        $this->router->get('/registration', [UserController::class, 'displaySubscribe']);
+        $this->router->post('/registration', [UserController::class, 'processSubscribe']);
 
         // Page de login
         $this->router->get('/login', [UserController::class, 'displayLogin']);
@@ -76,14 +79,16 @@ final class App
         $this->router->get('/logout', [UserController::class, 'processLogout']);
 
         // Page d'affichage d'une location
-        $this->router->get('/rental/{id}', [RentalController::class, 'show']);
+        $this->router->get('/rentals/{id}', [RentalController::class, 'show']);
 
         // Page de création d'une location
-        $this->router->get('/rental/add', [RentalController::class, 'displayAddRental']);
-        $this->router->post('/rental/add', [RentalController::class, 'processAddRental']);
+        $this->router->get('/rentals/add', [RentalController::class, 'displayAddRental']);
+        $this->router->post('/rentals/add', [RentalController::class, 'processAddRental']);
 
         // Page de liste des réservations
         $this->router->get('/reservations', [ReservationController::class, 'show']);
+        // Page d'ajout de réservation
+        $this->router->get('/rentals/{id}/reservations', [ReservationController::class, 'displayAddReservation']);
     }
 
     // Démarrage du routeur

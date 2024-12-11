@@ -15,16 +15,11 @@ class ReservationController extends Controller
      */
     public function show(): void
     {
-        // Si l'utilisateur n'est pas connecté ou est en mode propriétaire on redirige vers la page d'accueil
-        if (!AuthController::isLogged() || AuthController::isOwner()) {
-            $this->redirect('/');
-        }
-
         $view = new View('reservation:user:list');
 
         // Récupération des réservations
         // TODO: à gérer avec la session
-        $reservations = RepoManager::getRM()->getReservationRepo()->getAllForUser(1); // $_SESSION['user_id']
+        $reservations = RepoManager::getRM()->getReservationRepo()->getAllForUser($_SESSION['user']->getId());
 
         // Si la location n'existe pas
         if (is_null($reservations)) {

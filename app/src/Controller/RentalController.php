@@ -55,12 +55,28 @@ class RentalController extends Controller
     {
         $view = new View('rental:user:list');
 
-        $isOwner = AuthController::isOwner();
-
         $data = [
             'title' => 'Locations - Airbnb.com',
-            'isOwner' => $isOwner,
+            'forOwner' => false,
             'rentals' => RepoManager::getRM()->getRentalRepo()->getAll() 
+        ];
+
+        $view->render($data);
+    }
+
+    /**
+     * Affiche la liste des locations
+     * pas de paramètre
+     * @return void
+     */
+    public function displayRentalsByOwner(int $id): void
+    {
+        $view = new View('rental:user:list');
+
+        $data = [
+            'title' => 'Mes locations - Airbnb.com',
+            'forOwner' => true,
+            'rentals' => RepoManager::getRM()->getRentalRepo()->getAllById($id)
         ];
 
         $view->render($data);

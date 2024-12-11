@@ -5,11 +5,11 @@ namespace App\Model\Entity;
 use Symplefony\Model\Entity;
 class TypeLogement extends Entity
 {
-    protected string $label_type_logement;
-    public function getName(): string { return $this->label_type_logement; }
-    public function setName(int $value): self 
+    protected string $labelTypeLogement;
+    public function getName(): string { return $this->labelTypeLogement; }
+    public function setName(int $labelTypeLogement): self 
     {
-        $this->label_type_logement = $value;
+        $this->labelTypeLogement = $labelTypeLogement;
         return $this;
     }
 }

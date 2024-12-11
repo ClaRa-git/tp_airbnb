@@ -37,11 +37,8 @@ DROP TABLE IF EXISTS `addresses`;
 
 CREATE TABLE `addresses` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `number` int(11) NOT NULL,
-    `street` varchar(50) NOT NULL,
     `city` varchar(50) NOT NULL,
     `country` varchar(50) NOT NULL,
-    `complement` varchar(50) DEFAULT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */
@@ -71,7 +68,7 @@ DROP TABLE IF EXISTS `equipments`;
 
 CREATE TABLE `equipments` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `label_equipment` varchar(50) NOT NULL,
+    `labelEquipment` varchar(50) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */
@@ -106,15 +103,15 @@ CREATE TABLE `rentals` (
     `surface` int(11) NOT NULL,
     `description` text NOT NULL,
     `beddings` int(11) NOT NULL,
-    `type_logement_id` int(11) DEFAULT NULL,
+    `typeLogement_id` int(11) DEFAULT NULL,
     `address_id` int(11) DEFAULT NULL,
     `owner_id` int(11) DEFAULT NULL,
     PRIMARY KEY (`id`),
-    KEY `fk_rentals_types` (`type_logement_id`),
+    KEY `fk_rentals_types` (`typeLogement_id`),
     KEY `fk_rentals_addresses` (`address_id`),
     KEY `fk_rentals_users` (`owner_id`),
     CONSTRAINT `fk_rentals_addresses` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`),
-    CONSTRAINT `fk_rentals_types` FOREIGN KEY (`type_logement_id`) REFERENCES `types_logement` (`id`),
+    CONSTRAINT `fk_rentals_types` FOREIGN KEY (`typeLogement_id`) REFERENCES `typesLogement` (`id`),
     CONSTRAINT `fk_rentals_users` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */
@@ -177,8 +174,8 @@ DROP TABLE IF EXISTS `reservations`;
 
 CREATE TABLE `reservations` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `begin_date` datetime NOT NULL,
-    `end_date` datetime NOT NULL,
+    `beginDate` datetime NOT NULL,
+    `endDate` datetime NOT NULL,
     `user_id` int(11) NOT NULL,
     `rental_id` int(11) NOT NULL,
     PRIMARY KEY (`id`),
@@ -203,31 +200,31 @@ LOCK TABLES `reservations` WRITE;
 UNLOCK TABLES;
 
 --
--- Table structure for table `types_logement`
+-- Table structure for table `typesLogement`
 --
 
-DROP TABLE IF EXISTS `types_logement`;
+DROP TABLE IF EXISTS `typesLogement`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */
 ;
 /*!40101 SET character_set_client = utf8 */
 ;
 
-CREATE TABLE `types_logement` (
+CREATE TABLE `typesLogement` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `label_type_logement` varchar(50) NOT NULL,
+    `labelTypeLogement` varchar(50) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */
 ;
 
 --
--- Dumping data for table `types_logement`
+-- Dumping data for table `typesLogement`
 --
 
-LOCK TABLES `types_logement` WRITE;
-/*!40000 ALTER TABLE `types_logement` DISABLE KEYS */
+LOCK TABLES `typesLogement` WRITE;
+/*!40000 ALTER TABLE `typesLogement` DISABLE KEYS */
 ;
-/*!40000 ALTER TABLE `types_logement` ENABLE KEYS */
+/*!40000 ALTER TABLE `typesLogement` ENABLE KEYS */
 ;
 
 UNLOCK TABLES;
@@ -244,11 +241,11 @@ DROP TABLE IF EXISTS `users`;
 
 CREATE TABLE `users` (
     `id` int(11) NOT NULL AUTO_INCREMENT,
-    `first_name` varchar(50) NOT NULL,
-    `last_name` varchar(50) NOT NULL,
+    `firstName` varchar(50) NOT NULL,
+    `lastName` varchar(50) NOT NULL,
     `email` varchar(50) NOT NULL,
     `password` varchar(255) NOT NULL,
-    `type_user` int(11) NOT NULL,
+    `typeAccount` int(11) NOT NULL,
     PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */

@@ -19,8 +19,8 @@ class EquipmentRepository extends Repository
     {
         $query = sprintf(
             'INSERT INTO `%s` 
-                (`label_equipment`) 
-                VALUES (:label_equipment)',
+                (`labelEquipment`) 
+                VALUES (:labelEquipment)',
             $this->getTableName()
         );
 
@@ -29,7 +29,7 @@ class EquipmentRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'label_equipment' => $equipment->getLabelEquipment()
+            'labelEquipment' => $equipment->getLabelEquipment()
         ]);
 
         if(!$success) { return null; }
@@ -68,7 +68,7 @@ class EquipmentRepository extends Repository
     {
         $query = sprintf(
             'UPDATE `%s` 
-                SET `label_equipment` = :label_equipment
+                SET `labelEquipment` = :labelEquipment
                 WHERE `id` = :id',
             $this->getTableName()
         );
@@ -78,7 +78,7 @@ class EquipmentRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'label_equipment' => $equipment->getLabelEquipment(),
+            'labelEquipment' => $equipment->getLabelEquipment(),
             'id' => $equipment->getId()
         ]);
 

@@ -23,8 +23,8 @@ class ReservationRepository extends Repository
     {
         $query = sprintf(
             'INSERT INTO %s
-            (start_date, end_date, user_id, rental_id) 
-            VALUES (:start_date, :end_date, :user_id, :rental_id)',
+            (startDate, endDate, user_id, rental_id) 
+            VALUES (:startDate, :endDate, :user_id, :rental_id)',
             $this->getTableName()
         );
 
@@ -33,8 +33,8 @@ class ReservationRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'start_date' => $reservation->getDateStart(),
-            'end_date' => $reservation->getDateEnd(),
+            'startDate' => $reservation->getDateStart(),
+            'endDate' => $reservation->getDateEnd(),
             'user_id' => $reservation->getUserId(),
             'rental_id' => $reservation->getRentalId()
         ]);

@@ -23,8 +23,8 @@ class AddressRepository extends Repository
     {
         $query = sprintf(
             'INSERT INTO `%s` 
-                (`number`,`street`,`city`,`country`,`complement`) 
-                VALUES (:number,:street,:city,:country,:complement)',
+                (`city`,`country`) 
+                VALUES (:city,:country)',
             $this->getTableName()
         );
 
@@ -33,11 +33,8 @@ class AddressRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'number' => $address->getNumber(),
-            'street' => $address->getStreet(),
             'city' => $address->getCity(),
-            'country' => $address->getCountry(),
-            'complement' => $address->getComplement()
+            'country' => $address->getCountry()
         ]);
 
         if(!$success) { return null; }
@@ -71,11 +68,8 @@ class AddressRepository extends Repository
         $query = sprintf(
             'UPDATE `%s` 
                 SET 
-                    `number`=:number,
-                    `street`=:street,
                     `city`=:city,
-                    `country`=:country,
-                    `complement`=:complement
+                    `country`=:country
                 WHERE `id`=:id',
             $this->getTableName()
         );
@@ -86,11 +80,8 @@ class AddressRepository extends Repository
 
         $success = $sth->execute([
             'id' => $address->getId(),
-            'number' => $address->getNumber(),
-            'street' => $address->getStreet(),
             'city' => $address->getCity(),
-            'country' => $address->getCountry(),
-            'complement' => $address->getComplement()
+            'country' => $address->getCountry()
         ]);
 
         if(!$success) { return null; }

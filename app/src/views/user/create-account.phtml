@@ -3,7 +3,7 @@
 </div>
 <h1>Créer mon compte</h1>
 
-<form action="/inscription" id="form-create-user" method="post">
+<form action="/registration" id="form-create-user" method="post">
 
     <!-- gestion des messages d'erreur -->
     <?php if (isset($_GET['error'])): ?>
@@ -25,6 +25,13 @@
     <div>
         <label for="password">Mot de passe</label>
         <input type="password" id="password" name="password" required>
+    </div>
+    <div>
+        <label for="type_compte">Type de compte :</label>
+        <select name="type_compte" id="type_compte">
+            <option value="1">Annonceur</option>
+            <option value="2">utilisateur</option>
+        </select>
     </div>
     <button type="submit">Créer mon compte</button>
 </form>

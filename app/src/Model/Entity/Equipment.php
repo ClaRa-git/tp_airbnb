@@ -6,11 +6,11 @@ use Symplefony\Model\Entity;
 
 class Equipment extends Entity
 {
-    protected string $label_equipment;
-    public function getLabelEquipment(): string { return $this->label_equipment; }
-    public function setLabelEquipment(string $label_equipment): self
+    protected string $labelEquipment;
+    public function getLabelEquipment(): string { return $this->labelEquipment; }
+    public function setLabelEquipment(string $labelEquipment): self
     {
-        $this->label_equipment = $label_equipment;
+        $this->labelEquipment = $labelEquipment;
         return $this;
     }
 }

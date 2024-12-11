@@ -10,73 +10,73 @@ class Rental extends Entity
 {
     protected string $title;
     public function getTitle(): string { return $this->title; }
-    public function setTitle(string $value): self
+    public function setTitle(string $title): self
     {
-        $this->title = $value;
+        $this->title = $title;
         return $this;
     }
 
     protected float $price;
     public function getPrice(): float { return $this->price; }
-    public function setPrice(float $value): self
+    public function setPrice(float $price): self
     {
-        $this->price = $value;
+        $this->price = $price;
         return $this;
     }
 
     protected int $surface;
     public function getSurface(): int { return $this->surface; }
-    public function setSurface(int $value): self
+    public function setSurface(int $surface): self
     {
-        $this->surface = $value;
+        $this->surface = $surface;
         return $this;
     }
 
     protected string $description;
     public function getDescription(): string { return $this->description; }
-    public function setDescription(string $value): self
+    public function setDescription(string $description): self
     {
-        $this->description = $value;
+        $this->description = $description;
         return $this;
     }
 
     protected int $beddings;
     public function getBeddings(): int { return $this->beddings; }
-    public function setBeddings(int $value): self
+    public function setBeddings(int $beddings): self
     {
-        $this->beddings = $value;
+        $this->beddings = $beddings;
         return $this;
     }
 
-    protected int $type_logement_id;
-    public function getTypeLogementId(): int { return $this->type_logement_id; }
-    public function setTypeLogementId(int $value): self
+    protected int $typeLogement_id;
+    public function getTypeLogementId(): int { return $this->typeLogement_id; }
+    public function setTypeLogementId(int $typeLogement_id): self
     {
-        $this->type_logement_id = $value;
+        $this->typeLogement_id = $typeLogement_id;
         return $this;
     }
 
     // Foreign key / Liaison avec la table type_logement
-    protected TypeLogement $type_logement;
+    protected TypeLogement $typeLogement;
     public function getTypeLogement(): TypeLogement
     {
-        if(!isset($this->type_logement_id)) {
-            $this->type_logement = RepoManager::getRM()->getTypeLogementRepo()->getById($this->type_logement_id);
+        if(!isset($this->typeLogement)) {
+            $this->typeLogement = RepoManager::getRM()->getTypeLogementRepo()->getById($this->typeLogement_id);
         }
 
-        return $this->type_logement;
+        return $this->typeLogement;
     }
-    public function setTypeLogement(TypeLogement $type_logement): self
+    public function setTypeLogement(TypeLogement $typeLogement): self
     {
-        $this->type_logement = $type_logement;
+        $this->typeLogement = $typeLogement;
         return $this;
     }
 
     protected int $address_id;
     public function getAddressId(): int { return $this->address_id; }
-    public function setAddressId(int $value): self
+    public function setAddressId(int $address_id): self
     {
-        $this->address_id = $value;
+        $this->address_id = $address_id;
         return $this;
     }
 
@@ -84,23 +84,23 @@ class Rental extends Entity
     protected Address $address;
     public function getAddress(): Address
     {
-        if(!isset($this->address_id)) {
+        if(!isset($this->address)) {
             $this->address = RepoManager::getRM()->getAddressRepo()->getById($this->address_id);
         }
 
         return $this->address;
     }
-    public function setAddress(Address $value): self
+    public function setAddress(Address $address): self
     {
-        $this->address = $value;
+        $this->address = $address;
         return $this;
     }
 
     protected int $owner_id;
     public function getOwnerId(): int { return $this->owner_id; }
-    public function setOwnerId(int $value): self
+    public function setOwnerId(int $owner_id): self
     {
-        $this->owner_id = $value;
+        $this->owner_id = $owner_id;
         return $this;
     }
 
@@ -108,15 +108,15 @@ class Rental extends Entity
     protected User $owner;
     public function getOwner(): User
     {
-        if(!isset($this->owner_id)) {
+        if(!isset($this->owner)) {
             $this->owner = RepoManager::getRM()->getUserRepo()->getById($this->owner_id);
         }
 
         return $this->owner;
     }
-    public function setOwner(User $value): self
+    public function setOwner(User $owner): self
     {
-        $this->owner = $value;
+        $this->owner = $owner;
         return $this;
     }
 }

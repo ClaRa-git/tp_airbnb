@@ -10,3 +10,9 @@
         <li><?php printf('Nombre de couchage : %s', $rental->getBeddings()) ?></li>
     </ul>
 </div>
+
+<?php if(isset($_SESSION['user']) && $rental->getOwnerId() != $_SESSION['user']->getId()): ?>
+    <div>
+        <a href="/reservation/add/<?php echo $rental->getId() ?>">Réserver</a>
+    </div>
+<?php endif ?>

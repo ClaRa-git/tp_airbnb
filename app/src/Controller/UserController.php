@@ -6,7 +6,7 @@ use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
 use App\Tools\Functions;
 use Laminas\Diactoros\ServerRequest;
-use Symplefony\AbstractSession;
+
 use Symplefony\Controller;
 use Symplefony\View;
 
@@ -27,7 +27,7 @@ class UserController extends Controller
         $user_created = RepoManager::getRM()->getUserRepo()->create($user);
 
         if (is_null($user_created)) {
-            $this->redirect('/user/inscription?error=Une erreur est survenue lors de la création de votre compte');
+            $this->redirect('/user/registration?error=Une erreur est survenue lors de la création de votre compte');
         }
 
         $this->redirect('/user/login');
@@ -66,14 +66,19 @@ class UserController extends Controller
     }
 
     /**
-     * Traitement du formulaire d'inscription
+     * Traitement du formulaire d'registration
      * pas de paramètre
      * @return void
      */
     public function processSubscribe(): void
     {
         // On vérifie que l'on recoit bien les données du formulaire
-        if (isset($_POST['first_name']) && isset($_POST['last_name']) && isset($_POST['email']) && isset($_POST['password'])) {
+        if (isset($_POST['first_name']) &&
+            isset($_POST['last_name']) &&
+            isset($_POST['email']) &&
+            isset($_POST['password']) &&
+            isset($_POST['type_compte'])
+        ){
 
             // On sécurise les données
             $first_name = Functions::secureData($_POST['first_name']);
@@ -85,22 +90,24 @@ class UserController extends Controller
 
             // On vérifie si les données sont vides
             if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
-                $this->redirect('/inscription?error=Veuillez remplir tous les champs');
+                $this->redirect('/registration?error=Veuillez remplir tous les champs');
+            }
 
             // On vérifie le format de l'email
-            } else if (!Functions::validEmail($email)) {
-                $this->redirect('/inscription?error=Le format de l\'email est incorrect');
+            if (!Functions::validEmail($email)) {
+                $this->redirect('/registration?error=Le format de l\'email est incorrect');
+            }
 
             // On vérifie le format du mot de passe
-            } else if (!Functions::validPassword($password)) {
-                $this->redirect('/inscription?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
-            } else {
-                // On vérifie si l'email n'est pas déjà utilisé
-                $user = RepoManager::getRM()->getUserRepo()->getByEmail($email);
-                
-                if($user != null) {
-                    $this->redirect('/inscription?error=Cet email est déjà utilisé');
-                }
+            if (!Functions::validPassword($password)) {
+                $this->redirect('/registration?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
+            }
+
+            // On vérifie si l'email n'est pas déjà utilisé
+            $user = RepoManager::getRM()->getUserRepo()->getByEmail($email);
+            
+            if($user != null) {
+                $this->redirect('/registration?error=Cet email est déjà utilisé');
             }
 
             // On crée un nouvel utilisateur
@@ -114,7 +121,7 @@ class UserController extends Controller
             $user_created = RepoManager::getRM()->getUserRepo()->create($user);
 
             if (is_null($user_created)) {
-                $this->redirect('/inscription?error=Une erreur est survenue lors de la création de votre compte');
+                $this->redirect('/registration?error=Une erreur est survenue lors de la création de votre compte');
             } else {
                 $this->redirect('/login');
             }
@@ -129,7 +136,9 @@ class UserController extends Controller
     public function processLogin(): void
     {
         // On vérifie que l'on recoit bien les données du formulaire
-        if (isset($_POST['email']) && isset($_POST['password'])) {
+        if (isset($_POST['email']) &&
+        isset($_POST['password'])
+        ){
 
             // On sécurise les données
             $email = strtolower(Functions::secureData($_POST['email']));
@@ -159,9 +168,8 @@ class UserController extends Controller
             }
 
             // On connecte l'utilisateur
-            AbstractSession::set('type', 'user');
             $user->setPassword("");
-            AbstractSession::set('user', $user);
+            $_SESSION['user'] = $user;
 
             $this->redirect('/');
         }
