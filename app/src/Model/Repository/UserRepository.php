@@ -70,9 +70,9 @@ class UserRepository extends Repository
     /**
      * Récupère un user par son email
      * @param string $email
-     * @return User|null
+     * @return array
      */
-    public function getByEmail(string $email): ?User
+    public function getAllByEmail(string $email): array
     {
         $query = sprintf(
             'SELECT * FROM `%s` WHERE `email`=:email',
@@ -81,17 +81,18 @@ class UserRepository extends Repository
 
         $sth = $this->pdo->prepare($query);
 
-        if(!$sth) { return null; }
+        if(!$sth) { return []; }
 
         $success = $sth->execute(['email' => $email]);
 
-        if(!$success) { return null; }
+        if(!$success) { return []; }
 
-        if($sth->rowCount() === 0) { return null; }
-
-        $user = new User($sth->fetch());
+        $users = [];
+        foreach($sth as $row) {
+            $users[] = new User($row);
+        }
         
-        return $user;
+        return $users;
     }
 
     /**

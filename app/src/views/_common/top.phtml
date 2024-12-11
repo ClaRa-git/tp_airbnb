@@ -1,3 +1,5 @@
+<?php use Symplefony\AbstractSession; ?>
+
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -10,27 +12,24 @@
     <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 
-    <!-- Polices -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Merriweather:ital,wght@0,700;1,700&display=swap">
-
     <title><?php echo $title ?></title>
 </head>
 
 <body>
 
     <div id="top-container">
-        <?php if (isset($_SESSION['user'])):?>
+        <?php if (AbstractSession::get('user') != null):?>
             <div>
                 <div class="logo">
                     <a href="/">AIRBNB</a>
                 </div>
-                <div>Bonjour <?php echo $_SESSION['user']->getfirst_name() ?></div>
+                <div>Bonjour <?php echo AbstractSession::get('user')->getfirstName() ?></div>
             </div>
             <div>
                 <ul>
-                    <li><a href="/rental/user/<?php echo $_SESSION['user']->getId() ?>">Mes locations</a></li>
+                    <?php if(AbstractSession::get('user')->getTypeAccount() == 1): ?>
+                    <li><a href="/rentals/user/<?php echo AbstractSession::get('user')->getId() ?>">Mes locations</a></li>
+                    <?php endif; ?>
                     <li><a href="/reservations">Mes réservations</a></li>
                 </ul>
             </div>         

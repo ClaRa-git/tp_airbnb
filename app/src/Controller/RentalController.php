@@ -6,9 +6,12 @@ use App\Model\Entity\Address;
 use App\Model\Entity\Rental;
 use App\Model\Repository\RepoManager;
 use App\Tools\Functions;
-use Laminas\Diactoros\ServerRequest;
+
 use Symplefony\Controller;
 use Symplefony\View;
+
+use Laminas\Diactoros\ServerRequest;
+use Symplefony\AbstractSession;
 
 class RentalController extends Controller
 {
@@ -26,7 +29,7 @@ class RentalController extends Controller
         $rental_created = RepoManager::getRM()->getRentalRepo()->create($rental);
 
         if (is_null($rental_created)) {
-            $this->redirect('/rental/add?error=Une erreur est survenue lors de la création de la location');
+            $this->redirect('/rentals/add?error=Une erreur est survenue lors de la création de la location');
         }
     }
 
@@ -57,7 +60,6 @@ class RentalController extends Controller
 
         $data = [
             'title' => 'Locations - Airbnb.com',
-            'forOwner' => false,
             'rentals' => RepoManager::getRM()->getRentalRepo()->getAll() 
         ];
 
@@ -75,7 +77,6 @@ class RentalController extends Controller
 
         $data = [
             'title' => 'Mes locations - Airbnb.com',
-            'forOwner' => true,
             'rentals' => RepoManager::getRM()->getRentalRepo()->getAllById($id)
         ];
 
@@ -94,69 +95,50 @@ class RentalController extends Controller
             isset($_POST['surface']) &&
             isset($_POST['description']) &&
             isset($_POST['beddings']) &&
-            isset($_POST['number-address']) &&
-            isset($_POST['street']) &&
             isset($_POST['city']) &&
             isset($_POST['country']) &&
-            isset($_POST['complement']) &&
-            isset($_POST['type-logement'])
+            isset($_POST['typeLogementId'])
          ){
             $title = Functions::secureData($_POST['title']);
-            $price = Functions::secureData($_POST['price']);
-            $surface = Functions::secureData($_POST['surface']);
+            $price = floatval(Functions::secureData($_POST['price']));
+            $surface = intval(Functions::secureData($_POST['surface']));
             $description = Functions::secureData($_POST['description']);
-            $beddings = Functions::secureData($_POST['beddings']);
-            $number_address = Functions::secureData($_POST['number-address']);
-            $street = strtoupper(Functions::secureData($_POST['street']));
+            $beddings = intval(Functions::secureData($_POST['beddings']));
             $city = strtoupper(Functions::secureData($_POST['city']));
             $country = strtoupper(Functions::secureData($_POST['country']));
-            $complement = strtoupper(Functions::secureData($_POST['complement']));
-            $type_logement = Functions::secureData($_POST['type-logement']);
+            $typeLogementId = intval(Functions::secureData($_POST['typeLogementId']));
 
             if(empty($title) ||
                 empty($price) ||
                 empty($surface) ||
                 empty($description) ||
                 empty($beddings) ||
-                empty($number_address) ||
-                empty($street) ||
                 empty($city) ||
                 empty($country) ||
-                empty($type_logement)
+                empty($typeLogementId)
             ){
-                $this->redirect('/rental/add?error=Tous les champs sont obligatoires');
-            }
-
-            if(empty($complement)){
-                $complement = "";
-            }
-
-            if(!is_numeric($price) ||
-                !is_numeric($surface) ||
-                !is_numeric($beddings) ||
-                !is_numeric($number_address)
-            ){
-                $this->redirect('/rental/add?error=Les champs prix, surface, nombre de couchages et numéro de rue doivent être des chiffres');
+                $this->redirect('/rentals/add?error=Tous les champs sont obligatoires');
             }
 
             if($price <= 0 ||
                 $surface <= 0 ||
-                $beddings <= 0 ||
-                $number_address <= 0
+                $beddings <= 0
             ){
-                $this->redirect('/rental/add?error=Les champs prix, surface, nombre de couchages et numéro de rue doivent être supérieurs à 0');
+                $this->redirect('/rentals/add?error=Les champs prix, surface, nombre de couchages doivent être supérieurs à 0');
             }
 
-            if($type_logement != 1 && $type_logement != 2 && $type_logement != 3){
-                $this->redirect('/rental/add?error=Le type de logement est incorrect');
+            $typeLogementArray = RepoManager::getRM()->getTypeLogementRepo()->getAll();
+
+            $typeLogementIdArray = array_map(function($typeLogement){
+                return $typeLogement->getId();
+            }, $typeLogementArray);
+            if(!in_array($typeLogementId, $typeLogementIdArray)){
+                $this->redirect('/rentals/add?error=Le type de logement est incorrect');
             }
 
             $address = RepoManager::getRM()->getAddressRepo()->create(new Address([
-                'number' => $number_address,
-                'street' => $street,
                 'city' => $city,
-                'country' => $country,
-                'complement' => $complement
+                'country' => $country
             ]));
 
             $rental = RepoManager::getRM()->getRentalRepo()->create(new Rental([
@@ -165,13 +147,13 @@ class RentalController extends Controller
                 'surface' => $surface,
                 'description' => $description,
                 'beddings' => $beddings,
-                'type_logement_id' => $type_logement,
+                'typeLogement_id' => $typeLogementId,
                 'address_id' => $address->getId(),
-                'owner_id' => 1//  $_SESSION['user_id']
+                'owner_id' => AbstractSession::get('user')->getId()
             ]));
 
             if(is_null($rental)){
-                $this->redirect('/rental/add?error=Une erreur est survenue lors de la création de la location');
+                $this->redirect('/rentals/add?error=Une erreur est survenue lors de la création de la location');
             } else {
                 $this->redirect('/');
             }

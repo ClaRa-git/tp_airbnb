@@ -14,7 +14,7 @@ class TypeLogementRepository extends Repository
      */
     protected function getTableName(): string
     {
-        return 'types_logement';
+        return 'typesLogement';
     }
 
     /**

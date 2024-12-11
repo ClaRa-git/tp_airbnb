@@ -6,7 +6,7 @@
 
 <h1>Créer une location</h1>
 
-<form action="/rental/add" id="form-create-rental" method="post">
+<form action="/rentals/add" id="form-create-rental" method="post">
 
     <!-- gestion des messages d'erreur -->
     <?php
@@ -16,52 +16,39 @@
     <?php endif; ?>
 
     <div>
-        <label for="input-title">Titre :</label>
-        <input type="text" name="title" id="input-title">
+        <label for="title">Titre :</label>
+        <input type="text" name="title" id="title">
     </div>
     <div>
-        <label for="input-price">Prix :</label>
-        <input type="number" name="price" id="input-price">
+        <label for="price">Prix :</label>
+        <input type="number" name="price" id="price">
     </div>
     <div>
-        <label for="input-surface">Surface</label>
-        <input type="number" name="surface" id="input-surface">
+        <label for="surface">Surface</label>
+        <input type="number" name="surface" id="surface">
     </div>
     <div>
-        <label for="input-description">Description :</label>
-        <textarea name="description" id="input-description"></textarea>
+        <label for="description">Description :</label>
+        <textarea name="description" id="description"></textarea>
     </div>
     <div>
-        <label for="input-beddings">Nombre de couchage :</label>
-        <input type="number" name="beddings" id="input-beddings">
+        <label for="beddings">Nombre de couchage :</label>
+        <input type="number" name="beddings" id="beddings">
     </div>
     <div>
-        <label for="input-number-address">Numéro de rue :</label>
-        <input type="number" name="number-address" id="input-number-address">
+        <label for="city">Ville :</label>
+        <input type="text" name="city" id="city">
     </div>
     <div>
-        <label for="input-street">Rue :</label>
-        <input type="text" name="street" id="input-street">
+        <label for="country">Pays :</label>
+        <input type="text" name="country" id="country">
     </div>
     <div>
-        <label for="input-city">Ville :</label>
-        <input type="text" name="city" id="input-city">
-    </div>
-    <div>
-        <label for="iniput-country">Pays :</label>
-        <input type="text" name="country" id="input-country">
-    </div>
-    <div>
-        <label for="input-complement">Complément d'adresse :</label>
-        <input type="text" name="complement" id="input-complement">
-    </div>
-    <div>
-        <label for="input-type-logement">Type de logement :</label>
-        <!-- TODO: récupérer les types de logement depuis la base de données -->
-        <select name="type-logement" id="input-type-logement">
+        <label for="typeLogement">Type de logement :</label>
+        <select name="typeLogementId" id="typeLogement">
             <?php $types = RepoManager::getRM()->getTypeLogementRepo()->getAll();
                 foreach($types as $type) {
-                    echo "<option value='".$type->getId()."'>".$type->getName()."</option>";
+                    echo "<option value='" . $type->getId() . "'>" . $type->getName() . "</option>";
                 } ?>
         </select>
     </div>

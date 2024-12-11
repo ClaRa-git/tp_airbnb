@@ -68,8 +68,8 @@ final class App
         $this->router->get('/rentals/users/{id}', [RentalController::class, 'displayRentalsByOwner']);
 
         // Page de création de compte
-        $this->router->get('/registration', [UserController::class, 'displaySubscribe']);
-        $this->router->post('/registration', [UserController::class, 'processSubscribe']);
+        $this->router->get('/registration', [UserController::class, 'displayRegistration']);
+        $this->router->post('/registration', [UserController::class, 'processRegistration']);
 
         // Page de login
         $this->router->get('/login', [UserController::class, 'displayLogin']);

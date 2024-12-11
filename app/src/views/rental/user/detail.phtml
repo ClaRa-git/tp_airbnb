@@ -1,18 +1,22 @@
 <div>
     <a href="/">🔙 Retour</a>
 </div>
-<h1><?php printf('Location : %s', $rental->getTitle()) ?></h1>
+<h1><?php
+
+use Symplefony\AbstractSession;
+
+ printf('Location : %s', $rental->getTitle()) ?></h1>
 <div>
     <ul>
         <li><?php printf('Prix : %s € / nuit', $rental->getPrice()) ?></li>
         <li><?php printf('Surface : %s m²', $rental->getSurface()) ?></li>
         <li><?php printf('Description : %s', $rental->getDescription()) ?></li>
-        <li><?php printf('Nombre de couchage : %s', $rental->getBeddings()) ?></li>
+        <li><?php printf('Nombre de couchage(s) : %s', $rental->getBeddings()) ?></li>
     </ul>
 </div>
 
-<?php if(isset($_SESSION['user']) && $rental->getOwnerId() != $_SESSION['user']->getId()): ?>
+<?php if($rental->getOwnerId() != AbstractSession::get('user')->getId()): ?>
     <div>
-        <a href="/reservation/add/<?php echo $rental->getId() ?>">Réserver</a>
+        <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
     </div>
 <?php endif ?>

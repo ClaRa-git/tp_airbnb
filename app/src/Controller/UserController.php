@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
 use App\Tools\Functions;
-use Laminas\Diactoros\ServerRequest;
 
 use Symplefony\Controller;
 use Symplefony\View;
 
+use Laminas\Diactoros\ServerRequest;
+use Symplefony\AbstractSession;
 
 class UserController extends Controller
 {
@@ -27,10 +28,10 @@ class UserController extends Controller
         $user_created = RepoManager::getRM()->getUserRepo()->create($user);
 
         if (is_null($user_created)) {
-            $this->redirect('/user/registration?error=Une erreur est survenue lors de la création de votre compte');
+            $this->redirect('/users/registration?error=Une erreur est survenue lors de la création de votre compte');
         }
 
-        $this->redirect('/user/login');
+        $this->redirect('/users/login');
     }
 
     /**
@@ -38,7 +39,7 @@ class UserController extends Controller
      * pas de paramètre
      * @return void
      */
-    public function displaySubscribe(): void
+    public function displayRegistration(): void
     {
         $view = new View('user:create-account');
 
@@ -70,26 +71,31 @@ class UserController extends Controller
      * pas de paramètre
      * @return void
      */
-    public function processSubscribe(): void
+    public function processRegistration(): void
     {
         // On vérifie que l'on recoit bien les données du formulaire
-        if (isset($_POST['first_name']) &&
-            isset($_POST['last_name']) &&
+        if (isset($_POST['firstName']) &&
+            isset($_POST['lastName']) &&
             isset($_POST['email']) &&
             isset($_POST['password']) &&
-            isset($_POST['type_compte'])
+            isset($_POST['typeAccount'])
         ){
 
             // On sécurise les données
-            $first_name = Functions::secureData($_POST['first_name']);
-            $last_name = Functions::secureData($_POST['last_name']);
+            $firstName = Functions::secureData($_POST['firstName']);
+            $lastName = Functions::secureData($_POST['lastName']);
             $email = strtolower(Functions::secureData($_POST['email']));
             $password = Functions::secureData($_POST['password']);
+            $typeAccount = intval(Functions::secureData($_POST['typeAccount']));
 
             $pass_hash = password_hash($password, PASSWORD_BCRYPT);
 
             // On vérifie si les données sont vides
-            if (empty($first_name) || empty($last_name) || empty($email) || empty($password)) {
+            if (empty($firstName) ||
+                empty($lastName) ||
+                empty($email) ||
+                empty($password) ||
+                empty($typeAccount)) {
                 $this->redirect('/registration?error=Veuillez remplir tous les champs');
             }
 
@@ -103,19 +109,21 @@ class UserController extends Controller
                 $this->redirect('/registration?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
             }
 
-            // On vérifie si l'email n'est pas déjà utilisé
-            $user = RepoManager::getRM()->getUserRepo()->getByEmail($email);
-            
-            if($user != null) {
-                $this->redirect('/registration?error=Cet email est déjà utilisé');
+            // On vérifie si l'email n'est pas déjà utilisé pour le type de compte choisi
+            $users = RepoManager::getRM()->getUserRepo()->getAllByEmail($email);
+            foreach($users as $user) {
+                if ($user->getEmail() == $email && $user->getTypeAccount() == $typeAccount) {
+                    $this->redirect('/registration?error=Cet email est déjà utilisé');
+                }
             }
 
             // On crée un nouvel utilisateur
             $user = new User([
-                'first_name' => $first_name,
-                'last_name' => $last_name,
+                'firstName' => $firstName,
+                'lastName' => $lastName,
                 'email' => $email,
-                'password' => $pass_hash
+                'password' => $pass_hash,
+                'typeAccount' => $typeAccount
             ]);
 
             $user_created = RepoManager::getRM()->getUserRepo()->create($user);
@@ -137,15 +145,20 @@ class UserController extends Controller
     {
         // On vérifie que l'on recoit bien les données du formulaire
         if (isset($_POST['email']) &&
-        isset($_POST['password'])
+        isset($_POST['password']) &&
+        isset($_POST['typeAccount'])
         ){
 
             // On sécurise les données
             $email = strtolower(Functions::secureData($_POST['email']));
             $password = Functions::secureData($_POST['password']);
+            $typeAccount = Functions::secureData($_POST['typeAccount']);
 
             // On vérifie si les données sont vides
-            if (empty($email) || empty($password)) {
+            if (empty($email) ||
+                empty($password) ||
+                empty($typeAccount)
+            ){
                 $this->redirect('/login?error=Veuillez remplir tous les champs');
             }
 
@@ -154,22 +167,22 @@ class UserController extends Controller
                 $this->redirect('/login?error=Le format de l\'email est incorrect');
             }
 
-            // On récupère l'utilisateur
-            $user = RepoManager::getRM()->getUserRepo()->getByEmail($email);
-
-            // On vérifie si l'utilisateur existe
-            if ($user == null) {
-                $this->redirect('/login?error=Cet email n\'existe pas');
+            // On récupère les utilisateurs et on vérifie si l'utilisateur existe pour le type de compte choisi
+            $users = RepoManager::getRM()->getUserRepo()->getAllByEmail($email);
+            foreach($users as $user) {
+                if ($user->getEmail() == $email && $user->getTypeAccount() == $typeAccount) {
+                    $verifiedUser = $user;
+                }
             }
 
             // On vérifie le mot de passe
-            if (!password_verify($password, $user->getPassword())) {
+            if (!password_verify($password, $verifiedUser->getPassword())) {
                 $this->redirect('/login?error=Le mot de passe est incorrect');
             }
 
             // On connecte l'utilisateur
-            $user->setPassword("");
-            $_SESSION['user'] = $user;
+            $verifiedUser->setPassword("");
+            AbstractSession::set('user', $verifiedUser);
 
             $this->redirect('/');
         }

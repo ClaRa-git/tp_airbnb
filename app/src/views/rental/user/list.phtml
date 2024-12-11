@@ -1,27 +1,35 @@
 
 <h1>Accueil</h1>
 
-<?php if($forOwner): ?>
-    <div>
-        <a href="/rental/add">Ajouter une location</a>
-    </div>
-<?php endif ?>
+<?php
 
-<?php if(!$forOwner): ?>
+use Symplefony\AbstractSession;
+
+ if(AbstractSession::get('user') != null): 
+    
+    if(AbstractSession::get('user')->getTypeAccount() == 1):?>
     <div>
-        <h2>Liste des biens disponibles :</h2>
-    </div>
-<?php else: ?>
-    <div>
-        <h2>Locations mise en ligne :</h2>
-    </div>
-<?php endif ?>
+        <a href="/rentals/add">Ajouter une location</a>
+    </div>    
+    <?php endif;
+
+
+    if(!(AbstractSession::get('user')->getTypeAccount() == 1)): ?>
+        <div>
+            <h2>Liste des biens disponibles :</h2>
+        </div>
+    <?php else: ?>
+        <div>
+            <h2>Locations mise en ligne :</h2>
+        </div>
+    <?php endif;
+endif; ?>
 
 <?php if (!empty($rentals)): ?>
     <div class="rentals-list">
         <?php foreach ($rentals as $rental): ?>
             <div class="post-rental">
-                <a href="/rental/<?php echo $rental->getId() ?>">
+                <a href="/rentals/<?php echo $rental->getId() ?>">
                     <?php echo $rental->getTitle() ?>
                 </a>
             </div>
