@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Model\Repository\RepoManager;
-use Symplefony\AbstractSession;
+use App\Session;
+
 use Symplefony\Controller;
 use Symplefony\View;
 
@@ -16,11 +17,11 @@ class ReservationController extends Controller
      */
     public function show(): void
     {
-        $view = new View('reservation:user:list');
+        $view = new View('reservation:user:list', auth_controller: AuthController::class);
 
         // Récupération des réservations
         // TODO: à gérer avec la session
-        $reservations = RepoManager::getRM()->getReservationRepo()->getAllForUser(AbstractSession::get('user')->getId());
+        $reservations = RepoManager::getRM()->getReservationRepo()->getAllForUser(Session::get('user')->getId());
 
         // Si la location n'existe pas
         if (is_null($reservations)) {

@@ -1,9 +1,15 @@
+<?php
+
+use App\Model\Entity\User;
+
+?>
+
 <div>
     <a href="/">🔙 Retour</a>
 </div>
 <h1>Créer mon compte</h1>
 
-<form action="/registration" id="form-create-user" method="post">
+<form action="/sign-up" id="form-create-user" method="post">
 
     <!-- gestion des messages d'erreur -->
     <?php if (isset($_GET['error'])): ?>
@@ -29,8 +35,8 @@
     <div>
         <label for="typeAccount">Type de compte :</label>
         <select name="typeAccount" id="typeAccount">
-            <option value="1">Annonceur</option>
-            <option value="2">Utilisateur</option>
+            <option value=<?php echo User::ROLE_OWNER ?>>Annonceur</option>
+            <option value=<?php echo User::ROLE_USER ?>>Utilisateur</option>
         </select>
     </div>
     <button type="submit">Créer mon compte</button>

@@ -3,13 +3,12 @@
 namespace App\Controller;
 
 use App\Model\Entity\Address;
-use App\Tools\Functions;
 use App\Model\Entity\Rental;
-use App\Model\Entity\TypeLogement;
+use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
 use App\Session;
+use App\Tools\Functions;
 
-use Symplefony\AbstractSession;
 use Symplefony\Controller;
 use Symplefony\View;
 
@@ -42,7 +41,7 @@ class RentalController extends Controller
      */
     public function displayAddRental(): void
     {
-        $view = new View('rental:user:create');
+        $view = new View('rental:user:create', auth_controller: AuthController::class);
 
         $data = [
             'title' => 'Ajouter une location - Airbnb.com'
@@ -58,11 +57,19 @@ class RentalController extends Controller
      */
     public function displayRentals(): void
     {
-        $view = new View('rental:user:list');
+        $view = new View('rental:user:list', auth_controller: AuthController::class);
+
+        if(!AuthController::isAuth() || Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER) {
+            $rentals = RepoManager::getRM()->getRentalRepo()->getAll();
+        }
+        else {
+            $rentals = RepoManager::getRM()->getRentalRepo()->getAllById(Session::get(Session::USER)->getId());
+            var_dump(Session::get(Session::USER)->getId());
+        }
 
         $data = [
             'title' => 'Locations - Airbnb.com',
-            'rentals' => RepoManager::getRM()->getRentalRepo()->getAll() 
+            'rentals' => $rentals
         ];
 
         $view->render($data);
@@ -75,7 +82,7 @@ class RentalController extends Controller
      */
     public function displayRentalsByOwner(int $id): void
     {
-        $view = new View('rental:user:list');
+        $view = new View('rental:user:list', auth_controller: AuthController::class);
 
         $data = [
             'title' => 'Mes locations - Airbnb.com',
@@ -169,11 +176,11 @@ class RentalController extends Controller
             'beddings' => $beddings,
             'typeLogement_id' => $typeLogement_id,
             'address_id' => $address_created->getId(),
-            'owner_id' => AbstractSession::get(Session::USER)->getId()
+            'owner_id' => Session::get(Session::USER)->getId()
         ]);
 
         $rental->setAddress($address_created);
-        $rental->setOwner(AbstractSession::get(Session::USER));     
+        $rental->setOwner(Session::get(Session::USER));     
 
         $rental_created = RepoManager::getRM()->getRentalRepo()->create($rental);
 
@@ -195,7 +202,7 @@ class RentalController extends Controller
      */
     public function show(int $id): void
     {
-        $view = new View('rental:user:detail');
+        $view = new View('rental:user:detail', auth_controller: AuthController::class);
 
         // Récupération de la location
         $rental = RepoManager::getRM()->getRentalRepo()->getById($id);
@@ -212,5 +219,21 @@ class RentalController extends Controller
         ];
 
         $view->render($data);
+    }
+
+    /**
+     * Supprime une location grace à son id
+     * @param int $id
+     * @return void
+     */
+    public function delete(int $id): void
+    {
+        $delete_success = RepoManager::getRM()->getRentalRepo()->deleteOne($id);
+
+        if(!$delete_success) {
+            $this->redirect('/rentals?error=Une erreur est survenue lors de la suppression de la location');
+        }
+
+        $this->redirect('/');
     }
 }

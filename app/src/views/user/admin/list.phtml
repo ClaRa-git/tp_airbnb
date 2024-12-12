@@ -1,0 +1,31 @@
+<div>
+    <a href="/admin">🏠 Retour</a>
+</div>
+<h1>Liste des utilisateurs</h1>
+<p>
+    <a href="/admin/users/add">Ajouter un utilisateur</a>
+</p>
+<?php if( !empty($users) ): ?>
+<ul>
+    <?php foreach( $users as $user ): ?>
+        <li>
+            <h2>
+                <?php printf(
+                    '<a href="/admin/users/%s">%s %s</a>',
+                    $user->getId(),
+                    $user->getFirstname(),
+                    $user->getLastname()
+                ) ?>
+            </h2>
+            <ul>
+                <li>Id: <?php echo $user->getId() ?></li>
+                <li>Email: <?php echo $user->getEmail() ?></li>
+                <li>Prénom: <?php echo $user->getFirstName() ?></li>
+                <li>Nom: <?php echo $user->getLastName() ?></li>
+            </ul>
+        </li>
+    <?php endforeach ?>
+</ul>
+<?php else: ?>
+    <div>Aucun utilisateur inscrit.</div>
+<?php endif ?>

@@ -125,17 +125,12 @@ class RentalRepository extends Repository
      */
     public function deleteOne(int $id): bool 
     {
-        $query = sprintf(
-            'DELETE FROM %s WHERE id=:id',
-            $this->getTableName()
-        );
+        // On supprime d'abord toutes les liaisons avec les locations
+        $success = RepoManager::getRM()->getEquipmentRepo()->detachAllForRental($id);
+        
+        // Si cela a fonctionné, on invoque la méthode deleteOne parente
+        if($success) { return parent::deleteOne($id); }
 
-        $sth = $this->pdo->prepare($query);
-
-        if(!$sth) { return false; }
-
-        return $sth->execute([
-            'id' => $id
-        ]);
+        return $success;
     }
 }

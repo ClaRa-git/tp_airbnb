@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Classe de démarrage de l'application
  */
@@ -7,6 +6,8 @@
 // Déclaration du namespace de ce fichier
 namespace App;
 
+use App\Controller\AdminController;
+use App\Controller\AuthController;
 use Exception;
 use Throwable;
 
@@ -14,11 +15,15 @@ use App\Controller\PageController;
 use App\Controller\RentalController;
 use App\Controller\ReservationController;
 use App\Controller\UserController;
-
+use App\Middleware\AdminMiddleware;
+use App\Middleware\AuthMiddleware;
+use App\Middleware\VisitorMiddleware;
+use Symplefony\Security;
 use Symplefony\View;
 
 use MiladRahimi\PhpRouter\Router;
 use MiladRahimi\PhpRouter\Exceptions\RouteNotFoundException;
+use MiladRahimi\PhpRouter\Routing\Attributes;
 
 final class App
 {
@@ -40,6 +45,18 @@ final class App
         }
 
         return self::$app_instance;
+    }
+
+    /**
+     * Hache une chaîne de caractères en servant du "sel" et du "poivre" définis dans .env
+     *
+     * @param  string $str Chaîne à hacher
+     * 
+     * @return string Résultat
+     */
+    public static function strHash(string $str): string
+    {
+        return Security::strButcher($str, $_ENV['security_salt'], $_ENV['security_pepper']);
     }
 
     // Démarrage de l'application
@@ -64,24 +81,69 @@ final class App
         $this->router->pattern('id', '\d+');
 
         //TODO: Ajouter les routes de l'application  par groupes avec middleware
+        // -- Pages d'admin --
+        $adminAttributes = [
+            Attributes::PREFIX => '/admin',
+            Attributes::MIDDLEWARE => [AdminMiddleware::class]
+        ];
+
+        $this->router->group($adminAttributes, function (Router $router) {
+            $router->get('', [AdminController::class, 'dashboard']);
+
+            // -- User --
+            // Ajout
+            $router->get('/users/add', [UserController::class,
+                'add'
+            ]);
+            $router->post('/users', [UserController::class, 'create']);
+            // Liste
+            $router->get('/users', [UserController::class, 'index']);
+            // Détail
+            $router->get('/users/{id}', [UserController::class, 'show']);
+            $router->post('/users/{id}', [UserController::class, 'update']);
+            // Suppression
+            $router->get('/users/{id}/delete', [UserController::class, 'delete']);
+
+            // -- Rental -- TODO: Ajouter les routes de l'application  par groupes avec middleware
+            // --Equipments -- TODO: Ajouter les routes de l'application  par groupes avec middleware
+            // -- TypeLogement -- TODO: Ajouter les routes de l'application  par groupes avec middleware
+            // -- Reservation -- TODO: Ajouter les routes de l'application  par groupes avec middleware
+
+        });
 
         // -- Pages communes --
         $this->router->get('/', [RentalController::class, 'displayRentals']);
         $this->router->get('/mentions-legales', [PageController::class, 'legalMentions']);
 
+        // -- Visiteurs (non-connectés) --
+        $visitorAttributes = [
+            Attributes::MIDDLEWARE => [VisitorMiddleware::class]
+        ];
+
+        $this->router->group($visitorAttributes, function (Router $router) {
+            // sign-in
+            $router->get('/sign-in', [AuthController::class, 'signIn']);
+            $router->post('/sign-in', [AuthController::class, 'checkCredentials']);
+
+            // Page de création de compte
+            $this->router->get('/sign-up', [AuthController::class, 'signUp']);
+            $this->router->post('/sign-up', [AuthController::class, 'processSignUp']);
+        });
+
+        // -- Utilisateurs connectés (tous rôles) --
+        $visitorAttributes = [
+            Attributes::MIDDLEWARE => [AuthMiddleware::class]
+        ];
+
+        $this->router->group($visitorAttributes, function (Router $router) {
+            // Logout
+            $router->get('/sign-out', [AuthController::class,
+                'signOut'
+            ]);
+        });
+
         // Page d'affichage des locations d'un utlisateur
         $this->router->get('/rentals/users/{id}', [RentalController::class, 'displayRentalsByOwner']);
-
-        // Page de création de compte
-        $this->router->get('/registration', [UserController::class, 'displayRegistration']);
-        $this->router->post('/registration', [UserController::class, 'processRegistration']);
-
-        // Page de login
-        $this->router->get('/login', [UserController::class, 'displayLogin']);
-        $this->router->post('/login', [UserController::class, 'processLogin']);
-
-        // Page de logout
-        $this->router->get('/logout', [UserController::class, 'processLogout']);
 
         // Page d'affichage d'une location
         $this->router->get('/rentals/{id}', [RentalController::class, 'show']);
@@ -89,6 +151,9 @@ final class App
         // Page de création d'une location
         $this->router->get('/rentals/add', [RentalController::class, 'displayAddRental']);
         $this->router->post('/rentals/add', [RentalController::class, 'processAddRental']);
+
+        // Page de suppression d'une location
+        $this->router->get('/rentals/{id}/delete', [RentalController::class, 'delete']);
 
         // Page de liste des réservations
         $this->router->get('/reservations', [ReservationController::class, 'show']);

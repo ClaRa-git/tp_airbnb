@@ -4,26 +4,27 @@ namespace Symplefony;
 
 class View
 {
-    public const VIEW_PATH = APP_PATH . 'views' . DS;
-    public const COMMON_PATH = self::VIEW_PATH . '_common' . DS;
+    public const VIEW_PATH = APP_PATH .'views'. DS;
+    public const COMMON_PATH = self::VIEW_PATH .'_common'. DS;
 
     private string $name;
     private bool $is_complete;
+    private ?string $auth_controller;
 
-    public static function renderError(int $code): void
+    public static function renderError( int $code ): void
     {
-        http_response_code($code);
+        http_response_code( $code );
 
         $is_complete = $code !== 404;
         $data = [];
 
-        if (!$is_complete) {
-            $data['title'] = 'Page inexistante - Airbnb.com';
+        if( !$is_complete ) {
+            $data['title'] = 'Page inexistante - Autodingo.com';
         }
 
-        $view = new self('_errors:' . $code, $is_complete);
+        $view = new self( '_errors:'. $code, is_complete: $is_complete );
 
-        $view->render($data);
+        $view->render( $data );
     }
 
     /** 
@@ -31,32 +32,38 @@ class View
      * @param string $name Nom de la vue (construction représentant le chemin)
      * @return View Instance
      */
-    public function __construct(string $name, bool $is_complete = false)
+    public function __construct( string $name, bool $is_complete = false, ?string $auth_controller = null )
     {
         $this->name = $name;
         $this->is_complete = $is_complete;
+        $this->auth_controller = $auth_controller;
     }
 
-    public function render(array $view_data = []): void
+    public function render( array $view_data = [] ): void
     {
-        // Tranforme un tableau asociatif en liste de variables nommées comme les clés
-        extract($view_data);
+        // Nom du controller qui gère les infos d'authentification
+        if( ! is_null( $this->auth_controller ) ) {
+            $auth = $this->auth_controller;
+        }
 
-        if (!isset($title)) {
+        // Tranforme un tableau asociatif en liste de variables nommées comme les clés
+        extract( $view_data );
+
+        if( !isset( $title ) ) {
             $title = 'TITRE PAR DEFAULT';
         }
 
         // Démarrage du cache de réponse
         ob_start();
 
-        if (!$this->is_complete) {
-            require_once self::COMMON_PATH . 'top.phtml';
+        if( !$this->is_complete ) {
+            require_once self::COMMON_PATH .'top.phtml';
         }
 
         require_once $this->getTemplatePath();
 
-        if (!$this->is_complete) {
-            require_once self::COMMON_PATH . 'bottom.phtml';
+        if( !$this->is_complete ) {
+            require_once self::COMMON_PATH .'bottom.phtml';
         }
 
         // Libération du cache de réponse
@@ -69,10 +76,10 @@ class View
         // $path = self::VIEW_PATH .'page'. DS .'home.phtml';
 
         // On remplace tous les ":" de $this->name par des séparateurs de dossiers (DS)
-        $path = str_replace(':', DS, $this->name);
+        $path = str_replace( ':', DS, $this->name );
 
         // On ajoute avant et après le reste du chemin final
-        $path = self::VIEW_PATH . $path . '.phtml';
+        $path = self::VIEW_PATH . $path .'.phtml';
 
         return $path;
     }

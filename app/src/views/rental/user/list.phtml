@@ -3,18 +3,19 @@
 
 <?php
 
-use Symplefony\AbstractSession;
+use App\Model\Entity\User;
+use App\Session;
 
- if(AbstractSession::get('user') != null): 
+ if(Session::get(Session::USER) != null): 
     
-    if(AbstractSession::get('user')->getTypeAccount() == 1):?>
+    if(Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER):?>
     <div>
         <a href="/rentals/add">Ajouter une location</a>
     </div>    
     <?php endif;
 
 
-    if(!(AbstractSession::get('user')->getTypeAccount() == 1)): ?>
+    if(!(Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER)): ?>
         <div>
             <h2>Liste des biens disponibles :</h2>
         </div>
@@ -30,7 +31,7 @@ endif; ?>
         <?php foreach ($rentals as $rental): ?>
             <div class="post-rental">
                 <a href="/rentals/<?php echo $rental->getId() ?>">
-                    <?php echo $rental->getTitle() ?>
+                    Titre : <?php echo $rental->getTitle() ?><br>
                 </a>
             </div>
         <?php endforeach ?>

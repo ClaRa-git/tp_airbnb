@@ -2,6 +2,7 @@
 
 use App\Session;
 use Symplefony\AbstractSession;
+use App\Model\Repository\RepoManager;
 
 ?>
 
@@ -9,17 +10,95 @@ use Symplefony\AbstractSession;
     <a href="/">🔙 Retour</a>
 </div>
 <h1><?php printf('Location : %s', $rental->getTitle()) ?></h1>
-<div>
-    <ul>
-        <li><?php printf('Prix : %s € / nuit', $rental->getPrice()) ?></li>
-        <li><?php printf('Surface : %s m²', $rental->getSurface()) ?></li>
-        <li><?php printf('Description : %s', $rental->getDescription()) ?></li>
-        <li><?php printf('Nombre de couchage(s) : %s', $rental->getBeddings()) ?></li>
-    </ul>
-</div>
 
-<?php if (AbstractSession::get(Session::USER)): ?>
-    <?php if ($rental->getOwnerId() != AbstractSession::get(Session::USER)->getId()): ?>
+<?php if (!Session::get(Session::USER) || $rental->getOwnerId() != Session::get(Session::USER)->getId()): ?>
+    <div>
+        <ul>
+            <li><?php printf('Prix : %s € / nuit', $rental->getPrice()) ?></li>
+            <li><?php printf('Surface : %s m²', $rental->getSurface()) ?></li>
+            <li><?php printf('Description : %s', $rental->getDescription()) ?></li>
+            <li><?php printf('Nombre de couchage(s) : %s', $rental->getBeddings()) ?></li>
+        </ul>
+    </div>
+<?php elseif (Session::get(Session::USER) && $rental->getOwnerId() == Session::get(Session::USER)->getId()): ?>
+    <form action="/rentals/user/" <?php echo $rental->getId() ?> id="form-update-rental" method="post">
+
+        <!-- gestion des messages d'erreur -->
+        <?php
+
+        if (isset($_GET['error'])): ?>
+            <p class="error"><?php echo $_GET['error'] ?></p>
+        <?php endif; ?>
+
+        <fieldset>
+            <legend>Titre de la location</legend>
+            <div>
+                <label for="title">Titre :</label>
+                <input type="text" name="title" id="title" value="<?php echo $rental->getTitle() ?>">
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Informations sur la location</legend>
+            <div>
+                <label for="price">Prix :</label>
+                <input type="number" name="price" id="price" value="<?php echo $rental->getPrice() ?>">
+            </div>
+            <div>
+                <label for="surface">Surface</label>
+                <input type="number" name="surface" id="surface" value="<?php echo $rental->getSurface() ?>">
+            </div>
+            <div>
+                <label for="description">Description :</label>
+                <textarea name="description" id="description"><?php echo $rental->getDescription() ?></textarea>
+            </div>
+            <div>
+                <label for="beddings">Nombre de couchage :</label>
+                <input type="number" name="beddings" id="beddings" value="<?php echo $rental->getBeddings() ?>">
+            </div>
+            <div>
+                <label for="typeLogement">Type de logement :</label>
+                <select name="typeLogement_id" id="typeLogement">
+                    <?php $types = RepoManager::getRM()->getTypeLogementRepo()->getAll();
+                    foreach ($types as $type) {
+                        if ($type->getId() == $rental->getTypeLogementId()) {
+                            echo "<option value='" . $type->getId() . "' selected>" . $type->getName() . "</option>";
+                        } else {
+                            echo "<option value='" . $type->getId() . "'>" . $type->getName() . "</option>";
+                        }
+                    } ?>
+                </select>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Adresse de la location</legend>
+            <div>
+                <label for="city">Ville :</label>
+                <input type="text" name="city" id="city" value="<?php echo $rental->getAddress()->getCity() ?>">
+            </div>
+            <div>
+                <label for="country">Pays :</label>
+                <input type="text" name="country" id="country" value="<?php echo $rental->getAddress()->getCountry() ?>">
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Equipements disponibles</legend>
+            <div>
+                <?php $equipments = RepoManager::getRM()->getEquipmentRepo()->getAll();
+                foreach ($equipments as $equipment) {
+                    echo "<div><input type='checkbox' name='equipments[]' value='" . $equipment->getId() . "'><label for='equipments[]'>" . $equipment->getName() . "</label></div>";
+                } ?>
+        </fieldset>
+        <div>
+            <button type="submit">Ajouter</button>
+        </div>
+    </form>
+    <div>
+        <a href="<?php printf('/rentals/users/%s/delete', $rental->getId()) ?>">❌ Supprimer</a>
+    </div>
+<?php endif ?>
+
+<?php if (Session::get(Session::USER)): ?>
+    <?php if ($rental->getOwnerId() != Session::get(Session::USER)->getId()): ?>
         <div>
             <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
         </div>

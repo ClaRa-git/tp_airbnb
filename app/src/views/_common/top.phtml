@@ -1,4 +1,9 @@
-<?php use Symplefony\AbstractSession; ?>
+<?php
+
+use App\Model\Entity\User;
+use App\Session;
+
+?>
 
 <!DOCTYPE html>
 <html lang="fr">
@@ -18,31 +23,40 @@
 <body>
 
     <div id="top-container">
-        <?php if (AbstractSession::get('user') != null):?>
+        <?php if ($auth::isAuth()): ?>
             <div>
                 <div class="logo">
                     <a href="/">AIRBNB</a>
                 </div>
-                <div>Bonjour <?php echo AbstractSession::get('user')->getfirstName() ?></div>
+                <div>Bonjour <?php echo Session::get(Session::USER)->getfirstName() ?></div>
+                <div>Id : <?php echo Session::get(Session::USER)->getId() ?></div>
+                <div>
+                    Mode :
+                    <?php if (Session::get('user')->getTypeAccount() == User::ROLE_OWNER): ?>
+                        Propriétaire
+                    <?php elseif (Session::get('user')->getTypeAccount() == User::ROLE_USER): ?>
+                        Utilisateur
+                    <?php endif; ?>
+                </div>
             </div>
             <div>
                 <ul>
-                    <?php if(AbstractSession::get('user')->getTypeAccount() == 1): ?>
-                    <li><a href="/rentals/user/<?php echo AbstractSession::get('user')->getId() ?>">Mes locations</a></li>
+                    <?if($auth::isOwner()): ?>
+                        <li><a href="/rentals/user/<?php echo(Session::get('user')->getId()) ?>">Mes locations</a></li>
                     <?php endif; ?>
                     <li><a href="/reservations">Mes réservations</a></li>
                 </ul>
-            </div>         
+            </div>
             <div>
-                <a id="logout-button" href="/logout">Se déconnecter</a>
+                <a id="signout-button" href="/sign-out">Se déconnecter</a>
             </div>
         <?php else: ?>
             <div id="top-button">
                 <div>
-                    <a id="subscribe-button" href="/registration">Créer un compte</a>
+                    <a id="signup-button" href="/sign-up">Créer un compte</a>
                 </div>
                 <div>
-                    <a id="login-button" href="/login">Se connecter</a>
+                    <a id="signin-button" href="/sign-in">Se connecter</a>
                 </div>
             </div>
         <?php endif ?>

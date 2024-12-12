@@ -5,6 +5,10 @@ namespace App\Model\Entity;
 use Symplefony\Model\Entity;
 class User extends Entity
 { 
+    public const ROLE_ADMIN = 3;
+    public const ROLE_OWNER = 2;
+    public const ROLE_USER = 1;
+
     protected string $firstName;
     public function getFirstName(): string { return $this->firstName; }
     public function setFirstName(string $firstName): self

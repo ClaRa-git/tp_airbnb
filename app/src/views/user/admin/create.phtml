@@ -1,0 +1,33 @@
+<div>
+    <a href="/admin/users">🔙 Retour</a>
+</div>
+<h1>Ajouter un nouvel utilisateur</h1>
+<form action="/admin/users" method="post" novalidate>
+    <div>
+        <label for="input-email">Email :</label>
+        <input type="email" name="email" id="input-email">
+    </div>
+    <div>
+        <label for="input-password">Mot de passe :</label>
+        <input type="password" name="password" id="input-password">
+    </div>
+    <div>
+        <label for="select-role">Rôle : </label>
+        <select name="role" id="select-role">
+            <option value="1">Propriétaire</option>
+            <option value="2">Utilisateur</option>
+            <option value="3">Administrateur</option>
+        </select>
+    </div>
+    <div>
+        <label for="input-firstname">Prénom :</label>
+        <input type="text" name="firstName" id="input-firstname">
+    </div>
+    <div>
+        <label for="input-lastname">Nom :</label>
+        <input type="text" name="lastName" id="input-lastname">
+    </div>
+    <div>
+        <input type="submit" value="Ajouter">
+    </div>
+</form>
