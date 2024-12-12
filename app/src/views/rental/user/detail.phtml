@@ -1,11 +1,14 @@
+<?php
+
+use App\Session;
+use Symplefony\AbstractSession;
+
+?>
+
 <div>
     <a href="/">🔙 Retour</a>
 </div>
-<h1><?php
-
-use Symplefony\AbstractSession;
-
- printf('Location : %s', $rental->getTitle()) ?></h1>
+<h1><?php printf('Location : %s', $rental->getTitle()) ?></h1>
 <div>
     <ul>
         <li><?php printf('Prix : %s € / nuit', $rental->getPrice()) ?></li>
@@ -15,8 +18,10 @@ use Symplefony\AbstractSession;
     </ul>
 </div>
 
-<?php if($rental->getOwnerId() != AbstractSession::get('user')->getId()): ?>
-    <div>
-        <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
-    </div>
+<?php if (AbstractSession::get(Session::USER)): ?>
+    <?php if ($rental->getOwnerId() != AbstractSession::get(Session::USER)->getId()): ?>
+        <div>
+            <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
+        </div>
+    <?php endif ?>
 <?php endif ?>

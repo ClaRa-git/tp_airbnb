@@ -7,8 +7,8 @@ use Symplefony\Model\Entity;
 class Equipment extends Entity
 {
     protected string $labelEquipment;
-    public function getLabelEquipment(): string { return $this->labelEquipment; }
-    public function setLabelEquipment(string $labelEquipment): self
+    public function getName(): string { return $this->labelEquipment; }
+    public function setName(string $labelEquipment): self
     {
         $this->labelEquipment = $labelEquipment;
         return $this;

@@ -9,6 +9,7 @@ use Symplefony\Model\Repository;
 class EquipmentRepository extends Repository
 {
     protected function getTableName(): string { return 'equipments'; }
+    private function getMappingRental(): string { return 'rentals_equipments'; }
 
     /**
      * Crée un nouvel équipement en base de données
@@ -29,7 +30,7 @@ class EquipmentRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'labelEquipment' => $equipment->getLabelEquipment()
+            'labelEquipment' => $equipment->getName()
         ]);
 
         if(!$success) { return null; }
@@ -60,6 +61,38 @@ class EquipmentRepository extends Repository
     }
 
     /**
+     * Retourne tous les équipements d'une location
+     * @param int $id
+     * @return array
+     */
+    public function getAllForRental(int $id): array
+    {
+        $query = sprintf(
+            'SELECT * FROM `%1$s` as `e`
+                JOIN `%2$s` as `re` ON `e`.`id` = `re`.`equipment_id` 
+                WHERE `re`.`rental_id` = :id',
+            $this->getTableName(),
+            $this->getMappingRental()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return []; }
+
+        $success = $sth->execute(['id' => $id]);
+
+        if(!$success) { return []; }
+
+        $equipments = [];
+
+        while($equipment_data = $sth->fetch()){
+            $equipments[] = new Equipment($equipment_data);
+        }
+
+        return $equipments;
+    }
+
+    /**
      * Met à jour un équipement en base de données
      * @param Equipment $equipment
      * @return Equipment|null
@@ -78,7 +111,7 @@ class EquipmentRepository extends Repository
         if(!$sth) { return null; }
 
         $success = $sth->execute([
-            'labelEquipment' => $equipment->getLabelEquipment(),
+            'labelEquipment' => $equipment->getName(),
             'id' => $equipment->getId()
         ]);
 
@@ -104,6 +137,57 @@ class EquipmentRepository extends Repository
         if(!$sth) { return false; }
 
         $success = $sth->execute(['id' => $id]);
+
+        return $success;
+    }
+
+    /**
+     * Supprime toutes les liaisons entre un équipement et une location
+     * @param int $id
+     * @return bool
+     */
+    public function detachAllForRental(int $id): bool
+    {
+        $query = sprintf(
+            'DELETE FROM `%s` WHERE `rental_id` = :id',
+            $this->getMappingRental()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return false; }
+
+        $success = $sth->execute(['id' => $id]);
+
+        return $success;
+    }
+
+    /**
+     * Insère les liaisons entre un équipement et une location
+     * @param array $equipments_ids
+     * @param int $rental_id
+     * @return bool
+     */
+    public function attachForRental(array $equipments_ids, int $rental_id): bool
+    {
+        $query_values = [];
+        foreach($equipments_ids as $equipment_id) {
+            $query_values[] = sprintf('(%s, %s)', $rental_id, $equipment_id);
+        }
+
+        $query = sprintf(
+            'INSERT INTO `%s` 
+                (`rental_id`, `equipment_id`) 
+                VALUES %s',
+            $this->getMappingRental(),
+            implode(', ', $query_values)
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return false; }
+
+        $success = $sth->execute();
 
         return $success;
     }

@@ -7,17 +7,18 @@
 // Déclaration du namespace de ce fichier
 namespace App;
 
-use App\Controller\AddressController;
-use App\Controller\RentalController;
-use App\Controller\ReservationController;
-use App\Controller\UserController;
 use Exception;
 use Throwable;
 
-use MiladRahimi\PhpRouter\Router;
-use MiladRahimi\PhpRouter\Exceptions\RouteNotFoundException;
+use App\Controller\PageController;
+use App\Controller\RentalController;
+use App\Controller\ReservationController;
+use App\Controller\UserController;
 
 use Symplefony\View;
+
+use MiladRahimi\PhpRouter\Router;
+use MiladRahimi\PhpRouter\Exceptions\RouteNotFoundException;
 
 final class App
 {
@@ -30,6 +31,7 @@ final class App
         return $this->router;
     }
 
+    // Récupération de l'instance de l'application
     public static function getApp(): self
     {
         // Si l'instance n'existe pas encore on la crée
@@ -43,7 +45,7 @@ final class App
     // Démarrage de l'application
     public function start(): void
     {
-        session_start();
+        session_start(); // Démarrage de la session
         $this->registerRoutes();
         $this->startRouter();
     }
@@ -61,8 +63,11 @@ final class App
         // {id} doit être un nombre
         $this->router->pattern('id', '\d+');
 
+        //TODO: Ajouter les routes de l'application  par groupes avec middleware
+
         // -- Pages communes --
         $this->router->get('/', [RentalController::class, 'displayRentals']);
+        $this->router->get('/mentions-legales', [PageController::class, 'legalMentions']);
 
         // Page d'affichage des locations d'un utlisateur
         $this->router->get('/rentals/users/{id}', [RentalController::class, 'displayRentalsByOwner']);

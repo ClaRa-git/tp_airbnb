@@ -119,4 +119,31 @@ class Rental extends Entity
         $this->owner = $owner;
         return $this;
     }
+
+    // Liaison avec la tabme rentals_equipments
+    protected array $equipments;
+    public function getEquipments(): array
+    {
+        if(!isset($this->equipments)) {
+            $this->equipments = RepoManager::getRM()->getEquipmentRepo()->getAllForRental($this->id);
+        }
+
+        return $this->equipments;
+    }
+    public function addEquipments(array $equipments_ids): self
+    {
+        $equip_repo = RepoManager::getRM()->getEquipmentRepo();
+
+        // 1- On supprime les équipements déjà liés à la location
+        $equip_repo->detachAllForRental($this->id);
+
+        if(empty($equipments_ids)) {
+            return $this;
+        }
+
+        // 2- On lie seulement les équipements passés en paramètre
+        $equip_repo->attachForRental($equipments_ids, $this->id);
+
+        return $this;
+    }
 }

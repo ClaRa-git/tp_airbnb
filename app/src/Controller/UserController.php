@@ -71,68 +71,72 @@ class UserController extends Controller
      * pas de paramètre
      * @return void
      */
-    public function processRegistration(): void
+    public function processRegistration(ServerRequest $request): void
     {
+        $user_data = $request->getParsedBody();
+
         // On vérifie que l'on recoit bien les données du formulaire
-        if (isset($_POST['firstName']) &&
-            isset($_POST['lastName']) &&
-            isset($_POST['email']) &&
-            isset($_POST['password']) &&
-            isset($_POST['typeAccount'])
+        if (!isset($user_data['firstName']) ||
+            !isset($user_data['lastName']) ||
+            !isset($user_data['email']) ||
+            !isset($user_data['password']) ||
+            !isset($user_data['typeAccount'])
         ){
+            $this->redirect('/registration?error=Erreurlors de la création des champs');
+        }
 
-            // On sécurise les données
-            $firstName = Functions::secureData($_POST['firstName']);
-            $lastName = Functions::secureData($_POST['lastName']);
-            $email = strtolower(Functions::secureData($_POST['email']));
-            $password = Functions::secureData($_POST['password']);
-            $typeAccount = intval(Functions::secureData($_POST['typeAccount']));
+        // On sécurise les données
+        $firstName = Functions::secureData($user_data['firstName']);
+        $lastName = Functions::secureData($user_data['lastName']);
+        $email = strtolower(Functions::secureData($user_data['email']));
+        $password = Functions::secureData($user_data['password']);
+        $typeAccount = intval(Functions::secureData($user_data['typeAccount']));
 
-            $pass_hash = password_hash($password, PASSWORD_BCRYPT);
+        $pass_hash = password_hash($password, PASSWORD_BCRYPT);
 
-            // On vérifie si les données sont vides
-            if (empty($firstName) ||
-                empty($lastName) ||
-                empty($email) ||
-                empty($password) ||
-                empty($typeAccount)) {
-                $this->redirect('/registration?error=Veuillez remplir tous les champs');
+        // On vérifie si les données sont vides
+        if (empty($firstName) ||
+            empty($lastName) ||
+            empty($email) ||
+            empty($password) ||
+            empty($typeAccount)
+        ){
+            $this->redirect('/registration?error=Veuillez remplir tous les champs');
+        }
+
+        // On vérifie le format de l'email
+        if (!Functions::validEmail($email)) {
+            $this->redirect('/registration?error=Le format de l\'email est incorrect');
+        }
+
+        // On vérifie le format du mot de passe
+        if (!Functions::validPassword($password)) {
+            $this->redirect('/registration?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
+        }
+
+        // On vérifie si l'email n'est pas déjà utilisé pour le type de compte choisi
+        $users = RepoManager::getRM()->getUserRepo()->getAllByEmail($email);
+        foreach($users as $user) {
+            if ($user->getEmail() == $email && $user->getTypeAccount() == $typeAccount) {
+                $this->redirect('/registration?error=Cet email est déjà utilisé');
             }
+        }
 
-            // On vérifie le format de l'email
-            if (!Functions::validEmail($email)) {
-                $this->redirect('/registration?error=Le format de l\'email est incorrect');
-            }
+        // On crée un nouvel utilisateur
+        $user = new User([
+            'firstName' => $firstName,
+            'lastName' => $lastName,
+            'email' => $email,
+            'password' => $pass_hash,
+            'typeAccount' => $typeAccount
+        ]);
 
-            // On vérifie le format du mot de passe
-            if (!Functions::validPassword($password)) {
-                $this->redirect('/registration?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
-            }
+        $user_created = RepoManager::getRM()->getUserRepo()->create($user);
 
-            // On vérifie si l'email n'est pas déjà utilisé pour le type de compte choisi
-            $users = RepoManager::getRM()->getUserRepo()->getAllByEmail($email);
-            foreach($users as $user) {
-                if ($user->getEmail() == $email && $user->getTypeAccount() == $typeAccount) {
-                    $this->redirect('/registration?error=Cet email est déjà utilisé');
-                }
-            }
-
-            // On crée un nouvel utilisateur
-            $user = new User([
-                'firstName' => $firstName,
-                'lastName' => $lastName,
-                'email' => $email,
-                'password' => $pass_hash,
-                'typeAccount' => $typeAccount
-            ]);
-
-            $user_created = RepoManager::getRM()->getUserRepo()->create($user);
-
-            if (is_null($user_created)) {
-                $this->redirect('/registration?error=Une erreur est survenue lors de la création de votre compte');
-            } else {
-                $this->redirect('/login');
-            }
+        if (is_null($user_created)) {
+            $this->redirect('/registration?error=Une erreur est survenue lors de la création de votre compte');
+        } else {
+            $this->redirect('/login');
         }
     }
 
@@ -144,15 +148,15 @@ class UserController extends Controller
     public function processLogin(): void
     {
         // On vérifie que l'on recoit bien les données du formulaire
-        if (isset($_POST['email']) &&
-        isset($_POST['password']) &&
-        isset($_POST['typeAccount'])
+        if (isset($user_data['email']) &&
+        isset($user_data['password']) &&
+        isset($user_data['typeAccount'])
         ){
 
             // On sécurise les données
-            $email = strtolower(Functions::secureData($_POST['email']));
-            $password = Functions::secureData($_POST['password']);
-            $typeAccount = Functions::secureData($_POST['typeAccount']);
+            $email = strtolower(Functions::secureData($user_data['email']));
+            $password = Functions::secureData($user_data['password']);
+            $typeAccount = Functions::secureData($user_data['typeAccount']);
 
             // On vérifie si les données sont vides
             if (empty($email) ||
