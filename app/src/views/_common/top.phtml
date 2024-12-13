@@ -23,13 +23,12 @@ use App\Session;
 <body>
 
     <div id="top-container">
-        <?php if ($auth::isAuth()): ?>
+        <div class="logo">
+            <a href="/">AIRBNB</a>
+        </div>
+        <?php if (Session::get(Session::USER)): ?>
             <div>
-                <div class="logo">
-                    <a href="/">AIRBNB</a>
-                </div>
                 <div>Bonjour <?php echo Session::get(Session::USER)->getfirstName() ?></div>
-                <div>Id : <?php echo Session::get(Session::USER)->getId() ?></div>
                 <div>
                     Mode :
                     <?php if (Session::get('user')->getTypeAccount() == User::ROLE_OWNER): ?>
@@ -41,10 +40,9 @@ use App\Session;
             </div>
             <div>
                 <ul>
-                    <?if($auth::isOwner()): ?>
-                        <li><a href="/rentals/user/<?php echo(Session::get('user')->getId()) ?>">Mes locations</a></li>
+                    <?if(Session::get(Session::USER)): ?>
+                        <li><a href="/reservations">Mes réservations</a></li>
                     <?php endif; ?>
-                    <li><a href="/reservations">Mes réservations</a></li>
                 </ul>
             </div>
             <div>

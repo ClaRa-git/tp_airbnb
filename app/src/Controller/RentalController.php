@@ -64,7 +64,6 @@ class RentalController extends Controller
         }
         else {
             $rentals = RepoManager::getRM()->getRentalRepo()->getAllById(Session::get(Session::USER)->getId());
-            var_dump(Session::get(Session::USER)->getId());
         }
 
         $data = [
@@ -116,14 +115,14 @@ class RentalController extends Controller
         }
 
         // On sécurise les données
-        $title = Functions::secureData($rental_data['title']);
-        $price = Functions::secureData($rental_data['price']);
-        $surface = Functions::secureData($rental_data['surface']);
-        $description = Functions::secureData($rental_data['description']);
-        $beddings = Functions::secureData($rental_data['beddings']);
-        $typeLogement_id = Functions::secureData($rental_data['typeLogement_id']);
-        $city = Functions::secureData($rental_data['city']);
-        $country = Functions::secureData($rental_data['country']);
+        $title = $this->secureData($rental_data['title']);
+        $price = $this->secureData($rental_data['price']);
+        $surface = $this->secureData($rental_data['surface']);
+        $description = $this->secureData($rental_data['description']);
+        $beddings = $this->secureData($rental_data['beddings']);
+        $typeLogement_id = $this->secureData($rental_data['typeLogement_id']);
+        $city = $this->secureData($rental_data['city']);
+        $country = $this->secureData($rental_data['country']);
 
         // On vérifie si les données sont vides
         if(empty($title) ||
@@ -235,5 +234,36 @@ class RentalController extends Controller
         }
 
         $this->redirect('/');
+    }
+
+    // -- Fonctions de sécurisation des données --
+    /**
+     * Méthode qui vérifie le format de l'email
+     * @param string $email
+     * @return bool
+     */
+    public static function validEmail($email): bool
+    {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+     * Méthode qui vérifie que le mdp contient au moins 8 caractères, une majuscule, une minuscule et un chiffre
+     * @param string $password
+     * @return bool
+     */
+    public static function validPassword($password): bool
+    {
+        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password);
+    }
+
+    /**
+     * Méthode qui sécurise les données
+     * @param string $data
+     * @return string
+     */
+    public static function secureData($data): string
+    {
+        return htmlspecialchars(stripslashes(trim($data))); // htmlspecialchars() convertit les caractères spéciaux en entités HTML, stripslashes() supprime les antislashs et trim() supprime les espaces inutiles en début et fin de chaîne
     }
 }

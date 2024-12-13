@@ -158,7 +158,11 @@ final class App
         // Page de liste des réservations
         $this->router->get('/reservations', [ReservationController::class, 'show']);
         // Page d'ajout de réservation
-        $this->router->get('/rentals/{id}/reservations', [ReservationController::class, 'displayAddReservation']);
+        $this->router->get('/reservations/add?id={id}', [ReservationController::class, 'displayAddReservation']);
+        $this->router->get('/reservations/add', [ReservationController::class, 'displayAddReservation']);
+
+        // Ajout de réservation
+        $this->router->post('/reservations/add', [ReservationController::class, 'create']);
     }
 
     // Démarrage du routeur

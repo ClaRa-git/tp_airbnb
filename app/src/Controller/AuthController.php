@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Session;
 use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
-use App\Tools\Functions;
 
 use Symplefony\Controller;
 
@@ -110,11 +109,11 @@ class AuthController extends Controller
         }
 
         // On sécurise les données
-        $firstName = Functions::secureData($user_data['firstName']);
-        $lastName = Functions::secureData($user_data['lastName']);
-        $email = strtolower(Functions::secureData($user_data['email']));
-        $password = Functions::secureData($user_data['password']);
-        $typeAccount = intval(Functions::secureData($user_data['typeAccount']));
+        $firstName = $this->secureData($user_data['firstName']);
+        $lastName = $this->secureData($user_data['lastName']);
+        $email = strtolower($this->secureData($user_data['email']));
+        $password = $this->secureData($user_data['password']);
+        $typeAccount = intval($this->secureData($user_data['typeAccount']));
 
         $pass_hash = password_hash($password, PASSWORD_BCRYPT);
 
@@ -130,12 +129,12 @@ class AuthController extends Controller
         }
 
         // On vérifie le format de l'email
-        if (!Functions::validEmail($email)) {
+        if (!$this->validEmail($email)) {
             $this->redirect('/sign-up?error=Le format de l\'email est incorrect');
         }
 
         // On vérifie le format du mot de passe
-        if (!Functions::validPassword($password)) {
+        if (!$this->validPassword($password)) {
             $this->redirect('/sign-up?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
         }
 
@@ -210,9 +209,9 @@ class AuthController extends Controller
         }
 
         // On sécurise les données
-        $email = strtolower(Functions::secureData($user_data['email']));
-        $password = Functions::secureData($user_data['password']);
-        $typeAccount = Functions::secureData($user_data['typeAccount']);
+        $email = strtolower($this->secureData($user_data['email']));
+        $password = $this->secureData($user_data['password']);
+        $typeAccount = $this->secureData($user_data['typeAccount']);
 
         // On vérifie si les données sont vides
         if (
@@ -224,18 +223,12 @@ class AuthController extends Controller
         }
 
         // On vérifie le format de l'email
-        if (!Functions::validEmail($email)) {
+        if (!$this->validEmail($email)) {
             $this->redirect('/sign-in?error=Le format de l\'email est incorrect');
         }
 
         // On récupère les utilisateurs et on vérifie si l'utilisateur existe pour le type de compte choisi
-        $users = RepoManager::getRM()->getUserRepo()->getAllByEmail($email);
-        $verifiedUser = null;
-        foreach ($users as $user) {
-            if ($user->getEmail() == $email && $user->getTypeAccount() == $typeAccount) {
-                $verifiedUser = $user;
-            }
-        }
+        $verifiedUser = RepoManager::getRM()->getUserRepo()->getAllByEmailAndType($email, $typeAccount);
 
         // On vérifie si l'utilisateur existe
         if (is_null($verifiedUser)) {
@@ -249,10 +242,10 @@ class AuthController extends Controller
 
         // On connecte l'utilisateur
         $verifiedUser->setPassword("");
-        Session::set(Session::USER, $user);
+        Session::set(Session::USER, $verifiedUser);
 
         // On redirige vers une page en fonction du rôle de l'utilisateur
-        $redirect_url = match ($user->getTypeAccount()) {
+        $redirect_url = match ($verifiedUser->getTypeAccount()) {
             User::ROLE_USER => '/',
             User::ROLE_OWNER => '/',
             User::ROLE_ADMIN => '/admin' // TODO: Sécurité: page qui redemande le mot de passe par exemple
@@ -274,5 +267,36 @@ class AuthController extends Controller
         Session::remove(Session::USER);
 
         $this->redirect('/');
+    }
+
+    // -- Fonctions de sécurisation
+    /**
+     * Méthode qui vérifie le format de l'email
+     * @param string $email
+     * @return bool
+     */
+    public static function validEmail($email): bool
+    {
+        return filter_var($email, FILTER_VALIDATE_EMAIL);
+    }
+
+    /**
+     * Méthode qui vérifie que le mdp contient au moins 8 caractères, une majuscule, une minuscule et un chiffre
+     * @param string $password
+     * @return bool
+     */
+    public static function validPassword($password): bool
+    {
+        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password);
+    }
+
+    /**
+     * Méthode qui sécurise les données
+     * @param string $data
+     * @return string
+     */
+    public static function secureData($data): string
+    {
+        return htmlspecialchars(stripslashes(trim($data))); // htmlspecialchars() convertit les caractères spéciaux en entités HTML, stripslashes() supprime les antislashs et trim() supprime les espaces inutiles en début et fin de chaîne
     }
 } 

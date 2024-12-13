@@ -15,6 +15,13 @@ class ReservationRepository extends Repository
     protected function getTableName(): string { return 'reservations'; }
 
     /**
+     * Retourne  le nom de la table en base de données
+     * pas de paramètre
+     * @return string
+     */
+    private function getMappingRental(): string { return 'rentals'; }
+
+    /**
      * Créer une réservation
      * @param Reservation $reservation
      * @return Reservation|null
@@ -111,5 +118,38 @@ class ReservationRepository extends Repository
         ]);
 
         return $success;
+    }
+
+    /**
+     * Récupère toutes les réservations concernant un propriétaire
+     * @param int $owner_id
+     * @return array
+     */
+    public function getAllForOwner(int $owner_id): array
+    {
+        $query = sprintf(
+            'SELECT res.* FROM %1$s res
+            JOIN %2$s ren ON res.rental_id = ren.id
+            WHERE ren.owner_id=:owner_id',
+            $this->getTableName(),
+            $this->getMappingRental()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return []; }
+
+        $success = $sth->execute([
+            'owner_id' => $owner_id
+        ]);
+
+        if(!$success) { return []; }
+
+        $reservations = [];
+        while ($reservation = $sth->fetch()) {
+            $reservations[] = new Reservation($reservation);
+        }
+
+        return $reservations;
     }
 }

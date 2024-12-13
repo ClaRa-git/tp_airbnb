@@ -1,11 +1,17 @@
 <?php
 
-use App\Model\Repository\RepoManager; ?>
+use App\Model\Entity\User;
+use App\Model\Repository\RepoManager;
+use App\Session;
+
+?>
 
 <main>
     <h1>Réservations</h1>
 
-    <a href="/reservations/add">Faire une réservation</a>
+    <?php if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER): ?>
+        <a href="/reservations/add">Faire une réservation</a>
+    <?php endif ?>
 
     <h2>Mes réservations</h2>
 
@@ -15,8 +21,11 @@ use App\Model\Repository\RepoManager; ?>
                 <li>
                     <div class="post-rental">
                         <a href="/rentals/<?php echo $reservation->getRentalId() ?>">
-                            <?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd() ?>
-                            <?php echo RepoManager::getRM()->getRentalRepo()->getbyId($reservation->getRentalId())->getTitle() ?>
+                            <div><?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd() ?></div>
+                            <div><?php echo RepoManager::getRM()->getRentalRepo()->getbyId($reservation->getRentalId())->getTitle() ?></div>
+                            <?php if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER): ?>
+                                <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName() ?></div>
+                            <?php endif ?>
                         </a>
                     </div>
                 </li>

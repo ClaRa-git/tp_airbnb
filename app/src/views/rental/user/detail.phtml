@@ -100,7 +100,7 @@ use App\Model\Repository\RepoManager;
 <?php if (Session::get(Session::USER)): ?>
     <?php if ($rental->getOwnerId() != Session::get(Session::USER)->getId()): ?>
         <div>
-            <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
+            <a href="/reservations/add?id=<?php echo $rental->getId() ?>">Réserver</a>
         </div>
     <?php endif ?>
 <?php endif ?>

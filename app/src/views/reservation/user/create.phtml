@@ -1,0 +1,53 @@
+<?php
+
+use App\Model\Repository\RepoManager;
+
+?>
+
+<div>
+    <a href="/">🔙 Retour</a>
+</div>
+
+<h1>Faire une réservation</h1>
+
+<form action="/reservations/add" id="form-create-reservation" method="post">
+
+    <!-- gestion des messages d'erreur -->
+    <?php
+    
+    if (isset($_GET['error'])): ?>
+        <p class="error"><?php echo $_GET['error'] ?></p>
+    <?php endif; ?>
+
+    <fieldset>
+        <legend>Informations sur la réservation</legend>
+        <div>
+            <label for="dateStart">Date de début :</label>
+            <input type="datetime-local" name="dateStart" id="dateStart">
+        </div>
+        <div>
+            <label for="dateEnd">Date de fin :</label>
+            <input type="datetime-local" name="dateEnd" id="dateEnd">
+        </div>
+        <div>
+            <label for="rental">Location :</label>
+            <?php $rentals = RepoManager::getRM()->getRentalRepo()->getAll(); ?>
+            <select name="rental_id" id="rental">
+                <?php if(isset($_GET['id'])){ //TODO: sécuriser le $_GET
+                    foreach ($rentals as $rental) {
+                        var_dump($rental->getId());
+                        if ($rental->getId() == $_GET['id']) {
+                            echo "<option value='" . $rental->getId() . "' selected>" . $rental->getTitle() . "</option>";
+                        } else {
+                            echo "<option value='" . $rental->getId() . "'>" . $rental->getTitle() . "</option>";
+                        }
+                    }
+                } else {
+                    foreach ($rentals as $rental) {
+                        echo "<option value='" . $rental->getId() . "'>" . $rental->getTitle() . "</option>";
+                    }
+                } ?>
+            </select>
+        </div>
+    </fieldset>
+    <button type="submit">Réserver</button>

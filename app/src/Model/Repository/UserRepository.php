@@ -68,6 +68,39 @@ class UserRepository extends Repository
     }
 
     /**
+     * Récupère un user par son email et son type de compte
+     * @param string $email
+     * @param int $typeAccount
+     * @return User|null
+     */
+    public function getAllByEmailAndType(string $email, int $typeAccount): ?User
+    {
+        $query = sprintf(
+            'SELECT * FROM `%s` WHERE `email`=:email AND `typeAccount`=:typeAccount',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if(!$sth) { return null; }
+
+        $success = $sth->execute([
+            'email' => $email,
+            'typeAccount' => $typeAccount
+        ]);
+
+        if(!$success) { return null; }
+
+        $user_data = $sth->fetch();
+
+        if(!$user_data) { return null; }
+
+        $user = new User($user_data);
+        
+        return $user;
+    }
+
+    /**
      * Récupère un user par son email
      * @param string $email
      * @return array
@@ -81,17 +114,19 @@ class UserRepository extends Repository
 
         $sth = $this->pdo->prepare($query);
 
-        if(!$sth) { return []; }
+        if (!$sth) { return []; }
 
-        $success = $sth->execute(['email' => $email]);
+        $success = $sth->execute([
+            'email' => $email
+        ]);
 
-        if(!$success) { return []; }
+        if (!$success) { return []; }
 
         $users = [];
-        foreach($sth as $row) {
-            $users[] = new User($row);
+        while ($user = $sth->fetch()) {
+            $users[] = $user;
         }
-        
+
         return $users;
     }
 
