@@ -1,68 +1,314 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
+/* Style de base pour le body */
 body {
     width: 100%;
+    /* Largeur de la page */
     height: 100vh;
+    /* Hauteur de la page qui prend toute la hauteur de l'écran */
     display: flex;
+    /* Utilisation de Flexbox pour organiser les éléments */
     flex-direction: column;
+    /* Organiser les éléments en colonne */
+    font-family: 'Arial', sans-serif;
+    /* Police de base */
+    background-color: #f4f4f9;
+    /* Couleur de fond douce pour l'ensemble de la page */
+    color: #333;
+    /* Texte en gris foncé pour une meilleure lisibilité */
+    margin: 0;
+    /* Supprimer les marges par défaut */
+    padding: 0;
+    /* Supprimer les paddings par défaut */
+    padding-top: 80px;
+    /* Espace sous la bannière */
 }
 
-h1 {
-    text-align: center;
-}
-
+/* Style de la bannière (top-container) */
 #top-container {
     background-color: coral;
-    padding: 20px;
+    /* Couleur de fond corail */
+    padding: 15px 30px;
+    /* Espacement plus petit mais équilibré */
     width: 100%;
+    /* Prendre toute la largeur */
     display: flex;
+    /* Flexbox pour aligner les éléments */
     flex-direction: row;
+    /* Disposition des éléments de gauche à droite */
     justify-content: space-between;
+    /* Espacement égal entre les éléments */
     align-items: center;
+    /* Centrer les éléments verticalement */
+    position: fixed;
+    /* Fixer la bannière en haut */
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    /* Assurer qu'elle reste au-dessus des autres éléments */
 }
 
+/* Style du logo dans la bannière */
+#top-container .logo a {
+    font-size: 1.8rem;
+    /* Taille de police légèrement plus grande */
+    font-weight: bold;
+    /* Gras pour le logo */
+    color: white;
+    /* Texte blanc */
+    text-decoration: none;
+    /* Enlever le souligné */
+    letter-spacing: 2px;
+    /* Espacement entre les lettres pour un effet plus moderne */
+}
 
+/* Style des liens d'authentification (Créer un compte / Se connecter) */
+.auth-actions a {
+    color: white;
+    text-decoration: none;
+    background-color: #ff6600;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    margin-left: 15px;
+    font-size: 1rem;
+}
 
+/* Effet au survol des liens d'authentification */
+.auth-actions a:hover {
+    background-color: #e65c00;
+}
+
+/* Style des informations utilisateur */
+.user-info {
+    font-size: 1rem;
+    /* Taille de texte plus grande pour plus de lisibilité */
+    color: white;
+    /* Texte blanc pour contraster avec le fond corail */
+}
+
+.user-info .user-name {
+    font-weight: bold;
+}
+
+.user-info .user-mode {
+    font-style: italic;
+    /* Mode en italique */
+}
+
+/* Liste des actions utilisateur (Mes réservations et Se déconnecter) */
+.user-actions ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.user-actions ul li {
+    display: inline;
+    /* Disposition horizontale des éléments */
+    margin-right: 20px;
+    /* Espacement entre les liens */
+}
+
+.user-actions a {
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: bold;
+    background-color: rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+}
+
+/* Effet au survol des liens d'actions utilisateur */
+.user-actions a:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+    /* Légère transparence */
+}
+
+/* Conteneur principal du contenu */
+main {
+    flex-grow: 1;
+    /* L'élément main prendra tout l'espace disponible */
+    padding: 20px;
+    /* Espacement autour du contenu principal */
+    max-width: 1200px;
+    /* Limiter la largeur du contenu pour ne pas le rendre trop large */
+    margin: 0 auto;
+    /* Centrer le contenu horizontalement */
+    background-color: #fff;
+    /* Fond blanc pour le contenu principal */
+    border-radius: 10px;
+    /* Coins arrondis */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    /* Ajouter une légère ombre autour du contenu */
+}
+
+/* Style des erreurs (messages d'erreur) */
 .error {
     color: red;
     border: 1px solid red;
-    padding: 10px;
-    border-radius: 20px;
-    margin: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 20px 0;
     background-color: rgb(255, 150, 150);
+    font-size: 1rem;
 }
 
+/* Style des formulaires */
 form {
     border-radius: 20px;
-    padding: 20px;
-    width: 60%;
+    padding: 25px;
+    width: 100%;
+    max-width: 600px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    /* Ombre douce autour du formulaire */
 }
 
 form>* {
-    margin: 10px;
+    margin: 15px 0;
+    /* Espacement uniforme entre les éléments */
 }
 
+input,
+button {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border-radius: 8px;
+    border: 1px solid #ddd;
+}
+
+button {
+    background-color: coral;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #e65c00;
+}
+
+/* Liste des locations (rentals-list) */
 .rentals-list {
     display: flex;
     flex-direction: row;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center;
     padding: 20px;
     border-radius: 20px;
-    margin: 10px;
+    margin: 20px 0;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    /* Ombre légère pour plus de profondeur */
 }
 
+/* Style des posts de location */
 .post-rental {
     padding: 20px;
     border-radius: 20px;
-    border: 1px solid black;
+    border: 1px solid #ddd;
     margin: 10px;
+    background-color: #fafafa;
+    width: 30%;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    /* Ombre douce pour chaque post */
+}
+
+/* Responsivité - Ajuster les éléments pour les petits écrans */
+@media (max-width: 768px) {
+
+    /* Réduire la taille de la police pour les petits écrans */
+    body {
+        font-size: 14px;
+    }
+
+    /* Centrer le formulaire et ajuster la largeur */
+    form {
+        width: 90%;
+    }
+
+    /* Réorganiser les éléments de la location en colonne pour les petits écrans */
+    .rentals-list {
+        flex-direction: column;
+    }
+
+    .post-rental {
+        width: 100%;
+        /* Prendre toute la largeur pour les petits écrans */
+        margin-bottom: 20px;
+        /* Espacement entre les posts */
+    }
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    /* Fond foncé pour le footer */
+    color: white;
+    /* Texte en blanc */
+    padding: 20px;
+    /* Espacement interne */
+    text-align: center;
+    /* Centrer le texte */
+    position: relative;
+    /* Pour que le footer ne se superpose pas avec d'autres éléments */
+    bottom: 0;
+    /* Ancrer le footer au bas de la page */
+    width: 100%;
+    /* Occuper toute la largeur */
+}
+
+.footer {
+    display: flex;
+    justify-content: center;
+    /* Centrer le contenu horizontalement */
+    align-items: center;
+    /* Centrer les éléments verticalement */
+    gap: 30px;
+    /* Espacement entre les liens */
+}
+
+/* Liens du footer */
+footer a {
+    color: white;
+    /* Couleur du texte blanc */
+    text-decoration: none;
+    /* Enlever le souligné */
+    font-size: 1rem;
+    /* Taille de texte standard */
+    transition: color 0.3s ease;
+    /* Transition douce au survol */
+}
+
+/* Effet au survol des liens */
+footer a:hover {
+    color: #ff6600;
+    /* Couleur corail au survol */
+}
+
+/* Pour rendre le footer réactif sur les petits écrans */
+@media (max-width: 768px) {
+    footer {
+        padding: 15px;
+        /* Moins d'espace pour les petits écrans */
+    }
+
+    .footer {
+        flex-direction: column;
+        /* Empiler les éléments en colonne sur les petits écrans */
+        gap: 20px;
+        /* Espacement réduit */
+    }
+
+    footer a {
+        font-size: 0.9rem;
+        /* Réduire la taille des liens */
+    }
 }

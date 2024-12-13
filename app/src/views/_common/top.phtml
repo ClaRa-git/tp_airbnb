@@ -1,6 +1,5 @@
 <?php
 
-use App\Model\Entity\User;
 use App\Session;
 
 ?>
@@ -21,41 +20,42 @@ use App\Session;
 </head>
 
 <body>
-
     <div id="top-container">
+        <!-- Logo de l'application -->
         <div class="logo">
             <a href="/">AIRBNB</a>
         </div>
-        <?php if (Session::get(Session::USER)): ?>
-            <div>
-                <div>Bonjour <?php echo Session::get(Session::USER)->getfirstName() ?></div>
-                <div>
-                    Mode :
-                    <?php if (Session::get('user')->getTypeAccount() == User::ROLE_OWNER): ?>
-                        Propriétaire
-                    <?php elseif (Session::get('user')->getTypeAccount() == User::ROLE_USER): ?>
-                        Utilisateur
-                    <?php endif; ?>
+
+        <?php if ($auth::isAuth()): ?>
+            <!-- Informations de l'utilisateur authentifié -->
+            <div class="user-info">
+                <!-- Affiche le prénom de l'utilisateur -->
+                <div class="user-name">Bonjour <?php echo Session::get(Session::USER)->getfirstName(); ?></div>
+
+                <!-- Affiche le mode de l'utilisateur (Propriétaire ou Utilisateur) -->
+                <div class="user-mode">
+                    Mode : <?php echo $auth::isOwner() ? 'Propriétaire' : 'Utilisateur'; ?>
                 </div>
             </div>
-            <div>
+
+            <!-- Liens spécifiques aux actions d'un utilisateur authentifié -->
+            <div class="user-actions">
                 <ul>
-                    <?if(Session::get(Session::USER)): ?>
-                        <li><a href="/reservations">Mes réservations</a></li>
-                    <?php endif; ?>
+                    <!-- Lien vers les réservations -->
+                    <li><a id="reservations-button" href="/reservations">Mes réservations</a></li>
+                    <!-- Lien pour se déconnecter -->
+                    <li><a id="signout-button" href="/sign-out">Se déconnecter</a></li>
                 </ul>
             </div>
-            <div>
-                <a id="signout-button" href="/sign-out">Se déconnecter</a>
-            </div>
+
         <?php else: ?>
-            <div id="top-button">
-                <div>
-                    <a id="signup-button" href="/sign-up">Créer un compte</a>
-                </div>
-                <div>
-                    <a id="signin-button" href="/sign-in">Se connecter</a>
-                </div>
+            <!-- Liens pour les utilisateurs non authentifiés -->
+            <div class="auth-actions">
+                <!-- Lien pour créer un compte -->
+                <a id="signup-button" href="/sign-up">Créer un compte</a>
+                <!-- Lien pour se connecter -->
+                <a id="signin-button" href="/sign-in">Se connecter</a>
             </div>
-        <?php endif ?>
+        <?php endif; ?>
     </div>
+</body>
