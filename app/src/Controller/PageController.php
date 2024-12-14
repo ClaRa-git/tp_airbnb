@@ -13,7 +13,7 @@ class PageController extends Controller
         $view = new View('page:legal-notice', auth_controller: AuthController::class);
 
         $data = [
-            'title' => 'Mentions légales - ChezPasMoi.com'
+            'title' => 'Mentions légales - PasChezMoi.com'
         ];
 
         $view->render($data);

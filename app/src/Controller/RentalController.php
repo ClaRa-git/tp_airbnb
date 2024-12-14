@@ -47,7 +47,7 @@ class RentalController extends Controller
         $view = new View('rental:user:create', auth_controller: AuthController::class);
 
         $data = [
-            'title' => 'Ajouter une location - ChezPasMoi.com'
+            'title' => 'Ajouter une location - PasChezMoi.com'
         ];
 
         $view->render($data);
@@ -84,7 +84,7 @@ class RentalController extends Controller
         }
 
         $data = [
-            'title' => 'Locations - ChezPasMoi.com',
+            'title' => 'Locations - PasChezMoi.com',
             'rentals' => $rentals
         ];
 
@@ -101,7 +101,7 @@ class RentalController extends Controller
         $view = new View('rental:user:list', auth_controller: AuthController::class);
 
         $data = [
-            'title' => 'Mes locations - ChezPasMoi.com',
+            'title' => 'Mes locations - PasChezMoi.com',
             'rentals' => RepoManager::getRM()->getRentalRepo()->getAllById($id)
         ];
 
@@ -228,7 +228,7 @@ class RentalController extends Controller
         }
 
         $data = [
-            'title' => $rental->getTitle() . ' - ChezPasMoi.com',
+            'title' => $rental->getTitle() . ' - PasChezMoi.com',
             'rental' => $rental
         ];
 

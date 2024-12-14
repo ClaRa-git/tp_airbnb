@@ -34,7 +34,7 @@ class ReservationController extends Controller
         }
 
         $data = [
-            'title' => 'Mes réservations - ChezPasMoi.com',
+            'title' => 'Mes réservations - PasChezMoi.com',
             'reservations' => $reservations
         ];
 
@@ -72,7 +72,7 @@ class ReservationController extends Controller
         $view = new View('reservation:user:create', auth_controller: AuthController::class);
 
         $data = [
-            'title' => 'Ajouter une réservation - ChezPasMoi.com'
+            'title' => 'Ajouter une réservation - PasChezMoi.com'
         ];
 
         $view->render($data);

@@ -73,10 +73,10 @@ class UserRepository extends Repository
      * @param int $typeAccount
      * @return User|null
      */
-    public function getAllByEmailAndType(string $email, int $typeAccount): ?User
+    public function checkAuth(string $email, string $password, int $typeAccount): ?User
     {
         $query = sprintf(
-            'SELECT * FROM `%s` WHERE `email`=:email AND `typeAccount`=:typeAccount',
+            'SELECT * FROM `%s` WHERE `email`=:email AND `password`=:password AND `typeAccount`=:typeAccount',
             $this->getTableName()
         );
 
@@ -86,6 +86,7 @@ class UserRepository extends Repository
 
         $success = $sth->execute([
             'email' => $email,
+            'password' => $password,
             'typeAccount' => $typeAccount
         ]);
 

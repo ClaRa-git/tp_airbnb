@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\App;
 use App\Session;
 use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
@@ -83,7 +84,7 @@ class AuthController extends Controller
         $view = new View('auth:sign-up', auth_controller: self::class);
 
         $data = [
-            'title' => 'Créer mon compte - ChezPasMoi.com'
+            'title' => 'Créer mon compte - PasChezMoi.com'
         ];
 
         $view->render($data);
@@ -116,7 +117,7 @@ class AuthController extends Controller
         $password = Functions::secureData($user_data['password']);
         $typeAccount = intval(Functions::secureData($user_data['typeAccount']));
 
-        $pass_hash = password_hash($password, PASSWORD_BCRYPT);
+        $pass_hash = App::strHash($password);
 
         // On vérifie si les données sont vides
         if (
@@ -185,7 +186,7 @@ class AuthController extends Controller
         $view = new View('auth:sign-in', auth_controller: self::class);
 
         $data = [
-            'title' => 'Se connecter - ChezPasMoi.com'
+            'title' => 'Se connecter - PasChezMoi.com'
         ];
 
         $view->render($data);
@@ -228,17 +229,15 @@ class AuthController extends Controller
             $this->redirect('/sign-in?error=Le format de l\'email est incorrect');
         }
 
-        // On récupère les utilisateurs et on vérifie si l'utilisateur existe pour le type de compte choisi
-        $verifiedUser = RepoManager::getRM()->getUserRepo()->getAllByEmailAndType($email, $typeAccount);
+        // Chiffrement du mot de passe
+        $password = App::strHash($password);
+
+        // On vérifie si l'utilisateur existe
+        $verifiedUser = RepoManager::getRM()->getUserRepo()->checkAuth($email, $password, $typeAccount);
 
         // On vérifie si l'utilisateur existe
         if (is_null($verifiedUser)) {
-            $this->redirect('/sign-in?error=Cet email n\'existe pas');
-        }
-
-        // On vérifie le mot de passe
-        if (!password_verify($password, $verifiedUser->getPassword())) {
-            $this->redirect('/sign-in?error=Le mot de passe est incorrect');
+            $this->redirect('/sign-in?error=Ce compte n\'existe pas');
         }
 
         // On connecte l'utilisateur
