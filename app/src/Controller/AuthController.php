@@ -109,11 +109,11 @@ class AuthController extends Controller
         }
 
         // On sécurise les données
-        $firstName = $this->secureData($user_data['firstName']);
-        $lastName = $this->secureData($user_data['lastName']);
-        $email = strtolower($this->secureData($user_data['email']));
-        $password = $this->secureData($user_data['password']);
-        $typeAccount = intval($this->secureData($user_data['typeAccount']));
+        $firstName = Functions::secureData($user_data['firstName']);
+        $lastName = Functions::secureData($user_data['lastName']);
+        $email = strtolower(Functions::secureData($user_data['email']));
+        $password = Functions::secureData($user_data['password']);
+        $typeAccount = intval(Functions::secureData($user_data['typeAccount']));
 
         $pass_hash = password_hash($password, PASSWORD_BCRYPT);
 
@@ -209,9 +209,9 @@ class AuthController extends Controller
         }
 
         // On sécurise les données
-        $email = strtolower($this->secureData($user_data['email']));
-        $password = $this->secureData($user_data['password']);
-        $typeAccount = $this->secureData($user_data['typeAccount']);
+        $email = strtolower(Functions::secureData($user_data['email']));
+        $password = Functions::secureData($user_data['password']);
+        $typeAccount = Functions::secureData($user_data['typeAccount']);
 
         // On vérifie si les données sont vides
         if (

@@ -7,37 +7,45 @@ use App\Model\Entity\User;
 <div>
     <a href="/">🔙 Retour</a>
 </div>
+
 <h1>Créer mon compte</h1>
 
-<form action="/sign-up" id="form-create-user" method="post">
+<div class="container-form">
 
-    <!-- gestion des messages d'erreur -->
-    <?php if (isset($_GET['error'])): ?>
-        <p class="error"><?php echo $_GET['error'] ?></p>
-    <?php endif; ?>
+    <!-- Gestion des messages d'erreur -->
+    <div id="error-message">
+        <?php if (isset($_GET['error'])): ?>
+            <p class="error"><?php echo $_GET['error'] ?></p>
+        <?php endif; ?>
+    </div>
 
-    <div>
-        <label for="firstName">Prénom</label>
-        <input type="text" id="firstName" name="firstName">
-    </div>
-    <div>
-        <label for="lastName">Nom</label>
-        <input type="text" id="lastName" name="lastName" required>
-    </div>
-    <div>
-        <label for="email">Adresse email</label>
-        <input type="email" id="email" name="email" required>
-    </div>
-    <div>
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <div>
-        <label for="typeAccount">Type de compte :</label>
-        <select name="typeAccount" id="typeAccount">
-            <option value=<?php echo User::ROLE_OWNER ?>>Annonceur</option>
-            <option value=<?php echo User::ROLE_USER ?>>Utilisateur</option>
-        </select>
-    </div>
-    <button type="submit">Créer mon compte</button>
-</form>
+    <!-- Formulaire de création d'un compte -->
+    <form action="/sign-up" id="form-create-user" method="post">
+        <div>
+            <label for="firstName">Prénom</label>
+            <input type="text" id="firstName" name="firstName">
+        </div>
+        <div>
+            <label for="lastName">Nom</label>
+            <input type="text" id="lastName" name="lastName" required>
+        </div>
+        <div>
+            <label for="email">Adresse email</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Mot de passe</label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="typeAccount">Type de compte : </label>
+            <select name="typeAccount" id="typeAccount">
+                <option value=<?php echo User::ROLE_OWNER ?>>Annonceur</option>
+                <option value=<?php echo User::ROLE_USER ?>>Utilisateur</option>
+            </select>
+        </div>
+        <div class="button">
+            <button type="submit">Créer mon compte</button>
+        </div>
+    </form>
+</div>

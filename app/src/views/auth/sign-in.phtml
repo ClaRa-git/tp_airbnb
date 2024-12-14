@@ -4,28 +4,42 @@ use App\Model\Entity\User;
 
 ?>
 
+<div>
+    <a href="/">🔙 Retour</a>
+</div>
+
 <h1>Se connecter</h1>
 
-<!-- gestion des messages d'erreur -->
-<?php if (isset($_GET['error'])): ?>
-    <p class="error"><?php echo $_GET['error'] ?></p>
-<?php endif; ?>
 
-<form action="/sign-in" method="post">
-    <div>
-        <label for="email">Adresse email</label>
-        <input type="email" id="email" name="email" required>
+<div class="container-form">
+
+    <!-- Gestion des messages d'erreur -->
+    <div class="error-message">
+        <?php if (isset($_GET['error'])): ?>
+            <p class="error"><?php echo $_GET['error'] ?></p>
+        <?php endif; ?>
     </div>
-    <div>
-        <label for="password">Mot de passe</label>
-        <input type="password" id="password" name="password" required>
-    </div>
-    <div>
-        <label for="typeAccount">Type de compte :</label>
-        <select name="typeAccount" id="typeAccount">
-            <option value=<?php echo User::ROLE_USER ?>>Utilisateur</option>
-            <option value=<?php echo User::ROLE_OWNER ?>>Propriétaire</option>
-            <option value=<?php echo User::ROLE_ADMIN ?>>Administrateur</option>
-        </select>
-    </div>
-    <button type="submit">Se connecter</button>
+
+    <!-- Formulaire de connexion -->
+    <form action="/sign-in" method="post">
+        <div>
+            <label for="email">Adresse email : </label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div>
+            <label for="password">Mot de passe : </label>
+            <input type="password" id="password" name="password" required>
+        </div>
+        <div>
+            <label for="typeAccount">Type de compte : </label>
+            <select name="typeAccount" id="typeAccount">
+                <option value=<?php echo User::ROLE_USER ?>>Utilisateur</option>
+                <option value=<?php echo User::ROLE_OWNER ?>>Propriétaire</option>
+                <option value=<?php echo User::ROLE_ADMIN ?>>Administrateur</option>
+            </select>
+        </div>
+        <div class="button">
+            <button type="submit">Se connecter</button>
+        </div>
+    </form>
+</div>

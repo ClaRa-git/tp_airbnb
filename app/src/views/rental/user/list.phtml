@@ -1,37 +1,34 @@
-
-<h1>Accueil</h1>
-
 <?php
 
 use App\Model\Entity\User;
 use App\Session;
 
- if(Session::get(Session::USER) != null): 
-    
-    if(Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER):?>
-    <div>
-        <a href="/rentals/add">Ajouter une location</a>
-    </div>    
-    <?php endif;
+?>
 
+<h1>Accueil</h1>
 
-    if(!(Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER)): ?>
-        <div>
-            <h2>Liste des biens disponibles :</h2>
+<?php if ($auth::isAuth()):
+    if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER): ?>
+        <div class="button">
+            <a href="/rentals/add">Ajouter une location</a>
         </div>
-    <?php else: ?>
         <div>
             <h2>Locations mise en ligne :</h2>
         </div>
+    <?php else: ?>
+        <div>
+            <h2>Liste des biens disponibles :</h2>
+        </div>
     <?php endif;
-endif; ?>
+endif;
 
-<?php if (!empty($rentals)): ?>
+if (!empty($rentals)): ?>
     <div class="rentals-list">
         <?php foreach ($rentals as $rental): ?>
             <div class="post-rental">
                 <a href="/rentals/<?php echo $rental->getId() ?>">
                     Titre : <?php echo $rental->getTitle() ?><br>
+                    Adresse : <?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry() ?><br>
                 </a>
             </div>
         <?php endforeach ?>

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Model\Entity\Address;
 use App\Model\Entity\Rental;
+use App\Model\Entity\TypeLogement;
 use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
 use App\Session;
@@ -61,9 +62,23 @@ class RentalController extends Controller
 
         if(!AuthController::isAuth() || Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER) {
             $rentals = RepoManager::getRM()->getRentalRepo()->getAll();
+            foreach($rentals as $rental) {
+                $rental->setOwner(RepoManager::getRM()->getUserRepo()->getById($rental->getOwnerId()));
+                $rental->getOwner()->setPassword('');
+                $rental->setAddress(RepoManager::getRM()->getAddressRepo()->getById($rental->getAddressId()));
+                $rental->setTypeLogement(RepoManager::getRM()->getTypeLogementRepo()->getById($rental->getTypeLogementId()));
+                $rental->getEquipments();
+            }
         }
         else {
             $rentals = RepoManager::getRM()->getRentalRepo()->getAllById(Session::get(Session::USER)->getId());
+            foreach($rentals as $rental) {
+                $rental->setOwner(RepoManager::getRM()->getUserRepo()->getById($rental->getOwnerId()));
+                $rental->getOwner()->setPassword('');
+                $rental->setAddress(RepoManager::getRM()->getAddressRepo()->getById($rental->getAddressId()));
+                $rental->setTypeLogement(RepoManager::getRM()->getTypeLogementRepo()->getById($rental->getTypeLogementId()));
+                $rental->getEquipments();
+            }
         }
 
         $data = [
@@ -115,14 +130,14 @@ class RentalController extends Controller
         }
 
         // On sécurise les données
-        $title = $this->secureData($rental_data['title']);
-        $price = $this->secureData($rental_data['price']);
-        $surface = $this->secureData($rental_data['surface']);
-        $description = $this->secureData($rental_data['description']);
-        $beddings = $this->secureData($rental_data['beddings']);
-        $typeLogement_id = $this->secureData($rental_data['typeLogement_id']);
-        $city = $this->secureData($rental_data['city']);
-        $country = $this->secureData($rental_data['country']);
+        $title = Functions::secureData($rental_data['title']);
+        $price = Functions::secureData($rental_data['price']);
+        $surface = Functions::secureData($rental_data['surface']);
+        $description = Functions::secureData($rental_data['description']);
+        $beddings = Functions::secureData($rental_data['beddings']);
+        $typeLogement_id = Functions::secureData($rental_data['typeLogement_id']);
+        $city = strtoupper(Functions::secureData($rental_data['city']));
+        $country = strtoupper(Functions::secureData($rental_data['country']));
 
         // On vérifie si les données sont vides
         if(empty($title) ||
@@ -139,9 +154,9 @@ class RentalController extends Controller
         }
 
         // On vérifie si le type de logement existe
-        $typeLogement = RepoManager::getRM()->getTypeLogementRepo()->getAll();
+        $typeLogementArray = RepoManager::getRM()->getTypeLogementRepo()->getAll();
         $inArray = false;
-        foreach($typeLogement as $type){
+        foreach($typeLogementArray as $type){
             if($type->getId() == $typeLogement_id) {
                 $inArray = true;
                 break;
@@ -178,18 +193,16 @@ class RentalController extends Controller
             'owner_id' => Session::get(Session::USER)->getId()
         ]);
 
-        $rental->setAddress($address_created);
-        $rental->setOwner(Session::get(Session::USER));     
-
+        // On crée la location dans la base de données
         $rental_created = RepoManager::getRM()->getRentalRepo()->create($rental);
-
-        if (is_null($rental_created)) {
-            $this->redirect('/rentals/add?error=Une erreur est survenue lors de la création de la location');
-        }
 
         // Si pas de données post car aucun coché, on crée un tableau vide
         $equipments = $rental_data['equipments'] ?? [];
         $rental_created->addEquipments($equipments);
+
+        if (is_null($rental_created)) {
+            $this->redirect('/rentals/add?error=Une erreur est survenue lors de la création de la location');
+        }
 
         $this->redirect('/');
     }

@@ -2,76 +2,79 @@
 
 use App\Model\Repository\RepoManager; ?>
 
-<div>
+<div class="button">
     <a href="/">🔙 Retour</a>
 </div>
 
 <h1>Créer une location</h1>
 
-<form action="/rentals/add" id="form-create-rental" method="post">
-
-    <!-- gestion des messages d'erreur -->
-    <?php
-
-    if (isset($_GET['error'])): ?>
-        <p class="error"><?php echo $_GET['error'] ?></p>
-    <?php endif; ?>
-
-    <fieldset>
-        <legend>Titre de la location</legend>
-        <div>
-            <label for="title">Titre :</label>
-            <input type="text" name="title" id="title">
+<div id="container-form">
+    <form action="/rentals/add" id="form-create-rental" method="post">
+    
+        <!-- gestion des messages d'erreur -->
+        <div id="error-message">
+            <?php if (isset($_GET['error'])): ?>
+                <p class="error"><?php echo $_GET['error'] ?></p>
+            <?php endif; ?>
         </div>
-    </fieldset>
-    <fieldset>
-        <legend>Informations sur la location</legend>
-        <div>
-            <label for="price">Prix :</label>
-            <input type="number" name="price" id="price"> €
+    
+        <fieldset>
+            <legend>Titre de la location</legend>
+            <div>
+                <label for="title">Titre :</label>
+                <input type="text" name="title" id="title">
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Informations sur la location</legend>
+            <div>
+                <label for="price">Prix :</label>
+                <input type="number" name="price" id="price">
+            </div>
+            <div>
+                <label for="surface">Surface</label>
+                <input type="number" name="surface" id="surface">
+            </div>
+            <div>
+                <label for="description">Description :</label>
+                <textarea name="description" id="description"></textarea>
+            </div>
+            <div>
+                <label for="beddings">Nombre de couchage :</label>
+                <input type="number" name="beddings" id="beddings">
+            </div>
+            <div>
+                <label for="typeLogement">Type de logement :</label>
+                <select name="typeLogement_id" id="typeLogement">
+                    <?php $types = RepoManager::getRM()->getTypeLogementRepo()->getAll();
+                    foreach ($types as $type):
+                        echo "<option value='" . $type->getId() . "'>" . $type->getName() . "</option>";
+                    endforeach ?>
+                </select>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Adresse de la location</legend>
+            <div>
+                <label for="city">Ville :</label>
+                <input type="text" name="city" id="city">
+            </div>
+            <div>
+                <label for="country">Pays :</label>
+                <input type="text" name="country" id="country">
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Equipements disponibles</legend>
+            <div>
+                <?php $equipments = RepoManager::getRM()->getEquipmentRepo()->getAll();
+                foreach ($equipments as $equipment) {
+                    echo "<div><input type='checkbox' name='equipments[]' value='" . $equipment->getId() . "'><label for='equipments[]'>" . $equipment->getName() . "</label></div>";
+                }
+                ?>
+        </fieldset>
+        <div class="button">
+            <button type="submit">Ajouter</button>
         </div>
-        <div>
-            <label for="surface">Surface</label>
-            <input type="number" name="surface" id="surface">/m²
-        </div>
-        <div>
-            <label for="description">Description :</label>
-            <textarea name="description" id="description"></textarea>
-        </div>
-        <div>
-            <label for="beddings">Nombre de couchage :</label>
-            <input type="number" name="beddings" id="beddings">
-        </div>
-        <div>
-            <label for="typeLogement">Type de logement :</label>
-            <select name="typeLogement_id" id="typeLogement">
-                <?php $types = RepoManager::getRM()->getTypeLogementRepo()->getAll();
-                foreach ($types as $type) {
-                    echo "<option value='" . $type->getId() . "'>" . $type->getName() . "</option>";
-                } ?>
-            </select>
-        </div>
-    </fieldset>
-    <fieldset>
-        <legend>Adresse de la location</legend>
-        <div>
-            <label for="city">Ville :</label>
-            <input type="text" name="city" id="city">
-        </div>
-        <div>
-            <label for="country">Pays :</label>
-            <input type="text" name="country" id="country">
-        </div>
-    </fieldset>
-    <fieldset>
-        <legend>Equipements disponibles</legend>
-        <div>
-            <?php $equipments = RepoManager::getRM()->getEquipmentRepo()->getAll();
-            foreach ($equipments as $equipment) {
-                echo "<div><input type='checkbox' name='equipments[]' value='" . $equipment->getId() . "'><label for='equipments[]'>" . $equipment->getName() . "</label></div>";
-            } ?>
-    </fieldset>
-    <div>
-        <button type="submit">Ajouter</button>
-    </div>
-</form>
+    </form>
+</div>
