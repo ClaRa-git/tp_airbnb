@@ -3,21 +3,21 @@
 use App\Model\Repository\RepoManager; ?>
 
 <div class="button">
-    <a href="/">🔙 Retour</a>
+    <a href="/">↩ Retour</a>
 </div>
 
 <h1>Créer une location</h1>
 
 <div id="container-form">
     <form action="/rentals/add" id="form-create-rental" method="post">
-    
+
         <!-- gestion des messages d'erreur -->
-        <div id="error-message">
+        <div class="error-message">
             <?php if (isset($_GET['error'])): ?>
                 <p class="error"><?php echo $_GET['error'] ?></p>
             <?php endif; ?>
         </div>
-    
+
         <fieldset>
             <legend>Titre de la location</legend>
             <div>

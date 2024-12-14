@@ -1,3 +1,6 @@
+/* Reset CSS */
+/* Réinitialisation des styles */
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -5,17 +8,14 @@
 }
 
 a {
-    /* La couleur du texte sera celle héritée d'un ancêtre */
-    color: inherit;
+    color: black;
     text-decoration: none;
 }
 
-address {
-    /* Style de police: italique, normal, oblique */
-    font-style: normal;
+a:visited {
+    color: black;
 }
 
-/* Annulation des puces des listes */
 ol,
 ul {
     list-style-type: none;

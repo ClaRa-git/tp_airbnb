@@ -5,11 +5,12 @@ namespace App\Controller;
 use App\Session;
 use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
-
-use Symplefony\Controller;
+use App\Tools\Functions;
 
 use Laminas\Diactoros\ServerRequest;
+
 use Symplefony\View;
+use Symplefony\Controller;
 
 /**
  * Gestion des fonctionnalités d'authentification

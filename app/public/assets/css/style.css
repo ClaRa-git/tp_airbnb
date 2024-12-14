@@ -1,0 +1,153 @@
+* {
+    font-family: "Shantell Sans", cursive, sans-serif;
+}
+
+/* Bannière */
+#top-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    background-color: lightseagreen;
+    border-radius: 10px;
+
+    margin-bottom: 10px;
+
+    height: 100px;
+}
+
+.logo {
+    font-size: 30px;
+    font-weight: bold;
+
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+
+    margin: 10px;
+}
+
+.actions a {
+    color: white;
+    background-color: black;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+/* Body */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+
+    height: 100vh;
+}
+
+.error-message {
+    background-color: rgb(255, 150, 150);
+    border-radius: 10px;
+
+    text-align: center;
+    color: red;
+    font-weight: bold;
+
+    margin: 10px;
+    padding: 10px;
+}
+
+.button {
+    margin: 10px;
+    padding: 10px;
+}
+
+.button a, button {
+    color: white;
+    background-color: black;
+    padding: 5px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+#main-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex: 1;
+    align-items: center;
+}
+
+.rentals-list {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    flex: 1;
+
+    width: 100%;
+}
+
+.post-rental {
+    background-color: lightseagreen;
+    border-radius: 10px;
+
+    margin: 10px;
+    padding: 10px;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+fieldset {
+    border: 1px solid black;
+    border-radius: 10px;
+    padding: 10px;
+    margin: 10px;
+}
+
+fieldset legend {
+    font-weight: bold;
+}
+
+input, select {
+    margin: 5px;
+    padding: 5px;
+    border-radius: 10px;
+}
+
+select {
+    width: 100%;
+    text-align: center;
+}
+
+/* Footer */
+
+#bottom-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    background-color: lightseagreen;
+    border-radius: 10px;
+
+    margin-bottom: 10px;
+
+    height: 100px;
+}

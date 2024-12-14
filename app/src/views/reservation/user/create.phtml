@@ -5,13 +5,13 @@ use App\Model\Repository\RepoManager;
 ?>
 
 <div class="button">
-    <a href="/">🔙 Retour</a>
+    <a href="/">↩ Retour</a>
 </div>
 
 <h1>Faire une réservation</h1>
 
 <div class="form-container">
-    
+
     <!-- gestion des messages d'erreur -->
     <div class="error-container">
         <?php if (isset($_GET['error'])): ?>
@@ -20,7 +20,7 @@ use App\Model\Repository\RepoManager;
     </div>
 
     <!-- formulaire de réservation -->
-    <form action="/reservations/add" id="form-create-reservation" method="post">   
+    <form action="/reservations/add" id="form-create-reservation" method="post">
         <fieldset>
             <legend>Informations sur la réservation</legend>
             <div>
@@ -35,7 +35,7 @@ use App\Model\Repository\RepoManager;
                 <label for="rental">Location :</label>
                 <?php $rentals = RepoManager::getRM()->getRentalRepo()->getAll(); ?>
                 <select name="rental_id" id="rental">
-                    <?php if(isset($_GET['id'])) { //TODO: sécuriser le $_GET
+                    <?php if (isset($_GET['id'])) { //TODO: sécuriser le $_GET
                         foreach ($rentals as $rental) {
                             var_dump($rental->getId());
                             if ($rental->getId() == $_GET['id']) {

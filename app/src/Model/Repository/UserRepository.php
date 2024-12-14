@@ -124,7 +124,7 @@ class UserRepository extends Repository
 
         $users = [];
         while ($user = $sth->fetch()) {
-            $users[] = $user;
+            $users[] = new User($user);
         }
 
         return $users;

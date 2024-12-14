@@ -16,6 +16,11 @@ use App\Session;
     <link rel="stylesheet" href="../assets/css/reset.css">
     <link rel="stylesheet" href="../assets/css/style.css">
 
+    <!-- Police de caractères -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400..700&family=Shantell+Sans:ital,wght@0,300..800;1,300..800&display=swap" rel="stylesheet">
+
     <title><?php echo $title ?></title>
 </head>
 
@@ -39,18 +44,13 @@ use App\Session;
             </div>
 
             <!-- Liens spécifiques aux actions d'un utilisateur authentifié -->
-            <div class="user-actions">
-                <ul>
-                    <!-- Lien vers les réservations -->
-                    <li><a id="reservations-button" href="/reservations">Mes réservations</a></li>
-                    <!-- Lien pour se déconnecter -->
-                    <li><a id="signout-button" href="/sign-out">Se déconnecter</a></li>
-                </ul>
+            <div class="actions"><a id="reservations-button" href="/reservations">Mes réservations</a></li>
+                    <a id="signout-button" href="/sign-out">Se déconnecter</a>
             </div>
 
         <?php else: ?>
             <!-- Liens pour les utilisateurs non authentifiés -->
-            <div class="auth-actions">
+            <div class="actions">
                 <!-- Lien pour créer un compte -->
                 <a id="signup-button" href="/sign-up">Créer un compte</a>
                 <!-- Lien pour se connecter -->
