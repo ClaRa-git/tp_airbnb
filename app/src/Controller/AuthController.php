@@ -83,7 +83,7 @@ class AuthController extends Controller
         $view = new View('auth:sign-up', auth_controller: self::class);
 
         $data = [
-            'title' => 'Créer mon compte - Airbnb.com'
+            'title' => 'Créer mon compte - ChezPasMoi.com'
         ];
 
         $view->render($data);
@@ -185,7 +185,7 @@ class AuthController extends Controller
         $view = new View('auth:sign-in', auth_controller: self::class);
 
         $data = [
-            'title' => 'Se connecter - Airbnb.com'
+            'title' => 'Se connecter - ChezPasMoi.com'
         ];
 
         $view->render($data);

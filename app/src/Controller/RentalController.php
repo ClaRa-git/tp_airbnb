@@ -33,6 +33,8 @@ class RentalController extends Controller
         if (is_null($rental_created)) {
             $this->redirect('/rentals/add?error=Une erreur est survenue lors de la création de la location');
         }
+
+        $this->redirect('/');
     }
 
     /**
@@ -45,7 +47,7 @@ class RentalController extends Controller
         $view = new View('rental:user:create', auth_controller: AuthController::class);
 
         $data = [
-            'title' => 'Ajouter une location - Airbnb.com'
+            'title' => 'Ajouter une location - ChezPasMoi.com'
         ];
 
         $view->render($data);
@@ -82,7 +84,7 @@ class RentalController extends Controller
         }
 
         $data = [
-            'title' => 'Locations - Airbnb.com',
+            'title' => 'Locations - ChezPasMoi.com',
             'rentals' => $rentals
         ];
 
@@ -99,7 +101,7 @@ class RentalController extends Controller
         $view = new View('rental:user:list', auth_controller: AuthController::class);
 
         $data = [
-            'title' => 'Mes locations - Airbnb.com',
+            'title' => 'Mes locations - ChezPasMoi.com',
             'rentals' => RepoManager::getRM()->getRentalRepo()->getAllById($id)
         ];
 
@@ -116,7 +118,7 @@ class RentalController extends Controller
         $rental_data = $request->getParsedBody();
 
         // On vérifie que l'on recoit bien les données du formulaire
-        if(!isset($rental_data['title']) ||
+        if (!isset($rental_data['title']) ||
             !isset($rental_data['price']) ||
             !isset($rental_data['surface']) ||
             !isset($rental_data['description']) ||
@@ -126,7 +128,7 @@ class RentalController extends Controller
             !isset($rental_data['country'])
         )
         {
-            $this->redirect('/rentals/add?error=Erreur lors de la créationdes champs');
+            $this->redirect('/rentals/add?error=Erreur lors de la création des champs');
         }
 
         // On sécurise les données
@@ -193,7 +195,7 @@ class RentalController extends Controller
             'owner_id' => Session::get(Session::USER)->getId()
         ]);
 
-        // On crée la location dans la base de données
+        // On crée la location
         $rental_created = RepoManager::getRM()->getRentalRepo()->create($rental);
 
         // Si pas de données post car aucun coché, on crée un tableau vide
@@ -226,7 +228,7 @@ class RentalController extends Controller
         }
 
         $data = [
-            'title' => $rental->getTitle() . ' - Airbnb.com',
+            'title' => $rental->getTitle() . ' - ChezPasMoi.com',
             'rental' => $rental
         ];
 

@@ -51,6 +51,16 @@ body {
     height: 100vh;
 }
 
+.container-body 
+{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    flex: 1;
+}
+
 .error-message {
     background-color: rgb(255, 150, 150);
     border-radius: 10px;

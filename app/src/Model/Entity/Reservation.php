@@ -8,19 +8,19 @@ use Symplefony\Model\Entity;
 
 class Reservation extends Entity
 {
-    protected string $beginDate;
-    public function getDateStart(): string { return $this->beginDate; }
-    public function setDateStart(string $beginDate): self
+    protected string $dateStart;
+    public function getDateStart(): string { return $this->dateStart; }
+    public function setDateStart(string $value): self
     {
-        $this->beginDate = $beginDate;
+        $this->dateStart = $value;
         return $this;
     }
 
-    protected string $endDate;
-    public function getDateEnd(): string { return $this->endDate; }
-    public function setDateEnd(string $endDate): self
+    protected string $dateEnd;
+    public function getDateEnd(): string { return $this->dateEnd; }
+    public function setDateEnd(string $value): self
     {
-        $this->endDate = $endDate;
+        $this->dateEnd = $value;
         return $this;
     }
 

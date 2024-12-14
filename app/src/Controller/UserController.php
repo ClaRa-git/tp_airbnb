@@ -7,7 +7,6 @@ use App\Model\Repository\RepoManager;
 use App\Tools\Functions;
 
 use Symplefony\Controller;
-use Symplefony\View;
 
 use Laminas\Diactoros\ServerRequest;
 

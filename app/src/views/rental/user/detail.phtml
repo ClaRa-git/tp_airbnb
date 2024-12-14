@@ -6,32 +6,30 @@ use App\Model\Repository\RepoManager;
 
 ?>
 
-<div class="button">
-    <a href="/">↩ Retour</a>
-</div>
-
 <h1><?php printf('Location : %s', $rental->getTitle()) ?></h1>
 
-<?php //TODO: permettre au prorpiétaire de modifier la location ?>
-<?php //if (!$auth::isAuth() || $rental->getOwnerId() != Session::get(Session::USER)->getId()): ?>
-    <div class="rental-info">
-        <ul>
-            <li><?php printf('Prix : %s € / nuit', $rental->getPrice()) ?></li>
-            <li><?php printf('Surface : %s m²', $rental->getSurface()) ?></li>
-            <li><?php printf('Description : %s', $rental->getDescription()) ?></li>
-            <li><?php printf('Nombre de couchage(s) : %s', $rental->getBeddings()) ?></li>
-        </ul>
-    </div>
-<?php // elseif ($auth::isAuth() && $rental->getOwnerId() == Session::get(Session::USER)->getId()): ?>
-    <div class="button">
-        <a href="<?php printf('/rentals/%s/delete', $rental->getId()) ?>"> Supprimer</a>
-    </div>
-<?php // endif ?>
-
-<?php if ($auth::isAuth()): ?>
-    <?php if ($rental->getOwnerId() != Session::get(Session::USER)->getId()): ?>
-        <div class="button">
-            <a href="/reservations/add?id=<?php echo $rental->getId() ?>">Réserver</a>
+<div class="container-body">
+    <?php //TODO: permettre au prorpiétaire de modifier la location ?>
+    <?php //if (!$auth::isAuth() || $rental->getOwnerId() != Session::get(Session::USER)->getId()): ?>
+        <div class="rental-info">
+            <ul>
+                <li><?php printf('Prix : %s € / nuit', $rental->getPrice()) ?></li>
+                <li><?php printf('Surface : %s m²', $rental->getSurface()) ?></li>
+                <li><?php printf('Description : %s', $rental->getDescription()) ?></li>
+                <li><?php printf('Nombre de couchage(s) : %s', $rental->getBeddings()) ?></li>
+            </ul>
         </div>
+    <?php if ($auth::isAuth() && $rental->getOwnerId() == Session::get(Session::USER)->getId()): ?>
+        <div class="button">
+            <a href="<?php printf('/rentals/%s/delete', $rental->getId()) ?>"> Supprimer</a>
+        </div>
+    <?php  endif ?>
+    
+    <?php if ($auth::isAuth()): ?>
+        <?php if ($rental->getOwnerId() != Session::get(Session::USER)->getId()): ?>
+            <div class="button">
+                <a href="/reservations/add?id=<?php echo $rental->getId() ?>">Réserver</a>
+            </div>
+        <?php endif ?>
     <?php endif ?>
-<?php endif ?>
+</div>

@@ -113,7 +113,7 @@ final class App
 
         // -- Pages communes --
         $this->router->get('/', [RentalController::class, 'displayRentals']);
-        $this->router->get('/mentions-legales', [PageController::class, 'legalMentions']);
+        $this->router->get('/mentions-legales', [PageController::class, 'legalNotice']);
 
         // -- Visiteurs (non-connectés) --
         $visitorAttributes = [
@@ -160,9 +160,7 @@ final class App
         // Page d'ajout de réservation
         $this->router->get('/reservations/add?id={id}', [ReservationController::class, 'displayAddReservation']);
         $this->router->get('/reservations/add', [ReservationController::class, 'displayAddReservation']);
-
-        // Ajout de réservation
-        $this->router->post('/reservations/add', [ReservationController::class, 'create']);
+        $this->router->post('/reservations/add', [ReservationController::class, 'processAddReservation']);
     }
 
     // Démarrage du routeur

@@ -15,7 +15,7 @@ class AddressRepository extends Repository
     protected function getTableName(): string { return 'addresses'; }
 
     /**
-     * Crée une nouvelle adresse en base de données
+     * Crée une nouvelle adresse
      * @param Address $address
      * @return Address|null
      */

@@ -2,13 +2,9 @@
 
 use App\Model\Repository\RepoManager; ?>
 
-<div class="button">
-    <a href="/">↩ Retour</a>
-</div>
-
 <h1>Créer une location</h1>
 
-<div id="container-form">
+<div id="container-body">
     <form action="/rentals/add" id="form-create-rental" method="post">
 
         <!-- Gestion des messages d'erreur -->
@@ -72,6 +68,7 @@ use App\Model\Repository\RepoManager; ?>
                     echo "<div><input type='checkbox' name='equipments[]' value='" . $equipment->getId() . "'><label for='equipments[]'>" . $equipment->getName() . "</label></div>";
                 }
                 ?>
+            </div>
         </fieldset>
         <div class="button">
             <button type="submit">Ajouter</button>

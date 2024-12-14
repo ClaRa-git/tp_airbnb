@@ -18,6 +18,39 @@ class TypeLogementRepository extends Repository
     }
 
     /**
+     * Crée un type de logement
+     * @param TypeLogement $typeLogement
+     * @return TypeLogement|null
+     */
+    public function create(TypeLogement $typeLogement): ?TypeLogement
+    {
+        $query = sprintf(
+            'INSERT INTO `%s` 
+                (`name`) 
+                VALUES (:name)',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if (!$sth) {
+            return null;
+        }
+
+        $success = $sth->execute([
+            'labelTypeLogement' => $typeLogement->getName()
+        ]);
+
+        if (!$success) {
+            return null;
+        }
+
+        $typeLogement->setId($this->pdo->lastInsertId());
+
+        return $typeLogement;
+    }
+
+    /**
      * Récupère un type de logement par son id
      * @param int $id
      * @return TypeLogement|null

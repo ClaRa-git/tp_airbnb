@@ -13,7 +13,7 @@ class AdminController extends Controller
         $view = new View( 'page:admin:home', auth_controller: AuthController::class );
 
         $data = [
-            'title' => 'Tableau de bord - Admin Airbnb.com'
+            'title' => 'Tableau de bord - Admin ChezPasMoi.com'
         ];
 
         $view->render( $data);

@@ -6,33 +6,41 @@ use App\Session;
 
 ?>
 
-<main>
-    <h1>Réservations</h1>
+
+<h1>Réservations</h1>
+
+<div class="container-body">
+    <?php if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER): ?>
+         <h2>Mes réservations</h2>
+    <?php endif ?>
+    
+    
+    <div class="list-reservations">
+        <?php if (!empty($reservations)): ?>
+            <ul>
+                <?php foreach ($reservations as $reservation): ?>
+                    <li>
+                        <div class="post-rental">
+                            <a href="/rentals/<?php echo $reservation->getRentalId() ?>">
+                                <div><?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd() ?></div>
+                                <div><?php echo RepoManager::getRM()->getRentalRepo()->getbyId($reservation->getRentalId())->getTitle() ?></div>
+                                <?php if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER): ?>
+                                    <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName() ?></div>
+                                <?php endif ?>
+                            </a>
+                        </div>
+                    </li>
+                <?php endforeach ?>
+                <br>
+            </ul>
+        <?php else: ?>
+            <div>Aucune réservation.</div>
+        <?php endif ?>
+    </div>
 
     <?php if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER): ?>
-        <a href="/reservations/add">Faire une réservation</a>
+        <div class="button">
+        <a href="/reservations/add">Faire une réservation</a>            
+        </div>
     <?php endif ?>
-
-    <h2>Mes réservations</h2>
-
-    <?php if (!empty($reservations)): ?>
-        <ul>
-            <?php foreach ($reservations as $reservation): ?>
-                <li>
-                    <div class="post-rental">
-                        <a href="/rentals/<?php echo $reservation->getRentalId() ?>">
-                            <div><?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd() ?></div>
-                            <div><?php echo RepoManager::getRM()->getRentalRepo()->getbyId($reservation->getRentalId())->getTitle() ?></div>
-                            <?php if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER): ?>
-                                <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName() ?></div>
-                            <?php endif ?>
-                        </a>
-                    </div>
-                </li>
-            <?php endforeach ?>
-            <br>
-        </ul>
-    <?php else: ?>
-        <div>Aucune réservation.</div>
-    <?php endif ?>
-</main>
+</div>
