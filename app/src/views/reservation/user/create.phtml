@@ -12,12 +12,12 @@ use App\Model\Repository\RepoManager;
 
 <div class="form-container">
 
-    <!-- gestion des messages d'erreur -->
-    <div class="error-container">
-        <?php if (isset($_GET['error'])): ?>
+    <!-- Gestion des messages d'erreur -->
+    <?php if (isset($_GET['error'])): ?>
+        <div class="error-message">
             <p class="error"><?php echo $_GET['error'] ?></p>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 
     <!-- formulaire de réservation -->
     <form action="/reservations/add" id="form-create-reservation" method="post">

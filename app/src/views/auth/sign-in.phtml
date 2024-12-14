@@ -14,11 +14,11 @@ use App\Model\Entity\User;
 <div class="container-form">
 
     <!-- Gestion des messages d'erreur -->
-    <div class="error-message">
-        <?php if (isset($_GET['error'])): ?>
+    <?php if (isset($_GET['error'])): ?>
+        <div class="error-message">
             <p class="error"><?php echo $_GET['error'] ?></p>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
 
     <!-- Formulaire de connexion -->
     <form action="/sign-in" method="post">

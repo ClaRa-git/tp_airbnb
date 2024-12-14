@@ -11,12 +11,12 @@ use App\Model\Repository\RepoManager; ?>
 <div id="container-form">
     <form action="/rentals/add" id="form-create-rental" method="post">
 
-        <!-- gestion des messages d'erreur -->
-        <div class="error-message">
-            <?php if (isset($_GET['error'])): ?>
+        <!-- Gestion des messages d'erreur -->
+        <?php if (isset($_GET['error'])): ?>
+            <div class="error-message">
                 <p class="error"><?php echo $_GET['error'] ?></p>
-            <?php endif; ?>
-        </div>
+            </div>
+        <?php endif; ?>
 
         <fieldset>
             <legend>Titre de la location</legend>

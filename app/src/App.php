@@ -145,6 +145,9 @@ final class App
         // Page d'affichage des locations d'un utlisateur
         $this->router->get('/rentals/users/{id}', [RentalController::class, 'displayRentalsByOwner']);
 
+        // Page de suppression d'une location
+        $this->router->get('/rentals/users/delete/{id}', [RentalController::class, 'delete']);
+
         // Page d'affichage d'une location
         $this->router->get('/rentals/{id}', [RentalController::class, 'show']);
 
