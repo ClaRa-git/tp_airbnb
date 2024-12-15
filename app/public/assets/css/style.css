@@ -1,91 +1,98 @@
+/* ----- Variables ----- */
+:root {
+    --bg-light: lightseagreen;
+    --bg-dark: black;
+    --text-light: white;
+    --text-dark: black;
+    --text-error: red;
+}
+
+/* ----- Généralités ----- */
 * {
     font-family: "Shantell Sans", cursive, sans-serif;
 }
 
-/* Bannière */
+/* ----- Corps de la page ----- */
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    height: 100vh;
+}
+
+/* --- Conteneur principal --- */
+.container-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+}
+
+/* ----- Bannière ----- */
 #top-container {
     display: flex;
     justify-content: space-between;
     align-items: center;
-
-    background-color: lightseagreen;
+    background-color: var(--bg-light);
     border-radius: 10px;
-
     margin-bottom: 10px;
-
     height: 100px;
 }
 
+/* Logo */
 .logo {
     font-size: 30px;
     font-weight: bold;
-
     padding: 5px;
     margin: 5px;
     border-radius: 10px;
 }
 
+/* Actions (liens dans la bannière) */
 .actions {
     display: flex;
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-
     margin: 10px;
 }
 
 .actions a {
-    color: white;
-    background-color: black;
+    color: var(--text-light);
+    background-color: var(--bg-dark);
     padding: 5px;
     margin: 5px;
     border-radius: 10px;
 }
 
-/* Body */
-body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-
-    height: 100vh;
-}
-
-.container-body 
-{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-
-    flex: 1;
-}
-
+/* ----- Message d'erreur ----- */
 .error-message {
     background-color: rgb(255, 150, 150);
     border-radius: 10px;
-
     text-align: center;
-    color: red;
+    color: var(--text-error);
     font-weight: bold;
-
     margin: 10px;
     padding: 10px;
 }
 
+/* ----- Boutons ----- */
 .button {
     margin: 10px;
     padding: 10px;
 }
 
-.button a, button {
-    color: white;
-    background-color: black;
+.button a,
+button {
+    color: var(--text-light);
+    background-color: var(--bg-dark);
     padding: 5px;
     margin: 5px;
     border-radius: 10px;
 }
 
+/* ----- Liste des locations ----- */
 #main-container {
     display: flex;
     flex-direction: column;
@@ -101,32 +108,33 @@ body {
     align-items: center;
     flex-wrap: wrap;
     flex: 1;
-
     width: 100%;
 }
 
 .post-rental {
-    background-color: lightseagreen;
+    background-color: var(--bg-light);
     border-radius: 10px;
-
     margin: 10px;
     padding: 10px;
 }
 
+/* ----- Formulaires ----- */
 form {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-
-    border: 1px solid black;
+    border: 1px solid var(--bg-dark);
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
+    width: 100%;
+    max-width: 500px;
+    /* Assurez-vous que le formulaire ne devient pas trop large */
 }
 
 fieldset {
-    border: 1px solid black;
+    border: 1px solid var(--bg-dark);
     border-radius: 10px;
     padding: 10px;
     margin: 10px;
@@ -136,28 +144,148 @@ fieldset legend {
     font-weight: bold;
 }
 
-input, select {
+input,
+select {
     margin: 5px;
     padding: 5px;
     border-radius: 10px;
+    width: 100%;
+    /* S'assurer que les champs prennent toute la largeur du formulaire */
 }
 
 select {
-    width: 100%;
     text-align: center;
 }
 
-/* Footer */
-
+/* ----- Footer ----- */
 #bottom-container {
     display: flex;
     justify-content: center;
     align-items: center;
-
-    background-color: lightseagreen;
+    background-color: var(--bg-light);
     border-radius: 10px;
-
     margin-bottom: 10px;
-
     height: 100px;
+}
+
+/* ----- Responsive ----- */
+
+/* --- Tablettes et plus grand (à partir de 768px de large) --- */
+@media (min-width: 768px) {
+
+    /* --- Bannière --- */
+    #top-container {
+        height: 150px;
+    }
+
+    .logo {
+        font-size: 36px;
+    }
+
+    .actions {
+        flex-direction: row;
+    }
+
+    .actions a {
+        padding: 10px;
+        margin: 10px;
+    }
+
+    /* --- Liste des locations --- */
+    .rentals-list {
+        flex-direction: row;
+        justify-content: flex-start;
+    }
+
+    .post-rental {
+        width: 45%;
+    }
+
+    /* --- Formulaires --- */
+    form {
+        max-width: 600px;
+        /* Augmenter la largeur maximale */
+        width: 80%;
+        /* Limite la largeur à 80% de la fenêtre */
+    }
+}
+
+/* --- Tablettes (entre 768px et 991px de large) --- */
+@media (min-width: 768px) and (max-width: 991px) {
+
+    .rentals-list {
+        flex-direction: row;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .post-rental {
+        width: 48%;
+    }
+
+    /* --- Formulaires --- */
+    form {
+        width: 70%;
+        max-width: 500px;
+        /* Limiter la largeur à un maximum de 500px */
+    }
+}
+
+/* --- Desktop (à partir de 992px de large) --- */
+@media (min-width: 992px) {
+
+    /* --- Bannière --- */
+    #top-container {
+        height: 180px;
+    }
+
+    .logo {
+        font-size: 40px;
+    }
+
+    .actions {
+        flex-direction: row;
+    }
+
+    .actions a {
+        padding: 15px;
+        margin: 15px;
+    }
+
+    /* --- Liste des locations --- */
+    .rentals-list {
+        flex-direction: row;
+        justify-content: space-around;
+    }
+
+    .post-rental {
+        width: 30%;
+    }
+
+    /* --- Formulaires --- */
+    form {
+        width: 60%;
+        max-width: 700px;
+        /* Limiter la largeur maximale */
+    }
+}
+
+/* --- Très grand écran (à partir de 1200px de large) --- */
+@media (min-width: 1200px) {
+
+    /* --- Liste des locations --- */
+    .rentals-list {
+        justify-content: space-between;
+    }
+
+    .post-rental {
+        width: 22%;
+    }
+
+    /* --- Formulaires --- */
+    form {
+        width: 50%;
+        max-width: 800px;
+        /* Limiter la largeur à 800px */
+    }
 }
