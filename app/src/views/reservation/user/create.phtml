@@ -1,17 +1,13 @@
-<?php
-
-use App\Model\Repository\RepoManager;
-
-?>
+<!-- Page de création d'une réservation par un utilisateur -->
 
 <h1>Faire une réservation</h1>
 
 <div class="container-body">
 
     <!-- Gestion des messages d'erreur -->
-    <?php if (isset($_GET['error'])): ?>
+    <?php if ( isset( $_GET[ 'error' ] ) ): ?>
         <div class="error-message">
-            <p class="error"><?php echo $_GET['error'] ?></p>
+            <p class="error"><?php echo $_GET[ 'error' ] ?></p>
         </div>
     <?php endif; ?>
 
@@ -29,18 +25,24 @@ use App\Model\Repository\RepoManager;
             </div>
             <div>
                 <label for="rental">Location :</label>
-                <?php $rentals = RepoManager::getRM()->getRentalRepo()->getAll(); ?>
+                <?php  ?>
                 <select name="rental_id" id="rental">
-                    <?php if (isset($_GET['id'])) { //TODO: sécuriser le $_GET
-                        foreach ($rentals as $rental) {
-                            if ($rental->getId() == $_GET['id']) {
+                    <?php if ( isset( $_GET[ 'id' ] ) )
+                    { //TODO: sécuriser le $_GET
+                        foreach ( $rentals as $rental ):
+                            if ( $rental->getId() == $_GET[ 'id' ] )
+                            {
                                 echo "<option value='" . $rental->getId() . "' selected>" . $rental->getTitle() . "</option>";
-                            } else {
+                            }
+                            else
+                            {
                                 echo "<option value='" . $rental->getId() . "'>" . $rental->getTitle() . "</option>";
                             }
-                        }
-                    } else {
-                        foreach ($rentals as $rental):
+                        endforeach;
+                    }
+                    else
+                    {
+                        foreach ( $rentals as $rental ):
                             echo "<option value='" . $rental->getId() . "'>" . $rental->getTitle() . "</option>";
                         endforeach;
                     } ?>

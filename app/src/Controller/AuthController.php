@@ -2,16 +2,16 @@
 
 namespace App\Controller;
 
+use Laminas\Diactoros\ServerRequest;
+
+use Symplefony\View;
+use Symplefony\Controller;
+
 use App\App;
 use App\Session;
 use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
 use App\Tools\Functions;
-
-use Laminas\Diactoros\ServerRequest;
-
-use Symplefony\View;
-use Symplefony\Controller;
 
 /**
  * Gestion des fonctionnalités d'authentification
@@ -23,10 +23,7 @@ class AuthController extends Controller
      * pas de paramètre
      * @return bool
      */
-    public static function isAuth(): bool
-    {
-        return !is_null( Session::get( Session::USER ) );
-    }
+    public static function isAuth(): bool { return !is_null( Session::get( Session::USER ) ); }
     
     /**
      * L'utilisateur connecté est un administrateur
@@ -35,9 +32,7 @@ class AuthController extends Controller
      */
     public static function isAdmin(): bool
     {
-        if( !self::isAuth() ) {
-            return false;
-        }
+        if( !self::isAuth() ) { return false; }
 
         $user = Session::get( Session::USER );
 
@@ -51,20 +46,21 @@ class AuthController extends Controller
      */
     public static function isOwner(): bool
     {
-        if( !self::isAuth() ) {
-            return false;
-        }
+        if( !self::isAuth() ) { return false; }
 
         $user = Session::get( Session::USER );
         
         return $user->getTypeAccount() === User::ROLE_OWNER;
     }
 
+    /**
+     * Renvoie l'utilisateur s'il est connecté, sinon null
+     * pas de paramètre
+     * @return bool
+     */
     public static function getUser(): ?User
     {
-        if( !self::isAuth() ) {
-            return null;
-        }
+        if( !self::isAuth() ) { return null; }
 
         return Session::get( Session::USER );
     }
@@ -81,13 +77,13 @@ class AuthController extends Controller
      */
     public function signUp(): void
     {
-        $view = new View('auth:sign-up', auth_controller: self::class);
+        $view = new View( 'auth:sign-up', auth_controller: self::class );
 
         $data = [
             'title' => 'Créer mon compte - PasChezMoi.com'
         ];
 
-        $view->render($data);
+        $view->render( $data );
     }
 
     /**
@@ -95,84 +91,92 @@ class AuthController extends Controller
      * @param ServerRequest $request
      * @return void
      */
-    public function processSignUp(ServerRequest $request): void
+    public function processSignUp( ServerRequest $request ): void
     {
         $user_data = $request->getParsedBody();
 
         // On vérifie que l'on recoit bien les données du formulaire
         if (
-            !isset($user_data['firstName']) ||
-            !isset($user_data['lastName']) ||
-            !isset($user_data['email']) ||
-            !isset($user_data['password']) ||
-            !isset($user_data['typeAccount'])
-        ) {
-            $this->redirect('/sign-up?error=Erreurlors de la création des champs');
+            !isset( $user_data[ 'firstName' ] ) ||
+            !isset( $user_data[ 'lastName' ] ) ||
+            !isset( $user_data[ 'email' ] ) ||
+            !isset( $user_data[ 'password' ] ) ||
+            !isset( $user_data[ 'typeAccount' ] )
+        )
+        {
+            $this->redirect( '/sign-up?error=Erreurlors de la création des champs' );
         }
 
         // On sécurise les données
-        $firstName = Functions::secureData($user_data['firstName']);
-        $lastName = Functions::secureData($user_data['lastName']);
-        $email = strtolower(Functions::secureData($user_data['email']));
-        $password = Functions::secureData($user_data['password']);
-        $typeAccount = intval(Functions::secureData($user_data['typeAccount']));
-
-        $pass_hash = App::strHash($password);
+        $firstName = Functions::secureData( $user_data[ 'firstName' ] );
+        $lastName = Functions::secureData( $user_data[ 'lastName' ] );
+        $email = strtolower(Functions::secureData( $user_data[ 'email' ] ) );
+        $password = Functions::secureData( $user_data[ 'password' ] );
+        $typeAccount = Functions::secureData( $user_data[ 'typeAccount' ] );
 
         // On vérifie si les données sont vides
         if (
-            empty($firstName) ||
-            empty($lastName) ||
-            empty($email) ||
-            empty($password) ||
-            empty($typeAccount)
-        ) {
-            $this->redirect('/sign-up?error=Veuillez remplir tous les champs');
+            empty( $firstName ) ||
+            empty( $lastName ) ||
+            empty( $email ) ||
+            empty( $password ) ||
+            empty( $typeAccount )
+        )
+        {
+            $this->redirect( '/sign-up?error=Veuillez remplir tous les champs' );
         }
 
         // On vérifie le format de l'email
-        if (!$this->validEmail($email)) {
-            $this->redirect('/sign-up?error=Le format de l\'email est incorrect');
+        if ( !Functions::validEmail( $email ) )
+        {
+            $this->redirect( '/sign-up?error=Le format de l\'email est incorrect' );
         }
 
         // On vérifie le format du mot de passe
-        if (!$this->validPassword($password)) {
-            $this->redirect('/sign-up?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre');
+        if ( !Functions::validPassword( $password ) )
+        {
+            $this->redirect( '/sign-up?error=Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule et un chiffre' );
         }
+
+        // Chiffrement du mot de passe
+        $pass_hash = App::strHash( $password );
 
         // On vérifie si l'email n'est pas déjà utilisé pour le type de compte choisi
-        $users = RepoManager::getRM()->getUserRepo()->getAllByEmail($email);
-        foreach ($users as $user) {
-            if ($user->getEmail() == $email && $user->getTypeAccount() == $typeAccount) {
-                $this->redirect('/sign-up?error=Cet email est déjà utilisé');
-            }
+        $user = RepoManager::getRM()->getUserRepo()->getByEmailAndType( $email, $typeAccount );
+
+        if ( !is_null( $user ) )
+        {
+            $this->redirect( '/sign-up?error=Cet email n\'est pas disponible' );
         }
 
-        // On crée un nouvel utilisateur
-        $user = new User([
+        $user = new User( [
             'firstName' => $firstName,
             'lastName' => $lastName,
             'email' => $email,
             'password' => $pass_hash,
             'typeAccount' => $typeAccount
-        ]);
+        ] );
 
-        $user_created = RepoManager::getRM()->getUserRepo()->create($user);
+        $user_created = RepoManager::getRM()->getUserRepo()->create( $user );
 
-        if (is_null($user_created)) {
-            $this->redirect('/sign-up?error=Une erreur est survenue lors de la création de votre compte');
-        } else {
+        // On vérifie si l'utilisateur a bien été créé
+        if ( is_null( $user_created ) )
+        {
+            $this->redirect( '/sign-up?error=Une erreur est survenue lors de la création de votre compte' );
+        }
+        else
+        {
             // On enregistre l'utilisateur correspondant dans la session
-            Session::set(Session::USER, $user);
+            Session::set( Session::USER, $user );
 
             // On redirige vers une page en fonction du rôle de l'utilisateur
-            $redirect_url = match ($user->getTypeAccount()) {
+            $redirect_url = match ( $user->getTypeAccount() ) {
                 User::ROLE_USER => '/',
                 User::ROLE_OWNER => '/',
                 User::ROLE_ADMIN => '/admin' // TODO: Sécurité: page qui redemande le mot de passe par exemple
             };
 
-            $this->redirect($redirect_url);
+            $this->redirect( $redirect_url );
         }
     }
 
@@ -183,13 +187,13 @@ class AuthController extends Controller
      */
     public function signIn(): void
     {
-        $view = new View('auth:sign-in', auth_controller: self::class);
+        $view = new View( 'auth:sign-in', auth_controller: self::class );
 
         $data = [
             'title' => 'Se connecter - PasChezMoi.com'
         ];
 
-        $view->render($data);
+        $view->render( $data );
     }
 
     /**
@@ -197,61 +201,64 @@ class AuthController extends Controller
      * @param ServerRequest $request
      * @return void
      */
-    public function checkCredentials(ServerRequest $request): void
+    public function checkCredentials( ServerRequest $request ): void
     {
         $user_data = $request->getParsedBody();
 
         // On vérifie que l'on recoit bien les données du formulaire
         if (
-            !isset($user_data['email']) &&
-            !isset($user_data['password']) &&
-            !isset($user_data['typeAccount'])
-        ) {
-            $this->redirect('/sign-in?error=Erreur lors de la création des champs');
+            !isset( $user_data[ 'email' ] ) &&
+            !isset( $user_data[ 'password' ] ) &&
+            !isset( $user_data[ 'typeAccount' ] )
+        )
+        {
+            $this->redirect( '/sign-in?error=Erreur lors de la création des champs' );
         }
 
         // On sécurise les données
-        $email = strtolower(Functions::secureData($user_data['email']));
-        $password = Functions::secureData($user_data['password']);
-        $typeAccount = Functions::secureData($user_data['typeAccount']);
+        $email = strtolower( Functions::secureData( $user_data[ 'email' ] ) );
+        $password = Functions::secureData( $user_data[' password' ] );
+        $typeAccount = Functions::secureData( $user_data[ 'typeAccount' ] );
 
         // On vérifie si les données sont vides
         if (
-            empty($email) ||
-            empty($password) ||
-            empty($typeAccount)
-        ) {
-            $this->redirect('/sign-in?error=Veuillez remplir tous les champs');
+            empty( $email ) ||
+            empty( $password ) ||
+            empty( $typeAccount )
+        )
+        {
+            $this->redirect( '/sign-in?error=Veuillez remplir tous les champs' );
         }
 
         // On vérifie le format de l'email
-        if (!$this->validEmail($email)) {
-            $this->redirect('/sign-in?error=Le format de l\'email est incorrect');
+        if ( !Functions::validEmail( $email ) )
+        {
+            $this->redirect( '/sign-in?error=Le format de l\'email est incorrect' );
         }
 
         // Chiffrement du mot de passe
-        $password = App::strHash($password);
+        $password = App::strHash( $password );
 
-        // On vérifie si l'utilisateur existe
-        $verifiedUser = RepoManager::getRM()->getUserRepo()->checkAuth($email, $password, $typeAccount);
-
-        // On vérifie si l'utilisateur existe
-        if (is_null($verifiedUser)) {
-            $this->redirect('/sign-in?error=Ce compte n\'existe pas');
+        // On vérifie si le compte existe
+        $verifiedUser = RepoManager::getRM()->getUserRepo()->checkAuth( $email, $password, $typeAccount );
+        if ( is_null( $verifiedUser ) )
+        {
+            $this->redirect( '/sign-in?error=Ce compte n\'existe pas' );
         }
 
         // On connecte l'utilisateur
-        $verifiedUser->setPassword("");
-        Session::set(Session::USER, $verifiedUser);
+        $verifiedUser->setPassword( "" );
+        Session::set( Session::USER, $verifiedUser );
 
         // On redirige vers une page en fonction du rôle de l'utilisateur
-        $redirect_url = match ($verifiedUser->getTypeAccount()) {
+        $redirect_url = match ( $verifiedUser->getTypeAccount() )
+        {
             User::ROLE_USER => '/',
             User::ROLE_OWNER => '/',
             User::ROLE_ADMIN => '/admin' // TODO: Sécurité: page qui redemande le mot de passe par exemple
         };
 
-        $this->redirect($redirect_url);
+        $this->redirect( $redirect_url );
     }
 
     
@@ -264,39 +271,8 @@ class AuthController extends Controller
      */
     public function signOut(): void
     {
-        Session::remove(Session::USER);
+        Session::remove( Session::USER );
 
-        $this->redirect('/');
-    }
-
-    // -- Fonctions de sécurisation
-    /**
-     * Méthode qui vérifie le format de l'email
-     * @param string $email
-     * @return bool
-     */
-    public static function validEmail($email): bool
-    {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
-    }
-
-    /**
-     * Méthode qui vérifie que le mdp contient au moins 8 caractères, une majuscule, une minuscule et un chiffre
-     * @param string $password
-     * @return bool
-     */
-    public static function validPassword($password): bool
-    {
-        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password);
-    }
-
-    /**
-     * Méthode qui sécurise les données
-     * @param string $data
-     * @return string
-     */
-    public static function secureData($data): string
-    {
-        return htmlspecialchars(stripslashes(trim($data))); // htmlspecialchars() convertit les caractères spéciaux en entités HTML, stripslashes() supprime les antislashs et trim() supprime les espaces inutiles en début et fin de chaîne
+        $this->redirect( '/' );
     }
 } 

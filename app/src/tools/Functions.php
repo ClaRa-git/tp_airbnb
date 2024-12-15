@@ -9,9 +9,9 @@ abstract Class Functions
      * @param string $email
      * @return bool
      */
-    public static function validEmail($email): bool
+    public static function validEmail( $email ): bool
     {
-        return filter_var($email, FILTER_VALIDATE_EMAIL);
+        return filter_var( $email, FILTER_VALIDATE_EMAIL );
     }
 
     /**
@@ -19,9 +19,9 @@ abstract Class Functions
      * @param string $password
      * @return bool
      */
-    public static function validPassword($password): bool
+    public static function validPassword( $password ): bool
     {
-        return preg_match('/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password);
+        return preg_match( '/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/', $password );
     }
 
     /**
@@ -29,8 +29,8 @@ abstract Class Functions
      * @param string $data
      * @return string
      */
-    public static function secureData($data): string
+    public static function secureData( $data ): string
     {
-        return htmlspecialchars(stripslashes(trim($data))); // htmlspecialchars() convertit les caractères spéciaux en entités HTML, stripslashes() supprime les antislashs et trim() supprime les espaces inutiles en début et fin de chaîne
+        return htmlspecialchars( stripslashes( trim( $data ) ) ); // htmlspecialchars() convertit les caractères spéciaux en entités HTML, stripslashes() supprime les antislashs et trim() supprime les espaces inutiles en début et fin de chaîne
     }
 }

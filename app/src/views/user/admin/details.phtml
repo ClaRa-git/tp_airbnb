@@ -1,14 +1,16 @@
+<!-- Page de modification d'un utilisateur par un administrateur -->
+
 <h1>Modifier</h1>
 
 <div class="container-form">
-    <form action="/admin/users/<?php echo $user->getId() ?>" method="post" novalidate>
+    <form action="/admin/users/<?php echo $user->getId(); ?>" method="post" novalidate>
         <div>
             <label for="input-firstname">Prénom :</label>
-            <input type="text" name="firstname" id="input-firstname" value="<?php echo $user->getFirstName() ?>">
+            <input type="text" name="firstname" id="input-firstname" value="<?php echo $user->getFirstName(); ?>">
         </div>
         <div>
             <label for="input-lastname">Nom :</label>
-            <input type="text" name="lastname" id="input-lastname" value="<?php echo $user->getLastName() ?>">
+            <input type="text" name="lastname" id="input-lastname" value="<?php echo $user->getLastName(); ?>">
         </div>
         <div class="button">
             <input type="submit" value="Enregistrer la modification">
@@ -17,5 +19,5 @@
 </div>
 
 <div class="button">
-    <a href="<?php printf('/admin/users/%s/delete', $user->getId()) ?>">❌ Supprimer</a>
+    <a href="<?php printf( '/admin/users/%s/delete', $user->getId() ); ?>">❌ Supprimer</a>
 </div>

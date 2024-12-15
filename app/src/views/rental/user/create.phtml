@@ -1,6 +1,4 @@
-<?php
-
-use App\Model\Repository\RepoManager; ?>
+<!-- Page de création d'une location par un annonceur -->
 
 <h1>Créer une location</h1>
 
@@ -8,7 +6,7 @@ use App\Model\Repository\RepoManager; ?>
     <form action="/rentals/add" id="form-create-rental" method="post">
 
         <!-- Gestion des messages d'erreur -->
-        <?php if (isset($_GET['error'])): ?>
+        <?php if ( isset( $_GET[ 'error' ] ) ): ?>
             <div class="error-message">
                 <p class="error"><?php echo $_GET['error'] ?></p>
             </div>
@@ -42,10 +40,9 @@ use App\Model\Repository\RepoManager; ?>
             <div>
                 <label for="typeLogement">Type de logement :</label>
                 <select name="typeLogement_id" id="typeLogement">
-                    <?php $types = RepoManager::getRM()->getTypeLogementRepo()->getAll();
-                    foreach ($types as $type):
+                    <?php foreach ( $types as $type ):
                         echo "<option value='" . $type->getId() . "'>" . $type->getName() . "</option>";
-                    endforeach ?>
+                    endforeach; ?>
                 </select>
             </div>
         </fieldset>
@@ -63,11 +60,9 @@ use App\Model\Repository\RepoManager; ?>
         <fieldset>
             <legend>Equipements disponibles</legend>
             <div>
-                <?php $equipments = RepoManager::getRM()->getEquipmentRepo()->getAll();
-                foreach ($equipments as $equipment) {
+                <?php foreach ( $equipments as $equipment ):
                     echo "<div><input type='checkbox' name='equipments[]' value='" . $equipment->getId() . "'><label for='equipments[]'>" . $equipment->getName() . "</label></div>";
-                }
-                ?>
+                endforeach; ?>
             </div>
         </fieldset>
         <div class="button">

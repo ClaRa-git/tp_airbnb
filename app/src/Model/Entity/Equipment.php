@@ -8,9 +8,9 @@ class Equipment extends Entity
 {
     protected string $labelEquipment;
     public function getName(): string { return $this->labelEquipment; }
-    public function setName(string $labelEquipment): self
+    public function setName( string $value ): self
     {
-        $this->labelEquipment = $labelEquipment;
+        $this->labelEquipment = $value;
         return $this;
     }
 }

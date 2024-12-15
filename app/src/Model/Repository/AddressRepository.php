@@ -2,8 +2,9 @@
 
 namespace App\Model\Repository;
 
-use App\Model\Entity\Address;
 use Symplefony\Model\Repository;
+
+use App\Model\Entity\Address;
 
 class AddressRepository extends Repository
 {
@@ -19,7 +20,7 @@ class AddressRepository extends Repository
      * @param Address $address
      * @return Address|null
      */
-    public function create(Address $address): ?Address
+    public function create( Address $address ): ?Address
     {
         $query = sprintf(
             'INSERT INTO `%s` 
@@ -28,18 +29,18 @@ class AddressRepository extends Repository
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return null; }
+        if ( !$sth ) { return null; }
 
-        $success = $sth->execute([
+        $success = $sth->execute( [
             'city' => $address->getCity(),
             'country' => $address->getCountry()
-        ]);
+        ] );
 
-        if(!$success) { return null; }
+        if ( !$success ) { return null; }
 
-        $address->setId($this->pdo->lastInsertId());
+        $address->setId( $this->pdo->lastInsertId() );
 
         return $address;
     }
@@ -49,21 +50,21 @@ class AddressRepository extends Repository
      * pas de paramètre
      * @return array
      */
-    public function getAll(): array { return $this->readAll(Address::class); }
+    public function getAll(): array { return $this->readAll( Address::class ); }
 
     /**
      * Retourne une adresse par son id
      * @param int $id
      * @return Address|null
      */
-    public function getById(int $id): ?Address { return $this->readById(Address::class, $id); }
+    public function getById( int $id ): ?Address { return $this->readById( Address::class, $id ); }
 
     /**
      * Met à jour une adresse en base de données
      * @param Address $address
      * @return Address|null
      */
-    public function update(Address $address): ?Address
+    public function update( Address $address ): ?Address
     {
         $query = sprintf(
             'UPDATE `%s` 
@@ -78,13 +79,13 @@ class AddressRepository extends Repository
 
         if(!$sth) { return null; }
 
-        $success = $sth->execute([
+        $success = $sth->execute( [
             'id' => $address->getId(),
             'city' => $address->getCity(),
             'country' => $address->getCountry()
-        ]);
+        ] );
 
-        if(!$success) { return null; }
+        if ( !$success ) { return null; }
 
         return $address;
     }
@@ -95,18 +96,20 @@ class AddressRepository extends Repository
      * @param int $id
      * @return bool
      */
-    public function deleteOne(int $id): bool
+    public function deleteOne( int $id ): bool
     {
         $query = sprintf(
             'DELETE FROM `%s` WHERE `id`=:id',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return false; }
+        if ( !$sth ) { return false; }
 
-        $success = $sth->execute(['id' => $id]);
+        $success = $sth->execute( [
+            'id' => $id
+        ] );
 
         return $success;
     }

@@ -82,34 +82,34 @@ final class App
 
         //TODO: Ajouter les routes de l'application  par groupes avec middleware
         // -- Pages d'admin --
-        $adminAttributes = [
-            Attributes::PREFIX => '/admin',
-            Attributes::MIDDLEWARE => [AdminMiddleware::class]
-        ];
+        // $adminAttributes = [
+        //     Attributes::PREFIX => '/admin',
+        //     Attributes::MIDDLEWARE => [AdminMiddleware::class]
+        // ];
 
-        $this->router->group($adminAttributes, function (Router $router) {
-            $router->get('', [AdminController::class, 'dashboard']);
+        // $this->router->group($adminAttributes, function (Router $router) {
+        //     $router->get('', [AdminController::class, 'dashboard']);
 
-            // -- User --
-            // Ajout
-            $router->get('/users/add', [UserController::class,
-                'add'
-            ]);
-            $router->post('/users', [UserController::class, 'create']);
-            // Liste
-            $router->get('/users', [UserController::class, 'index']);
-            // Détail
-            $router->get('/users/{id}', [UserController::class, 'show']);
-            $router->post('/users/{id}', [UserController::class, 'update']);
-            // Suppression
-            $router->get('/users/{id}/delete', [UserController::class, 'delete']);
+        //     // -- User --
+        //     // Ajout
+        //     $router->get('/users/add', [UserController::class,
+        //         'add'
+        //     ]);
+        //     $router->post('/users', [UserController::class, 'create']);
+        //     // Liste
+        //     $router->get('/users', [UserController::class, 'index']);
+        //     // Détail
+        //     $router->get('/users/{id}', [UserController::class, 'show']);
+        //     $router->post('/users/{id}', [UserController::class, 'update']);
+        //     // Suppression
+        //     $router->get('/users/{id}/delete', [UserController::class, 'delete']);
 
-            // -- Rental -- TODO: Ajouter les routes de l'application  par groupes avec middleware
-            // --Equipments -- TODO: Ajouter les routes de l'application  par groupes avec middleware
-            // -- TypeLogement -- TODO: Ajouter les routes de l'application  par groupes avec middleware
-            // -- Reservation -- TODO: Ajouter les routes de l'application  par groupes avec middleware
+            // -- Rental -- TODO: Ajouter les routes de l'application
+            // --Equipments -- TODO: Ajouter les routes de l'application
+            // -- TypeLogement -- TODO: Ajouter les routes de l'application
+            // -- Reservation -- TODO: Ajouter les routes de l'application
 
-        });
+        //});
 
         // -- Pages communes --
         $this->router->get('/', [RentalController::class, 'displayRentals']);

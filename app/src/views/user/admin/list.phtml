@@ -1,3 +1,5 @@
+<!-- Page de liste des utilisateurs pour un administrateur -->
+
 <div class="button">
     <a href="/admin">🏠 Retour</a>
 </div>
@@ -8,7 +10,7 @@
     <a href="/admin/users/add">Ajouter un utilisateur</a>
 </div>
 
-<?php if(!empty($users)): ?>
+<?php if( !empty( $users ) ): ?>
 <div>
     <ul>
         <?php foreach( $users as $user ): ?>
@@ -19,13 +21,13 @@
                         $user->getId(),
                         $user->getFirstname(),
                         $user->getLastname()
-                    ) ?>
+                    ); ?>
                 </h2>
                 <ul>
-                    <li>Id: <?php echo $user->getId() ?></li>
-                    <li>Email: <?php echo $user->getEmail() ?></li>
-                    <li>Prénom: <?php echo $user->getFirstName() ?></li>
-                    <li>Nom: <?php echo $user->getLastName() ?></li>
+                    <li>Id: <?php echo $user->getId(); ?></li>
+                    <li>Email: <?php echo $user->getEmail(); ?></li>
+                    <li>Prénom: <?php echo $user->getFirstName(); ?></li>
+                    <li>Nom: <?php echo $user->getLastName(); ?></li>
                 </ul>
             </li>
         <?php endforeach ?>

@@ -1,3 +1,5 @@
+<!-- Page de création d'un compte utilisateur ou annoceur -->
+
 <?php
 
 use App\Model\Entity\User;
@@ -13,9 +15,9 @@ use App\Model\Entity\User;
 <div class="container-body">
 
     <!-- Gestion des messages d'erreur -->
-    <?php if (isset($_GET['error'])): ?>
+    <?php if ( isset( $_GET[ 'error' ] ) ): ?>
         <div class="error-message">
-            <p class="error"><?php echo $_GET['error'] ?></p>
+            <p class="error"><?php echo $_GET[ 'error' ] ?></p>
         </div>
     <?php endif; ?>
 

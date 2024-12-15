@@ -1,15 +1,20 @@
+<!-- Page d'accueil de l'application -->
+<!-- Affiche la liste des locations disponibles -->
+<!-- Si l'utilisateur est connecté en tant qu'annonceur, il voit la liste des biens qu'il propose -->
+<!-- Si l'utilisateur est connecté en tant qu'utilisateur, il voit la liste des biens disponibles -->
+
 <?php
 
-use App\Model\Entity\User;
 use App\Session;
+use App\Model\Entity\User;
 
 ?>
 
 <h1>Accueil</h1>
 
 <div class="container-body">
-    <?php if ($auth::isAuth()):
-        if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER): ?>
+    <?php if ( $auth::isAuth() ):
+        if ( Session::get( Session::USER )->getTypeAccount() == User::ROLE_OWNER ): ?>
             <div class="button">
                 <a href="/rentals/add">Ajouter une location</a>
             </div>
@@ -23,18 +28,18 @@ use App\Session;
         <?php endif;
     endif;
     
-    if (!empty($rentals)): ?>
+    if ( !empty( $rentals ) ): ?>
         <div class="rentals-list">
-            <?php foreach ($rentals as $rental): ?>
+            <?php foreach ( $rentals as $rental ): ?>
                 <div class="post-rental">
-                    <a href="/rentals/<?php echo $rental->getId() ?>">
-                        Titre : <?php echo $rental->getTitle() ?><br>
-                        Adresse : <?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry() ?><br>
+                    <a href="/rentals/<?php echo $rental->getId(); ?>">
+                        Titre : <?php echo $rental->getTitle(); ?><br>
+                        Adresse : <?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry(); ?><br>
                     </a>
                 </div>
-            <?php endforeach ?>
+            <?php endforeach; ?>
         </div>
     <?php else: ?>
         <div>Aucun bien proposé.</div>
-    <?php endif ?>
+    <?php endif; ?>
 </div>

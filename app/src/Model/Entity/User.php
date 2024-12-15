@@ -11,41 +11,41 @@ class User extends Entity
 
     protected string $firstName;
     public function getFirstName(): string { return $this->firstName; }
-    public function setFirstName(string $firstName): self
+    public function setFirstName( string $value ): self
     {
-        $this->firstName = $firstName;
+        $this->firstName = $value;
         return $this;
     }
 
     protected string $lastName;
     public function getLastName(): string { return $this->lastName; }
-    public function setLastName(string $lastName): self
+    public function setLastName( string $value ): self
     {
-        $this->lastName = $lastName;
+        $this->lastName = $value;
         return $this;
     }
 
     protected string $password;
     public function getPassword(): string { return $this->password; }
-    public function setPassword(string $password): self
+    public function setPassword( string $value ): self
     {
-        $this->password = $password;
+        $this->password = $value;
         return $this;
     }
 
     protected string $email;
     public function getEmail(): string { return $this->email; }
-    public function setEmail(string $email): self
+    public function setEmail( string $value ): self
     {
-        $this->email = $email;
+        $this->email = $value;
         return $this;
     }
 
     protected int $typeAccount;
     public function getTypeAccount(): int { return $this->typeAccount; }
-    public function typeAccount(int $typeAccount): self
+    public function typeAccount( int $value ): self
     {
-        $this->typeAccount = $typeAccount;
+        $this->typeAccount = $value;
         return $this;
     }
 }

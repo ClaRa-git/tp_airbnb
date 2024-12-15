@@ -31,11 +31,11 @@ use App\Session;
             <a href="/">PasChezMoi</a>
         </div>
 
-        <?php if ($auth::isAuth()): ?>
+        <?php if ( $auth::isAuth() ): ?>
             <!-- Informations de l'utilisateur authentifié -->
             <div class="user-info">
                 <!-- Affiche le prénom de l'utilisateur -->
-                <div class="user-name">Bonjour <?php echo Session::get(Session::USER)->getfirstName(); ?></div>
+                <div class="user-name">Bonjour <?php echo Session::get( Session::USER )->getfirstName(); ?></div>
 
                 <!-- Affiche le mode de l'utilisateur (Propriétaire ou Utilisateur) -->
                 <div class="user-mode">

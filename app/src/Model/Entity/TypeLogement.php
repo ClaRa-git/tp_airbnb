@@ -7,9 +7,9 @@ class TypeLogement extends Entity
 {
     protected string $labelTypeLogement;
     public function getName(): string { return $this->labelTypeLogement; }
-    public function setName(int $labelTypeLogement): self 
+    public function setName( int $value ): self 
     {
-        $this->labelTypeLogement = $labelTypeLogement;
+        $this->labelTypeLogement = $value;
         return $this;
     }
 }

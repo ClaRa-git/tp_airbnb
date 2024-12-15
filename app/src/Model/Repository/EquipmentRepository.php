@@ -2,13 +2,24 @@
 
 namespace App\Model\Repository;
 
-use App\Model\Entity\Equipment;
-
 use Symplefony\Model\Repository;
+
+use App\Model\Entity\Equipment;
 
 class EquipmentRepository extends Repository
 {
+    /**
+     * Retourne le nom de la table en base de données
+     * pas de paramètre
+     * @return string
+     */
     protected function getTableName(): string { return 'equipments'; }
+
+    /**
+     * Retourne le nom de la table de liée à celle des équipements
+     * pas de paramètre
+     * @return string
+     */
     private function getMappingRental(): string { return 'rentals_equipments'; }
 
     /**
@@ -16,7 +27,7 @@ class EquipmentRepository extends Repository
      * @param Equipment $equipment
      * @return Equipment|null
      */
-    public function create(Equipment $equipment): ?Equipment
+    public function create( Equipment $equipment ): ?Equipment
     {
         $query = sprintf(
             'INSERT INTO `%s` 
@@ -25,29 +36,19 @@ class EquipmentRepository extends Repository
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return null; }
+        if ( !$sth ) { return null; }
 
-        $success = $sth->execute([
+        $success = $sth->execute( [
             'labelEquipment' => $equipment->getName()
-        ]);
+        ] );
 
-        if(!$success) { return null; }
+        if ( !$success ) { return null; }
 
-        $equipment->setId($this->pdo->lastInsertId());
+        $equipment->setId( $this->pdo->lastInsertId() );
 
         return $equipment;
-    }
-
-    /**
-     * Retourne un équipement par son id
-     * @param int $id
-     * @return Equipment|null
-     */
-    public function getById(int $id): ?Equipment
-    {
-        return $this->readById(Equipment::class, $id);        
     }
 
     /**
@@ -57,7 +58,17 @@ class EquipmentRepository extends Repository
      */
     public function getAll(): array
     {
-        return $this->readAll(Equipment::class);
+        return $this->readAll( Equipment::class );
+    }
+
+    /**
+     * Retourne un équipement par son id
+     * @param int $id
+     * @return Equipment|null
+     */
+    public function getById( int $id ): ?Equipment
+    {
+        return $this->readById( Equipment::class, $id );        
     }
 
     /**
@@ -65,7 +76,7 @@ class EquipmentRepository extends Repository
      * @param int $id
      * @return array
      */
-    public function getAllForRental(int $id): array
+    public function getAllForRental( int $id ): array
     {
         $query = sprintf(
             'SELECT * FROM `%1$s` as `e`
@@ -75,18 +86,21 @@ class EquipmentRepository extends Repository
             $this->getMappingRental()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return []; }
+        if ( !$sth ) { return []; }
 
-        $success = $sth->execute(['id' => $id]);
+        $success = $sth->execute( [
+            'id' => $id
+        ] );
 
-        if(!$success) { return []; }
+        if ( !$success ) { return []; }
 
         $equipments = [];
 
-        while($equipment_data = $sth->fetch()){
-            $equipments[] = new Equipment($equipment_data);
+        while( $equipment_data = $sth->fetch() )
+        {
+            $equipments[] = new Equipment( $equipment_data );
         }
 
         return $equipments;
@@ -97,7 +111,7 @@ class EquipmentRepository extends Repository
      * @param Equipment $equipment
      * @return Equipment|null
      */
-    public function update(Equipment $equipment): ?Equipment
+    public function update( Equipment $equipment ): ?Equipment
     {
         $query = sprintf(
             'UPDATE `%s` 
@@ -106,16 +120,16 @@ class EquipmentRepository extends Repository
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return null; }
+        if ( !$sth ) { return null; }
 
-        $success = $sth->execute([
+        $success = $sth->execute( [
             'labelEquipment' => $equipment->getName(),
             'id' => $equipment->getId()
-        ]);
+        ] );
 
-        if(!$success) { return null; }
+        if( !$success ) { return null; }
 
         return $equipment;
     }
@@ -125,18 +139,20 @@ class EquipmentRepository extends Repository
      * @param int $id
      * @return bool
      */
-    public function deleteOne(int $id): bool
+    public function deleteOne( int $id ): bool
     {
         $query = sprintf(
             'DELETE FROM `%s` WHERE `id` = :id',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
         if(!$sth) { return false; }
 
-        $success = $sth->execute(['id' => $id]);
+        $success = $sth->execute( [
+            'id' => $id
+        ] );
 
         return $success;
     }
@@ -146,18 +162,20 @@ class EquipmentRepository extends Repository
      * @param int $id
      * @return bool
      */
-    public function detachAllForRental(int $id): bool
+    public function detachAllForRental( int $id ): bool
     {
         $query = sprintf(
             'DELETE FROM `%s` WHERE `rental_id` = :id',
             $this->getMappingRental()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
         if(!$sth) { return false; }
 
-        $success = $sth->execute(['id' => $id]);
+        $success = $sth->execute( [
+            'id' => $id
+        ] );
 
         return $success;
     }
@@ -168,11 +186,12 @@ class EquipmentRepository extends Repository
      * @param int $rental_id
      * @return bool
      */
-    public function attachForRental(array $equipments_ids, int $rental_id): bool
+    public function attachForRental( array $equipments_ids, int $rental_id ): bool
     {
         $query_values = [];
-        foreach($equipments_ids as $equipment_id) {
-            $query_values[] = sprintf('(%s, %s)', $rental_id, $equipment_id);
+        foreach( $equipments_ids as $equipment_id )
+        {
+            $query_values[] = sprintf( '(%s, %s)', $rental_id, $equipment_id );
         }
 
         $query = sprintf(
@@ -180,12 +199,12 @@ class EquipmentRepository extends Repository
                 (`rental_id`, `equipment_id`) 
                 VALUES %s',
             $this->getMappingRental(),
-            implode(', ', $query_values)
+            implode( ', ', $query_values )
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return false; }
+        if ( !$sth ) { return false; }
 
         $success = $sth->execute();
 

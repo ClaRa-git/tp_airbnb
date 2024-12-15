@@ -20,7 +20,7 @@ class UserRepository extends Repository
      * @param User $user
      * @return User|null
      */
-    public function create(User $user): ?User
+    public function create( User $user ): ?User
     {
         $query = sprintf(
             'INSERT INTO `%s` 
@@ -29,21 +29,21 @@ class UserRepository extends Repository
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return null; }
+        if ( !$sth ) { return null; }
 
-        $success = $sth->execute([
+        $success = $sth->execute( [
             'firstName' => $user->getFirstName(),
             'lastName' => $user->getLastName(),
             'password' => $user->getPassword(),
             'email' => $user->getEmail(),
             'typeAccount' => $user->getTypeAccount()
-        ]);
+        ] );
 
-        if(!$success) { return null; }
+        if ( !$success ) { return null; }
 
-        $user->setId($this->pdo->lastInsertId());
+        $user->setId( $this->pdo->lastInsertId() );
 
         return $user;
     }
@@ -54,7 +54,7 @@ class UserRepository extends Repository
      */
     public function getAll(): array
     {
-        return $this->readAll(User::class);
+        return $this->readAll( User::class );
     }
 
     /**
@@ -62,10 +62,11 @@ class UserRepository extends Repository
      * @param int $id
      * @return User|null
      */
-    public function getById(int $id): ?User
+    public function getById( int $id ): ?User
     {
-        return $this->readById(User::class, $id);
+        return $this->readById( User::class, $id );
     }
+
 
     /**
      * Récupère un user par son email et son type de compte
@@ -73,62 +74,27 @@ class UserRepository extends Repository
      * @param int $typeAccount
      * @return User|null
      */
-    public function checkAuth(string $email, string $password, int $typeAccount): ?User
+    public function getByEmailAndType( string $email, int $typeAccount ): ?User
     {
         $query = sprintf(
-            'SELECT * FROM `%s` WHERE `email`=:email AND `password`=:password AND `typeAccount`=:typeAccount',
+            'SELECT * FROM `%s` WHERE `email`=:email AND `typeAccount`=:typeAccount',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return null; }
+        if ( !$sth ) { return null; }
 
-        $success = $sth->execute([
+        $success = $sth->execute( [
             'email' => $email,
-            'password' => $password,
             'typeAccount' => $typeAccount
-        ]);
+        ] );
 
-        if(!$success) { return null; }
+        if ( !$success ) { return null; }
 
-        $user_data = $sth->fetch();
+        $user = $sth->fetch();
 
-        if(!$user_data) { return null; }
-
-        $user = new User($user_data);
-        
         return $user;
-    }
-
-    /**
-     * Récupère un user par son email
-     * @param string $email
-     * @return array
-     */
-    public function getAllByEmail(string $email): array
-    {
-        $query = sprintf(
-            'SELECT * FROM `%s` WHERE `email`=:email',
-            $this->getTableName()
-        );
-
-        $sth = $this->pdo->prepare($query);
-
-        if (!$sth) { return []; }
-
-        $success = $sth->execute([
-            'email' => $email
-        ]);
-
-        if (!$success) { return []; }
-
-        $users = [];
-        while ($user = $sth->fetch()) {
-            $users[] = new User($user);
-        }
-
-        return $users;
     }
 
     /**
@@ -136,7 +102,7 @@ class UserRepository extends Repository
      * @param User $user
      * @return User|null
      */
-    public function update(User $user): ?User
+    public function update( User $user ): ?User
     {
         $query = sprintf(
             'UPDATE `%s` 
@@ -145,20 +111,83 @@ class UserRepository extends Repository
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare($query);
+        $sth = $this->pdo->prepare( $query );
 
-        if(!$sth) { return null; }
+        if ( !$sth ) { return null; }
 
-        $success = $sth->execute([
+        $success = $sth->execute( [
             'id' => $user->getId(),
             'firstName' => $user->getFirstName(),
             'lastName' => $user->getLastName(),
             'email' => $user->getEmail(),
             'password' => $user->getPassword(),
             'typeAccount' => $user->getTypeAccount()
-        ]);
+        ] );
 
-        if(!$success) { return null; }
+        if ( !$success ) { return null; }
+
+        return $user;
+    }
+
+    /**
+     * Supprime un user en base de données
+     * @param int $id
+     * @return bool
+     */
+    public function deleteOne( int $id ): bool
+    {
+        $query = sprintf(
+            'DELETE FROM `%s` WHERE `id`=:id',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare( $query );
+
+        if ( !$sth ) { return false; }
+
+        $success = $sth->execute( [
+            'id' => $id
+        ] );
+
+        return $success;
+    }
+
+    /**
+     * Récupère un user par son email et son type de compte
+     * @param string $email
+     * @param int $typeAccount
+     * @return User|null
+     */
+    public function checkAuth( string $email, string $password, int $typeAccount ): ?User
+    {
+        $query = sprintf(
+            'SELECT * FROM `%s` WHERE `email`=:email AND `password`=:password AND `typeAccount`=:typeAccount',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare( $query );
+
+        if ( !$sth ) {
+            return null;
+        }
+
+        $success = $sth->execute( [
+            'email' => $email,
+            'password' => $password,
+            'typeAccount' => $typeAccount
+        ] );
+
+        if ( !$success ) {
+            return null;
+        }
+
+        $user_data = $sth->fetch();
+
+        if ( !$user_data ) {
+            return null;
+        }
+
+        $user = new User( $user_data );
 
         return $user;
     }
