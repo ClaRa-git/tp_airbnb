@@ -13,8 +13,8 @@ use App\Model\Entity\User;
 <h1>Accueil</h1>
 
 <div class="container-body">
-    <?php if ( $auth::isAuth() ):
-        if ( Session::get( Session::USER )->getTypeAccount() == User::ROLE_OWNER ): ?>
+    <?php if ($auth::isAuth()):
+        if (Session::get(Session::USER)->getTypeAccount() == User::ROLE_OWNER): ?>
             <div class="button">
                 <a href="/rentals/add">Ajouter une location</a>
             </div>
@@ -27,15 +27,20 @@ use App\Model\Entity\User;
             </div>
         <?php endif;
     endif;
-    
-    if ( !empty( $rentals ) ): ?>
+
+    if (!empty($rentals)): ?>
         <div class="rentals-list">
-            <?php foreach ( $rentals as $rental ): ?>
+            <?php foreach ($rentals as $rental): ?>
                 <div class="post-rental">
                     <a href="/rentals/<?php echo $rental->getId(); ?>">
                         Titre : <?php echo $rental->getTitle(); ?><br>
                         Adresse : <?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry(); ?><br>
                     </a>
+                    <?php if ($auth::isAuth() && !$auth::isOwner()): ?>
+                        <div class="button">
+                            <a href="/reservations/add?id=<?php echo $rental->getId() ?>">Réserver</a>
+                        </div>
+                    <?php endif; ?>
                 </div>
             <?php endforeach; ?>
         </div>

@@ -217,7 +217,7 @@ class AuthController extends Controller
 
         // On sécurise les données
         $email = strtolower( Functions::secureData( $user_data[ 'email' ] ) );
-        $password = Functions::secureData( $user_data[' password' ] );
+        $password = Functions::secureData( $user_data[ 'password' ] );
         $typeAccount = Functions::secureData( $user_data[ 'typeAccount' ] );
 
         // On vérifie si les données sont vides

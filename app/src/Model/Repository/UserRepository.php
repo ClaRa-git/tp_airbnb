@@ -92,7 +92,13 @@ class UserRepository extends Repository
 
         if ( !$success ) { return null; }
 
-        $user = $sth->fetch();
+        $user_data = $sth->fetch();
+
+        if (!$user_data) {
+            return null;
+        }
+
+        $user = new User($user_data);
 
         return $user;
     }
