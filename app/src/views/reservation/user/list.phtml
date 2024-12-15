@@ -32,6 +32,11 @@ use App\Model\Repository\RepoManager;
                                     <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName(); ?></div>
                                 <?php endif; ?>
                             </a>
+                            <?php if ( $auth::isAuth() && $reservation->getUserId() == Session::get( Session::USER )->getId() ): ?>
+                                <div class="button">
+                                    <a href="<?php printf( '/reservations/%s/delete', $reservation->getId() ) ?>">Supprimer</a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </li>
                 <?php endforeach; ?>

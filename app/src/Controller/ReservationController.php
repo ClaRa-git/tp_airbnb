@@ -120,4 +120,22 @@ class ReservationController extends Controller
 
         $view->render( $data );
     }
+
+    /**
+     * Supprime une réservation
+     * @param int $id
+     * @return void
+     */
+    public function delete( int $id ): void
+    {
+        $delete_success = RepoManager::getRM()->getReservationRepo()->deleteOne( $id );
+
+        if (!$delete_success )
+        {
+            $this->redirect( '/reservations?error=Une erreur est survenue lors de la suppression de la réservation' );
+        }
+
+        $this->redirect( '/reservations' );
+    }
+
 }
