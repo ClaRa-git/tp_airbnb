@@ -18,15 +18,21 @@ class ReservationController extends Controller
      * pas de paramètre
      * @return void
      */
-    public function displayAddReservation(): void
+    public function displayAddReservation(int $id): void
     {
         $view = new View( 'reservation:user:create', auth_controller: AuthController::class );
 
-        $rentals = RepoManager::getRM()->getRentalRepo()->getAll();
+        $rental = RepoManager::getRM()->getRentalRepo()->getById( $id );
+        $rental->setTypeLogement( RepoManager::getRM()->getTypeLogementRepo()->getById( $rental->getTypeLogementId() ) );
+        $rental->setAddress( RepoManager::getRM()->getAddressRepo()->getById( $rental->getAddressId() ) );
+        $user = RepoManager::getRM()->getUserRepo()->getById($rental->getOwnerId());
+        $user->setPassword( '' );
+        $rental->setOwner( $user );
+        $rental->getEquipments();
 
         $data = [
             'title' => 'Ajouter une réservation - PasChezMoi.com',
-            'rentals' => $rentals
+            'rental' => $rental
         ];
 
         $view->render( $data );
@@ -37,23 +43,22 @@ class ReservationController extends Controller
      * @param ServerRequest $request
      * @return void
      */
-    public function processAddReservation( ServerRequest $request ): void
+    public function processAddReservation( ServerRequest $request, int $id ): void
     {
         $reservation_data = $request->getParsedBody();
 
         // On vérifie que l'on reçoit bien les données
         if (
             !isset( $reservation_data[ 'dateStart' ] ) ||
-            !isset( $reservation_data[ 'dateEnd' ] ) ||
-            !isset( $reservation_data[ 'rental_id' ] )
+            !isset( $reservation_data[ 'dateEnd' ] )
         ) {
-            $this->redirect( '/reservations/add?error=Erreur lors de la création des champs' );
+            $this->redirect( '/reservations/{id}?error=Erreur lors de la création des champs' );
         }
 
         // On sécurise les données
         $dateStart = htmlspecialchars( $reservation_data[ 'dateStart' ] );
         $dateEnd = htmlspecialchars( $reservation_data[ 'dateEnd' ] );
-        $rental_id = htmlspecialchars( $reservation_data[ 'rental_id' ] );
+        $rental_id = htmlspecialchars( $id );
 
         // On vérifie si les données sont vides
         if (
@@ -61,15 +66,15 @@ class ReservationController extends Controller
             empty( $dateEnd ) ||
             empty( $rental_id )
         ) {
-            $this->redirect( '/reservations/add?error=Veuillez remplir tous les champs' );
+            $this->redirect( '/reservations/{id}?error=Veuillez remplir tous les champs' );
         }
 
         // On vérifie si la location existe
-        $rental = RepoManager::getRM()->getRentalRepo()->getById( $rental_id );
+        $rental = RepoManager::getRM()->getRentalRepo()->getById( $id );
 
         if ( is_null( $rental ) )
         {
-            $this->redirect( '/reservations/add?error=La location n\'existe pas' );
+            $this->redirect( '/reservations/{id}?error=La location n\'existe pas' );
         }
 
         $reservation = new Reservation( [
@@ -82,8 +87,16 @@ class ReservationController extends Controller
         $reservation_created = RepoManager::getRM()->getReservationRepo()->create( $reservation );
 
         if ( is_null( $reservation_created ) ) {
-            $this->redirect( '/reservations/add?error=Une erreur est survenue lors de la création de la réservation' );
+            $this->redirect( '/reservations/{id}?error=Une erreur est survenue lors de la création de la réservation' );
         }
+
+        $reservation_created->setUser( RepoManager::getRM()->getUserRepo()->getById( $reservation_created->getUserId() ) );
+        $reservation_created->setRental( RepoManager::getRM()->getRentalRepo()->getById( $reservation_created->getRentalId() ) );
+        $reservation_created->getRental()->setTypeLogement( RepoManager::getRM()->getTypeLogementRepo()->getById( $reservation_created->getRental()->getTypeLogementId() ) );
+        $reservation_created->getRental()->setAddress( RepoManager::getRM()->getAddressRepo()->getById( $reservation_created->getRental()->getAddressId() ) );
+        $reservation_created->getRental()->setOwner( RepoManager::getRM()->getUserRepo()->getById( $reservation_created->getRental()->getOwnerId() ) );
+        $reservation_created->getRental()->getOwner()->setPassword( '' );
+        $reservation_created->getRental()->getEquipments();
 
         $this->redirect( '/reservations' );
     }
@@ -96,6 +109,11 @@ class ReservationController extends Controller
     public function show(): void
     {
         $view = new View( 'reservation:user:list', auth_controller: AuthController::class );
+        $user = Session::get( Session::USER );
+        $userConst = [
+            'ROLE_USER' => 'ROLE_USER',
+            'ROLE_OWNER' => 'ROLE_OWNER'
+        ];
 
         // Récupération des réservations
         if ( AuthController::isOwner() ) {
@@ -113,9 +131,27 @@ class ReservationController extends Controller
             return;
         }
 
+        foreach ($reservations as $reservation)
+        {
+            $user = RepoManager::getRM()->getUserRepo()->getById($reservation->getUserId());
+            $user->setPassword('');
+            $reservation->setUser($user);
+            $reservation->setRental(RepoManager::getRM()->getRentalRepo()->getById($reservation->getRentalId()));
+            $reservation->getRental()->setTypeLogement(RepoManager::getRM()->getTypeLogementRepo()->getById($reservation->getRental()->getTypeLogementId()));
+            $reservation->getRental()->setAddress(RepoManager::getRM()->getAddressRepo()->getById($reservation->getRental()->getAddressId()));
+            $owner = RepoManager::getRM()->getUserRepo()->getById($reservation->getRental()->getOwnerId());
+            $owner->setPassword('');
+            $reservation->getRental()->setOwner( $owner );
+            $reservation->getRental()->getEquipments();
+        }
+
+        var_dump($reservations);
+
         $data = [
             'title' => 'Mes réservations - PasChezMoi.com',
-            'reservations' => $reservations
+            'reservations' => $reservations,
+            'user' => $user,
+            'userConst' => $userConst
         ];
 
         $view->render( $data );

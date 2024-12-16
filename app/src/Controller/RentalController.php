@@ -54,7 +54,8 @@ class RentalController extends Controller
             !isset( $rental_data[ 'beddings' ] ) ||
             !isset( $rental_data['typeLogement_id' ] ) ||
             !isset( $rental_data[ 'city' ] ) ||
-            !isset( $rental_data[ 'country' ] )
+            !isset( $rental_data[ 'country' ] ) ||
+            !isset( $rental_data[ 'equipments' ] )
         )
         {
             $this->redirect( '/rentals/add?error=Erreur lors de la création des champs' );
@@ -102,6 +103,8 @@ class RentalController extends Controller
             $this->redirect( '/rentals/add?error=Le type de logement n\'existe pas' );
         }
 
+        $typeLogement = RepoManager::getRM()->getTypeLogementRepo()->getById( $typeLogement_id );
+
         // On vérifie la cohérence des données
         if ( $price <= 0 || $surface <= 0 || $beddings <= 0 )
         {
@@ -133,14 +136,26 @@ class RentalController extends Controller
 
         $rental_created = RepoManager::getRM()->getRentalRepo()->create( $rental );
 
-        // Si pas de données post car aucun coché, on crée un tableau vide
-        $equipments = $rental_data[ 'equipments' ] ?? [];
-        $rental_created->addEquipments( $equipments );
+        $equipments_ids = [];
+        if ( !empty( $rental_data[ 'equipments' ] ) )
+        {
+            foreach ( $rental_data[ 'equipments' ] as $equipment_id )
+            {
+                $equipment_id = Functions::secureData( $equipment_id );
+                $equipments_ids[] = $equipment_id;
+            }
+        };
 
         if ( is_null( $rental_created ) )
         {
             $this->redirect( '/rentals/add?error=Une erreur est survenue lors de la création de la location' );
         }
+
+        $rental_created->setOwner( Session::get( Session::USER ) );
+        $rental_created->setAddress( $address_created );
+        $rental_created->setTypeLogement( $typeLogement );
+        $rental_created->addEquipments( $equipments_ids );
+        $rental_created->getEquipments();
 
         $this->redirect( '/' );
     }
@@ -153,6 +168,12 @@ class RentalController extends Controller
     public function displayRentals(): void
     {
         $view = new View( 'rental:user:list', auth_controller: AuthController::class );
+        $user = Session::get(Session::USER);
+        $userConst = [
+            'ROLE_USER' => User::ROLE_USER,
+            'ROLE_OWNER' => User::ROLE_OWNER,
+            'ROLE_ADMIN' => User::ROLE_ADMIN
+        ];
 
         // Si l'utilisateur n'est pas connecté ou si c'est un utilisateur, on affiche toutes les locations
         if ( !AuthController::isAuth() || Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER )
@@ -185,7 +206,9 @@ class RentalController extends Controller
 
         $data = [
             'title' => 'Locations - PasChezMoi.com',
-            'rentals' => $rentals
+            'rentals' => $rentals,
+            'user' => $user,
+            'userConst' => $userConst
         ];
 
         $view->render( $data );
@@ -199,10 +222,18 @@ class RentalController extends Controller
     public function displayRentalsByOwner( int $id ): void
     {
         $view = new View( 'rental:user:list', auth_controller: AuthController::class );
+        $user = Session::get(Session::USER);
+        $userConst = [
+            'ROLE_USER' => User::ROLE_USER,
+            'ROLE_OWNER' => User::ROLE_OWNER,
+            'ROLE_ADMIN' => User::ROLE_ADMIN
+        ];
 
         $data = [
             'title' => 'Mes locations - PasChezMoi.com',
-            'rentals' => RepoManager::getRM()->getRentalRepo()->getAllById( $id )
+            'rentals' => RepoManager::getRM()->getRentalRepo()->getAllById( $id ),
+            'user' => $user,
+            'userConst' => $userConst
         ];
 
         $view->render( $data );
@@ -227,9 +258,12 @@ class RentalController extends Controller
             return;
         }
 
+        $user = Session::get( Session::USER );
+
         $data = [
             'title' => $rental->getTitle() . ' - PasChezMoi.com',
-            'rental' => $rental
+            'rental' => $rental,
+            'user' => $user
         ];
 
         $view->render( $data );

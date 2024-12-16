@@ -2,19 +2,10 @@
 <!-- S'il est connecté en tant qu'utilisateur, il voit la liste de ses réservations -->
 <!-- S'il est connecté en tant qu'annonceur, il voit la liste des réservations de ses biens -->
 
-<?php
-
-use App\Session;
-use App\Model\Entity\User;
-use App\Model\Repository\RepoManager;
-
-?>
-
-
 <h1>Réservations</h1>
 
 <div class="container-body">
-    <?php if ( Session::get( Session::USER )->getTypeAccount() == User::ROLE_USER ): ?>
+    <?php if ( $user->getTypeAccount() == $userConst[ 'ROLE_USER' ] ): ?>
          <h2>Mes réservations</h2>
     <?php endif; ?>
     
@@ -27,12 +18,12 @@ use App\Model\Repository\RepoManager;
                         <div class="post-rental">
                             <a href="/rentals/<?php echo $reservation->getRentalId(); ?>">
                                 <div><?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd(); ?></div>
-                                <div><?php echo RepoManager::getRM()->getRentalRepo()->getbyId( $reservation->getRentalId() )->getTitle(); ?></div>
-                                <?php if ( Session::get( Session::USER )->getTypeAccount() == User::ROLE_OWNER ): ?>
+                                <div><?php echo $reservation->getRental()->getTitle(); ?></div>
+                                <?php if ( $user->getTypeAccount() == $userConst[ 'ROLE_OWNER' ] ): ?>
                                     <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName(); ?></div>
                                 <?php endif; ?>
                             </a>
-                            <?php if ( $auth::isAuth() && $reservation->getUserId() == Session::get( Session::USER )->getId() ): ?>
+                            <?php if ( $auth::isAuth() && $reservation->getUserId() == $user->getId() ): ?>
                                 <div class="button">
                                     <a href="<?php printf( '/reservations/%s/delete', $reservation->getId() ) ?>">Supprimer</a>
                                 </div>
@@ -47,9 +38,9 @@ use App\Model\Repository\RepoManager;
         <?php endif; ?>
     </div>
 
-    <?php if ( Session::get( Session::USER )->getTypeAccount() == User::ROLE_USER ): ?>
+    <?php if ( $user->getTypeAccount() == $userConst[ 'ROLE_USER' ] ): ?>
         <div class="button">
-        <a href="/reservations/add">Faire une réservation</a>            
+        <a href="/">Faire une réservation</a>            
         </div>
     <?php endif; ?>
 </div>

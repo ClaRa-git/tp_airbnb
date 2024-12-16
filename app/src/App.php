@@ -128,9 +128,8 @@ final class App
         $this->router->get('/reservations', [ReservationController::class, 'show']);
 
         // Page d'ajout de réservation
-        $this->router->get('/reservations/add?id={id}', [ReservationController::class, 'displayAddReservation']);
-        $this->router->get('/reservations/add', [ReservationController::class, 'displayAddReservation']);
-        $this->router->post('/reservations/add', [ReservationController::class, 'processAddReservation']);
+        $this->router->get('/reservations/{id}', [ReservationController::class, 'displayAddReservation']);
+        $this->router->post('/reservations/{id}', [ReservationController::class, 'processAddReservation']);
 
         // Page de suppression de réservation
         $this->router->get('/reservations/{id}/delete', [ReservationController::class, 'delete']);

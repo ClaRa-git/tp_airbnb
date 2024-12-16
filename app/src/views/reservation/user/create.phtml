@@ -1,20 +1,20 @@
 <!-- Page de création d'une réservation par un utilisateur -->
 
-<h1>Faire une réservation</h1>
+<h1>Faire une réservation pour : <?php echo $rental->getTitle() ?></h1>
 
 <div class="container-body">
 
     <!-- Gestion des messages d'erreur -->
-    <?php if ( isset( $_GET[ 'error' ] ) ): ?>
+    <?php if (isset($_GET['error'])): ?>
         <div class="error-message">
-            <p class="error"><?php echo $_GET[ 'error' ] ?></p>
+            <p class="error"><?php echo $_GET['error'] ?></p>
         </div>
     <?php endif; ?>
 
     <!-- formulaire de réservation -->
-    <form action="/reservations/add" id="form-create-reservation" method="post">
+    <form action="/reservations/<?php echo $rental->getId() ?>" id="form-create-reservation" method="post">
         <fieldset>
-            <legend>Informations sur la réservation</legend>
+            <legend>Informations sur la réservation : </legend>
             <div>
                 <label for="dateStart">Date de début :</label>
                 <input type="datetime-local" name="dateStart" id="dateStart">
@@ -22,31 +22,6 @@
             <div>
                 <label for="dateEnd">Date de fin :</label>
                 <input type="datetime-local" name="dateEnd" id="dateEnd">
-            </div>
-            <div>
-                <label for="rental">Location :</label>
-                <?php  ?>
-                <select name="rental_id" id="rental">
-                    <?php if ( isset( $_GET[ 'id' ] ) )
-                    { //TODO: sécuriser le $_GET
-                        foreach ( $rentals as $rental ):
-                            if ( $rental->getId() == $_GET[ 'id' ] )
-                            {
-                                echo "<option value='" . $rental->getId() . "' selected>" . $rental->getTitle() . "</option>";
-                            }
-                            else
-                            {
-                                echo "<option value='" . $rental->getId() . "'>" . $rental->getTitle() . "</option>";
-                            }
-                        endforeach;
-                    }
-                    else
-                    {
-                        foreach ( $rentals as $rental ):
-                            echo "<option value='" . $rental->getId() . "'>" . $rental->getTitle() . "</option>";
-                        endforeach;
-                    } ?>
-                </select>
             </div>
         </fieldset>
         <div class="button">

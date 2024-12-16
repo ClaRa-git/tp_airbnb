@@ -1,11 +1,5 @@
 <!-- Page affichant les détails d'une location -->
 
-<?php
-
-use App\Session;
-
-?>
-
 <h1><?php printf( 'Location : %s', $rental->getTitle() ); ?></h1>
 
 <div class="container-body post-rental">
@@ -17,16 +11,17 @@ use App\Session;
             <li><?php printf( 'Nombre de couchage(s) : %s', $rental->getBeddings() ); ?></li>
         </ul>
     </div>
-    <?php if ( $auth::isAuth() && $rental->getOwnerId() == Session::get( Session::USER )->getId() ): ?>
+    <?php if ( $auth::isAuth() && $rental->getOwnerId() == $user->getId() ): ?>
         <div class="button">
             <a href="<?php printf( '/rentals/%s/delete', $rental->getId() ) ?>"> Supprimer</a>
         </div>
     <?php endif;
-    
+
+    // Si l'utilisateur est connecté en tant qu'utilisateur, il voit le bouton pour réserver
     if ( $auth::isAuth() ):
-        if ( $rental->getOwnerId() != Session::get( Session::USER )->getId() ): ?>
+        if ( $rental->getOwnerId() != $user->getId() ): ?>
             <div class="button">
-                <a href="/reservations/add?id=<?php echo $rental->getId() ?>">Réserver</a>
+                <a href="/reservations/<?php echo $rental->getId() ?>">Réserver</a>
             </div>
         <?php endif;
     endif; ?>

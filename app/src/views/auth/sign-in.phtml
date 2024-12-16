@@ -1,11 +1,5 @@
 <!-- Page de connexion -->
 
-<?php
-
-use App\Model\Entity\User;
-
-?>
-
 <div>
     <a href="/">↩ Retour</a>
 </div>
@@ -35,8 +29,8 @@ use App\Model\Entity\User;
         <div>
             <label for="typeAccount">Type de compte : </label>
             <select name="typeAccount" id="typeAccount">
-                <option value=<?php echo User::ROLE_USER ?>>Utilisateur</option>
-                <option value=<?php echo User::ROLE_OWNER ?>>Propriétaire</option>
+                <option value=<?php echo $userConst[ 'ROLE_USER' ] ?>>Utilisateur</option>
+                <option value=<?php echo $userConst[ 'ROLE_OWNER' ] ?>>Propriétaire</option>
             </select>
         </div>
         <div class="button">

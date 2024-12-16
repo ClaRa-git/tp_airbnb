@@ -15,30 +15,30 @@
         <fieldset>
             <legend>Titre de la location</legend>
             <div>
-                <label for="title">Titre :</label>
+                <label for="title">Titre : </label>
                 <input type="text" name="title" id="title">
             </div>
         </fieldset>
         <fieldset>
             <legend>Informations sur la location</legend>
             <div>
-                <label for="price">Prix :</label>
+                <label for="price">Prix : </label>
                 <input type="number" name="price" id="price">
             </div>
             <div>
-                <label for="surface">Surface</label>
+                <label for="surface">Surface : </label>
                 <input type="number" name="surface" id="surface">
             </div>
-            <div>
-                <label for="description">Description :</label>
+            <div class="rental-description">
+                <label for="description">Description : </label>
                 <textarea name="description" id="description"></textarea>
             </div>
             <div>
-                <label for="beddings">Nombre de couchage :</label>
+                <label for="beddings">Nombre de couchage : </label>
                 <input type="number" name="beddings" id="beddings">
             </div>
             <div>
-                <label for="typeLogement">Type de logement :</label>
+                <label for="typeLogement">Type de logement : </label>
                 <select name="typeLogement_id" id="typeLogement">
                     <?php foreach ( $types as $type ):
                         echo "<option value='" . $type->getId() . "'>" . $type->getName() . "</option>";
@@ -59,10 +59,13 @@
         </fieldset>
         <fieldset>
             <legend>Equipements disponibles</legend>
-            <div>
-                <?php foreach ( $equipments as $equipment ):
-                    echo "<div><input type='checkbox' name='equipments[]' value='" . $equipment->getId() . "'><label for='equipments[]'>" . $equipment->getName() . "</label></div>";
-                endforeach; ?>
+            <div class="equipments-div">
+                <?php foreach ( $equipments as $equipment ): ?>
+                    <div>
+                        <label for='equipments[]'><?php echo $equipment->getName();?></label>
+                        <input type='checkbox' name='equipments[]' value='<?php echo $equipment->getId(); ?>'>
+                    </div>
+                <?php endforeach; ?>
             </div>
         </fieldset>
         <div class="button">

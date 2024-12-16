@@ -78,9 +78,15 @@ class AuthController extends Controller
     public function signUp(): void
     {
         $view = new View( 'auth:sign-up', auth_controller: self::class );
+        $userConst = [
+            'ROLE_USER' => User::ROLE_USER,
+            'ROLE_OWNER' => User::ROLE_OWNER,
+            'ROLE_ADMIN' => User::ROLE_ADMIN
+        ];
 
         $data = [
-            'title' => 'Créer mon compte - PasChezMoi.com'
+            'title' => 'Créer mon compte - PasChezMoi.com',
+            'userConst' => $userConst
         ];
 
         $view->render( $data );
@@ -166,6 +172,8 @@ class AuthController extends Controller
         }
         else
         {
+            $user_created->setPassword( "" );
+
             // On enregistre l'utilisateur correspondant dans la session
             Session::set( Session::USER, $user );
 
@@ -188,9 +196,15 @@ class AuthController extends Controller
     public function signIn(): void
     {
         $view = new View( 'auth:sign-in', auth_controller: self::class );
+        $userConst = [
+            'ROLE_USER' => User::ROLE_USER,
+            'ROLE_OWNER' => User::ROLE_OWNER,
+            'ROLE_ADMIN' => User::ROLE_ADMIN
+        ];
 
         $data = [
-            'title' => 'Se connecter - PasChezMoi.com'
+            'title' => 'Se connecter - PasChezMoi.com',
+            'userConst' => $userConst
         ];
 
         $view->render( $data );
@@ -246,8 +260,8 @@ class AuthController extends Controller
             $this->redirect( '/sign-in?error=Ce compte n\'existe pas' );
         }
 
-        // On connecte l'utilisateur
         $verifiedUser->setPassword( "" );
+        // On connecte l'utilisateur
         Session::set( Session::USER, $verifiedUser );
 
         // On redirige vers une page en fonction du rôle de l'utilisateur
