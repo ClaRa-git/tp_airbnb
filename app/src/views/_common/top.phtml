@@ -38,8 +38,12 @@
             </div>
 
             <!-- Liens spécifiques aux actions d'un utilisateur authentifié -->
-            <div class="actions"><a id="reservations-button" href="/reservations/list">Mes réservations</a></li>
-                    <a id="signout-button" href="/sign-out">Se déconnecter</a>
+            <div class="actions">
+                <?php if ( $auth::isOwner() ): ?>
+                    <a href="/rentals/add">Ajouter une location</a>
+                <?php endif; ?>
+                <a id="reservations-button" href="/reservations/list">Mes réservations</a></li>
+                <a id="signout-button" href="/sign-out">Se déconnecter</a>
             </div>
 
         <?php else: ?>

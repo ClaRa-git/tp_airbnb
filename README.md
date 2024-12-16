@@ -1,5 +1,23 @@
 # tp_poo
-TODO: Faire le formulaire pour les réservations + le traitement
-Faire le lien entre les équipements et les locations
-Faire un middleware pour traiter qui a accès à quelle page ?
-Faire le css
+
+
+
+# -- à mettre dans le .env --
+
+# Connexion à la base de données
+db_host="database"
+db_name="airbnb"
+db_user="admin"
+db_pass="admin"
+
+# Sécurité
+security_salt = "c56a7523d96942a834b9cdc249bd4e8c7aa9" # Chaîne "sel" pour le hachage
+security_pepper = "8d746680fd4d7cbac57fa9f033115fc52196" # Chaîne "poivre" pour le hachage
+
+# Compte annoceur
+email : james@doe.com
+mdp : JamesDoe1234
+
+# Compte utilisateur
+email : jane@doe.com
+mdp : JaneDoe1234

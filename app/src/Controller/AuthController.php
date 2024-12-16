@@ -179,8 +179,7 @@ class AuthController extends Controller
             // On redirige vers une page en fonction du rôle de l'utilisateur
             $redirect_url = match ( $user->getTypeAccount() ) {
                 User::ROLE_USER => '/',
-                User::ROLE_OWNER => '/',
-                User::ROLE_ADMIN => '/admin' // TODO: Sécurité: page qui redemande le mot de passe par exemple
+                User::ROLE_OWNER => '/'
             };
 
             $this->redirect( $redirect_url );
@@ -267,8 +266,7 @@ class AuthController extends Controller
         $redirect_url = match ( $verifiedUser->getTypeAccount() )
         {
             User::ROLE_USER => '/',
-            User::ROLE_OWNER => '/',
-            User::ROLE_ADMIN => '/admin' // TODO: Sécurité: page qui redemande le mot de passe par exemple
+            User::ROLE_OWNER => '/'
         };
 
         $this->redirect( $redirect_url );

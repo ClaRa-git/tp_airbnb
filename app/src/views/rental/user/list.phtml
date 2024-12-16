@@ -8,9 +8,6 @@
 <div class="container-body">
     <?php if ( $auth::isAuth() ):
         if ( $user->getTypeAccount() == $userConst[ 'ROLE_OWNER' ] ): ?>
-            <div class="button">
-                <a href="/rentals/add">Ajouter une location</a>
-            </div>
             <div>
                 <h2>Locations mise en ligne :</h2>
             </div>
