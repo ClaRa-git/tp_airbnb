@@ -32,5 +32,5 @@ abstract Class Functions
     public static function secureData( $data ): string
     {
         return htmlspecialchars( stripslashes( trim( $data ) ) ); // htmlspecialchars() convertit les caractères spéciaux en entités HTML, stripslashes() supprime les antislashs et trim() supprime les espaces inutiles en début et fin de chaîne
-    }
+    } 
 }
