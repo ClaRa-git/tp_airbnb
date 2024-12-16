@@ -145,8 +145,6 @@ class ReservationController extends Controller
             $reservation->getRental()->getEquipments();
         }
 
-        var_dump($reservations);
-
         $data = [
             'title' => 'Mes réservations - PasChezMoi.com',
             'reservations' => $reservations,

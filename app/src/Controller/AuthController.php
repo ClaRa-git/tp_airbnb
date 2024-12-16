@@ -77,7 +77,7 @@ class AuthController extends Controller
      */
     public function signUp(): void
     {
-        $view = new View( 'auth:sign-up', auth_controller: self::class );
+        $view = new View( 'user:sign-up', auth_controller: self::class );
         $userConst = [
             'ROLE_USER' => User::ROLE_USER,
             'ROLE_OWNER' => User::ROLE_OWNER,
@@ -112,7 +112,6 @@ class AuthController extends Controller
         {
             $this->redirect( '/sign-up?error=Erreurlors de la création des champs' );
         }
-
         // On sécurise les données
         $firstName = Functions::secureData( $user_data[ 'firstName' ] );
         $lastName = Functions::secureData( $user_data[ 'lastName' ] );

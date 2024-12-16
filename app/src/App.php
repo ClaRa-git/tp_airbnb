@@ -95,8 +95,8 @@ final class App
             $router->post('/sign-in', [AuthController::class, 'checkCredentials']);
 
             // Page de création de compte
-            $this->router->get('/sign-up', [AuthController::class, 'signUp']);
-            $this->router->post('/sign-up', [AuthController::class, 'processSignUp']);
+            $this->router->get('/sign-up', [UserController::class, 'signUp']);
+            $this->router->post('/sign-up', [UserController::class, 'processSignUp']);
         });
 
         // -- Utilisateurs connectés (tous rôles) --
