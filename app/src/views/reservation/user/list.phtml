@@ -7,6 +7,8 @@
 <div class="container-body">
     <?php if ( $user->getTypeAccount() == $userConst[ 'ROLE_USER' ] ): ?>
          <h2>Mes réservations</h2>
+    <?php else: ?>
+        <h2>Réservations de mes biens</h2>
     <?php endif; ?>
     
     
@@ -16,12 +18,8 @@
                 <?php foreach ($reservations as $reservation): ?>
                     <li>
                         <div class="post-rental">
-                            <a href="/rentals/<?php echo $reservation->getRentalId(); ?>">
-                                <div><?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd(); ?></div>
+                            <a href="/reservations/<?php echo $reservation->getId(); ?>">
                                 <div><?php echo $reservation->getRental()->getTitle(); ?></div>
-                                <?php if ( $user->getTypeAccount() == $userConst[ 'ROLE_OWNER' ] ): ?>
-                                    <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName(); ?></div>
-                                <?php endif; ?>
                             </a>
                             <?php if ( $auth::isAuth() && $reservation->getUserId() == $user->getId() ): ?>
                                 <div class="button">

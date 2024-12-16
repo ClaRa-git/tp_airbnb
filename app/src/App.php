@@ -6,7 +6,6 @@
 // Déclaration du namespace de ce fichier
 namespace App;
 
-use App\Controller\AdminController;
 use App\Controller\AuthController;
 use Exception;
 use Throwable;
@@ -15,7 +14,6 @@ use App\Controller\PageController;
 use App\Controller\RentalController;
 use App\Controller\ReservationController;
 use App\Controller\UserController;
-use App\Middleware\AdminMiddleware;
 use App\Middleware\AuthMiddleware;
 use App\Middleware\VisitorMiddleware;
 use Symplefony\Security;
@@ -111,9 +109,6 @@ final class App
             ]);
         });
 
-        // Page d'affichage des locations d'un utlisateur
-        $this->router->get('/rentals/users/{id}', [RentalController::class, 'displayRentalsByOwner']);
-
         // Page d'affichage d'une location
         $this->router->get('/rentals/{id}', [RentalController::class, 'show']);
 
@@ -124,12 +119,15 @@ final class App
         // Page de suppression d'une location
         $this->router->get('/rentals/{id}/delete', [RentalController::class, 'delete']);
 
+        // Page d'affichage d'une réservation
+        $this->router->get('/reservations/{id}', [ReservationController::class, 'show']);
+
         // Page de liste des réservations
-        $this->router->get('/reservations', [ReservationController::class, 'show']);
+        $this->router->get('/reservations/list', [ReservationController::class, 'displayReservations']);
 
         // Page d'ajout de réservation
-        $this->router->get('/reservations/{id}', [ReservationController::class, 'displayAddReservation']);
-        $this->router->post('/reservations/{id}', [ReservationController::class, 'processAddReservation']);
+        $this->router->get('/reservations/add/{id}', [ReservationController::class, 'displayAddReservation']);
+        $this->router->post('/reservations/add/{id}', [ReservationController::class, 'processAddReservation']);
 
         // Page de suppression de réservation
         $this->router->get('/reservations/{id}/delete', [ReservationController::class, 'delete']);

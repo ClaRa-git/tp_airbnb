@@ -215,31 +215,6 @@ class RentalController extends Controller
     }
 
     /**
-     * Affiche la liste des locations d'un propriétaire
-     * pas de paramètre
-     * @return void
-     */
-    public function displayRentalsByOwner( int $id ): void
-    {
-        $view = new View( 'rental:user:list', auth_controller: AuthController::class );
-        $user = Session::get(Session::USER);
-        $userConst = [
-            'ROLE_USER' => User::ROLE_USER,
-            'ROLE_OWNER' => User::ROLE_OWNER,
-            'ROLE_ADMIN' => User::ROLE_ADMIN
-        ];
-
-        $data = [
-            'title' => 'Mes locations - PasChezMoi.com',
-            'rentals' => RepoManager::getRM()->getRentalRepo()->getAllById( $id ),
-            'user' => $user,
-            'userConst' => $userConst
-        ];
-
-        $view->render( $data );
-    }
-
-    /**
      * Affiche le détail d'une location grace à son id
      * @param int
      * @return void

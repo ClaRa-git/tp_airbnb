@@ -9,6 +9,7 @@ use Symplefony\View;
 
 use App\Session;
 use App\Model\Entity\Reservation;
+use App\Model\Entity\User;
 use App\Model\Repository\RepoManager;
 
 class ReservationController extends Controller
@@ -52,7 +53,7 @@ class ReservationController extends Controller
             !isset( $reservation_data[ 'dateStart' ] ) ||
             !isset( $reservation_data[ 'dateEnd' ] )
         ) {
-            $this->redirect( '/reservations/{id}?error=Erreur lors de la création des champs' );
+            $this->redirect( '/reservations/add/{id}?error=Erreur lors de la création des champs' );
         }
 
         // On sécurise les données
@@ -66,7 +67,7 @@ class ReservationController extends Controller
             empty( $dateEnd ) ||
             empty( $rental_id )
         ) {
-            $this->redirect( '/reservations/{id}?error=Veuillez remplir tous les champs' );
+            $this->redirect( '/reservations/add/{id}?error=Veuillez remplir tous les champs' );
         }
 
         // On vérifie si la location existe
@@ -74,7 +75,7 @@ class ReservationController extends Controller
 
         if ( is_null( $rental ) )
         {
-            $this->redirect( '/reservations/{id}?error=La location n\'existe pas' );
+            $this->redirect( '/reservations/add/{id}?error=La location n\'existe pas' );
         }
 
         $reservation = new Reservation( [
@@ -87,7 +88,7 @@ class ReservationController extends Controller
         $reservation_created = RepoManager::getRM()->getReservationRepo()->create( $reservation );
 
         if ( is_null( $reservation_created ) ) {
-            $this->redirect( '/reservations/{id}?error=Une erreur est survenue lors de la création de la réservation' );
+            $this->redirect( '/reservations/add/{id}?error=Une erreur est survenue lors de la création de la réservation' );
         }
 
         $reservation_created->setUser( RepoManager::getRM()->getUserRepo()->getById( $reservation_created->getUserId() ) );
@@ -98,7 +99,47 @@ class ReservationController extends Controller
         $reservation_created->getRental()->getOwner()->setPassword( '' );
         $reservation_created->getRental()->getEquipments();
 
-        $this->redirect( '/reservations' );
+        $this->redirect( '/reservations/list' );
+    }
+
+    /**
+     * Affiche une réservation
+     * @param int $id
+     * @return void
+     */
+    public function show( int $id ): void
+    {
+        $view = new View( 'reservation:user:detail', auth_controller: AuthController::class );
+        $userSession = Session::get( Session::USER );
+        $userConst = [
+            'ROLE_USER' => User::ROLE_USER,
+            'ROLE_OWNER' => User::ROLE_OWNER
+        ];
+
+        $reservation = RepoManager::getRM()->getReservationRepo()->getById( $id );
+
+        if ( is_null( $reservation ) )
+        {
+            View::renderError( 404 );
+            return;
+        }
+
+        $reservation->setUser( RepoManager::getRM()->getUserRepo()->getById( $reservation->getUserId() ) );
+        $reservation->setRental( RepoManager::getRM()->getRentalRepo()->getById( $reservation->getRentalId() ) );
+        $reservation->getRental()->setTypeLogement( RepoManager::getRM()->getTypeLogementRepo()->getById( $reservation->getRental()->getTypeLogementId() ) );
+        $reservation->getRental()->setAddress( RepoManager::getRM()->getAddressRepo()->getById( $reservation->getRental()->getAddressId() ) );
+        $reservation->getRental()->setOwner( RepoManager::getRM()->getUserRepo()->getById( $reservation->getRental()->getOwnerId() ) );
+        $reservation->getRental()->getOwner()->setPassword( '' );
+        $reservation->getRental()->getEquipments();
+
+        $data = [
+            'title' => 'Réservation - PasChezMoi.com',
+            'reservation' => $reservation,
+            'user' => $userSession,
+            'userConst' => $userConst
+        ];
+
+        $view->render( $data );
     }
 
     /**
@@ -106,13 +147,13 @@ class ReservationController extends Controller
      * pas de paramètre
      * @return void
      */
-    public function show(): void
+    public function displayReservations(): void
     {
         $view = new View( 'reservation:user:list', auth_controller: AuthController::class );
-        $user = Session::get( Session::USER );
+        $userSession = Session::get( Session::USER );
         $userConst = [
-            'ROLE_USER' => 'ROLE_USER',
-            'ROLE_OWNER' => 'ROLE_OWNER'
+            'ROLE_USER' => User::ROLE_USER,
+            'ROLE_OWNER' => User::ROLE_OWNER
         ];
 
         // Récupération des réservations
@@ -148,7 +189,7 @@ class ReservationController extends Controller
         $data = [
             'title' => 'Mes réservations - PasChezMoi.com',
             'reservations' => $reservations,
-            'user' => $user,
+            'user' => $userSession,
             'userConst' => $userConst
         ];
 
@@ -166,10 +207,10 @@ class ReservationController extends Controller
 
         if (!$delete_success )
         {
-            $this->redirect( '/reservations?error=Une erreur est survenue lors de la suppression de la réservation' );
+            $this->redirect( '/reservations/list?error=Une erreur est survenue lors de la suppression de la réservation' );
         }
 
-        $this->redirect( '/reservations' );
+        $this->redirect( '/reservations/list' );
     }
 
 }

@@ -21,7 +21,7 @@
     if ( $auth::isAuth() ):
         if ( $rental->getOwnerId() != $user->getId() ): ?>
             <div class="button">
-                <a href="/reservations/<?php echo $rental->getId() ?>">Réserver</a>
+                <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
             </div>
         <?php endif;
     endif; ?>

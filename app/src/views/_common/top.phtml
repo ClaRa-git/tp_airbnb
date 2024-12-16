@@ -1,9 +1,3 @@
-<?php
-
-use App\Session;
-
-?>
-
 <!DOCTYPE html>
 <html lang="fr">
 
@@ -35,7 +29,7 @@ use App\Session;
             <!-- Informations de l'utilisateur authentifié -->
             <div class="user-info">
                 <!-- Affiche le prénom de l'utilisateur -->
-                <div class="user-name">Bonjour, <?php echo Session::get( Session::USER )->getfirstName(); ?></div>
+                <div class="user-name">Bonjour, <?php echo $auth::getUser()->getfirstName(); ?></div>
 
                 <!-- Affiche le mode de l'utilisateur (Propriétaire ou Utilisateur) -->
                 <div class="user-mode">
@@ -44,7 +38,7 @@ use App\Session;
             </div>
 
             <!-- Liens spécifiques aux actions d'un utilisateur authentifié -->
-            <div class="actions"><a id="reservations-button" href="/reservations">Mes réservations</a></li>
+            <div class="actions"><a id="reservations-button" href="/reservations/list">Mes réservations</a></li>
                     <a id="signout-button" href="/sign-out">Se déconnecter</a>
             </div>
 
