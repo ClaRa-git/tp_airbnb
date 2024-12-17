@@ -1,0 +1,43 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36" version="25.0.3">
+  <diagram id="prtHgNgQTEPvFCAcTncT" name="Page-1">
+    <mxGraphModel dx="934" dy="580" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-13" value="&lt;div&gt;&lt;b&gt;SIGN IN&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : que les non connectés&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="80" y="80" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-14" value="&lt;b&gt;SIGN UP&lt;/b&gt;&lt;div&gt;Accès : que les non connectés&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" parent="1" vertex="1">
+          <mxGeometry x="240" y="80" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-17" value="&lt;div&gt;&lt;b&gt;HOME&lt;/b&gt;&lt;/div&gt;&lt;div&gt;&lt;b&gt;LISTE ANNONCES&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : tous&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="240" y="240" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-22" value="&lt;div&gt;&lt;b&gt;DETAIL ANNONCE&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : Utilisateur&lt;/div&gt;&lt;div&gt;Annonceur&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="360" y="400" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-24" value="&lt;div&gt;&lt;b&gt;DETAIL RESERVATION&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : Utilisateur&lt;/div&gt;&lt;div&gt;Annonceur&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="200" y="400" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-25" value="&lt;div&gt;&lt;b&gt;LISTE RESERVATIONS&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : Utilisateur&lt;/div&gt;&lt;div&gt;Annonceur&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" parent="1" vertex="1">
+          <mxGeometry x="40" y="400" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-28" value="&lt;div&gt;&lt;b&gt;MENTIONS LEGALES&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : Tous&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;" parent="1" vertex="1">
+          <mxGeometry x="80" y="240" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-30" value="Suppression de la réservation" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="400" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-33" value="Suppression de l&#39;annonce" style="rounded=0;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="560" y="240" width="120" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-36" value="&lt;div&gt;&lt;b&gt;AJOUTER ANNONCE&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : Annonceur&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" parent="1" vertex="1">
+          <mxGeometry x="560" y="80" width="120" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="Mf3q9R09Hzoo0Y9sXTbM-38" value="&lt;div&gt;&lt;b&gt;AJOUTER RESERVATION&lt;/b&gt;&lt;/div&gt;&lt;div&gt;Accès : Utilisateur&lt;/div&gt;" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" parent="1" vertex="1">
+          <mxGeometry x="400" y="80" width="120" height="120" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
