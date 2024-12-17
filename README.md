@@ -1,6 +1,6 @@
-# tp_poo
+# tp_poo airbnb
 
-
+Site de réservations de locations en ligne
 
 # -- à mettre dans le .env --
 
@@ -14,10 +14,15 @@ db_pass="admin"
 security_salt = "c56a7523d96942a834b9cdc249bd4e8c7aa9" # Chaîne "sel" pour le hachage
 security_pepper = "8d746680fd4d7cbac57fa9f033115fc52196" # Chaîne "poivre" pour le hachage
 
+
+# -- accès aux comptes déjà créés
+
+# mdp comptes : PrenomNom1234
 # Compte annoceur
-email : james@doe.com
-mdp : JamesDoe1234
+- james@doe.com
+- jake@doe.com
 
 # Compte utilisateur
-email : jane@doe.com
-mdp : JaneDoe1234
+- jane@doe.com
+- james@doe.com
+
