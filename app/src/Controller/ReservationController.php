@@ -72,13 +72,13 @@ class ReservationController extends Controller
             $this->redirect($route);
         }
 
-        // On vérifie si la date de début est supérieure à la date actuelle
+        // On vérifie que la date de début est supérieure à la date actuelle
         if (!Functions::dateIsSuperior($dateStart)) {
             $route = '/reservations/add/' . $id . '?error=La date de début doit être supérieure à la date actuelle';
             $this->redirect($route);
         }
 
-        // On vérifie si la date de fin est supérieure à la date de début
+        // On vérifie que la date de fin est supérieure à la date de début
         if (!Functions::dateEndIsSuperior($dateStart, $dateEnd)) {
             $route = '/reservations/add/' . $id . '?error=La date de fin doit être supérieure à la date de début';
             $this->redirect($route);
@@ -138,8 +138,8 @@ class ReservationController extends Controller
             return;
         }
 
-        $reservation->setDateStart(Functions::formatDate($reservation->getDateStart()));
-        $reservation->setDateEnd(Functions::formatDate($reservation->getDateEnd()));
+        $reservation->setDateStart($reservation->getDateStart());
+        $reservation->setDateEnd($reservation->getDateEnd());
 
         $reservation->setUser(RepoManager::getRM()->getUserRepo()->getById($reservation->getUserId()));
         $reservation->setRental(RepoManager::getRM()->getRentalRepo()->getById($reservation->getRentalId()));

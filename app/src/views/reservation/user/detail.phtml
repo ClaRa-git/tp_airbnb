@@ -10,7 +10,7 @@
     <div class="list-reservations">
         <div class="post-rental">
             <div><?php echo $reservation->getRental()->getTitle(); ?></div>
-            <div><?php echo $reservation->getDateStart() ?> - <?php echo $reservation->getDateEnd(); ?></div>
+            <div><?php echo $reservation->getStringDateStart() ?> - <?php echo $reservation->getStringDateEnd(); ?></div>
             <?php if ($user->getTypeAccount() == $userConst['ROLE_OWNER']): ?>
                 <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName(); ?></div>
             <?php endif; ?>

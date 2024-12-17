@@ -1,0 +1,34 @@
+PasChezMoi est une application de réservations de logements en ligne.
+
+Les fonctionnalités souhaitées sont les suivantes :
+
+- Des annonceurs mettent en location des chambres et les utilisateurs peuvent réserver.
+pour une durée
+
+On doit pouvoir :
+- Connexion / Inscription / Deconnexion
+
+- 2 types de compte:
+- Annonceur
+- Utilisateur Standard
+
+
+Le compte annonceur:
+    - Peut ajouter une annonce
+    - Peut voir ses annonces déjà postée
+    - Peut voir la liste des réservations de ses biens
+
+Le compte standard:
+    - Peut voir la liste des annonces
+    - Peut réserver une chambre ( date de début + date de fin )
+    - Peut voir ses réservations
+
+Une annonce contient :
+    - Adresse( pays et ville au minimum )
+    - Critères :
+        - Prix
+        - Type de logement ( Logement entier, Chambre privée, Chambre partagée )
+        - Taille
+        - Description
+        - Equipements(grille pain, machine à laver...)
+        - Couchages (nbre)
