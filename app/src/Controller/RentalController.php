@@ -61,7 +61,7 @@ class RentalController extends Controller
         }
 
         // On sécurise les données
-        $title = Functions::secureData($rental_data['title']);
+        $title = strtoupper(Functions::secureData($rental_data['title']));
         $price = Functions::secureData($rental_data['price']);
         $surface = Functions::secureData($rental_data['surface']);
         $description = Functions::secureData($rental_data['description']);
@@ -132,12 +132,12 @@ class RentalController extends Controller
                 $this->redirect('/rentals/add?error=Le format de l\'image n\'est pas valide');
             }
 
-            $image_name = uniqid() . $image;
+            $image_name = $dir_name . uniqid() . $image;
         } else {
             $image_name = 'default.jpg';
         }
 
-        if (!move_uploaded_file($tmp_name, $dir_name . $image_name)) {
+        if (!move_uploaded_file($tmp_name, $image_name)) {
             $this->redirect('/rentals/add?error=Une erreur est survenue lors de l\'upload de l\'image');
         }
 

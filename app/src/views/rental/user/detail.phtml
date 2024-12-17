@@ -5,11 +5,49 @@
 <div class="container-body post-rental">
     <div class="rental-info">
         <ul>
-            <li><img src="<?php echo $rental->getImage() ?>" alt="Photo de la location"></li>
-            <li><?php printf('Prix : %s € / nuit', $rental->getPrice()); ?></li>
-            <li><?php printf('Surface : %s m²', $rental->getSurface()); ?></li>
-            <li><?php printf('Description : %s', $rental->getDescription()); ?></li>
-            <li><?php printf('Nombre de couchage(s) : %s', $rental->getBeddings()); ?></li>
+            <li><a href="/<?php echo $rental->getImage() ?>"><img class="rental-picture" src="/<?php echo $rental->getImage() ?>" alt="Photo de la location"></a></li>
+            <li>
+                <div class="elements-rental">
+                    <div class="title-small"><?php printf('Prix : ') ?></div>
+                    <div><?php printf('%s € / nuit', $rental->getPrice()); ?></div>
+                </div>
+            </li>
+            <li>
+                <div class="elements-rental">
+                    <div class="title-small"><?php printf('Surface : ') ?></div>
+                    <div><?php printf('%s m²', $rental->getPrice()); ?></div>
+                </div>
+            </li>
+            <li>
+                <div class="elements-rental">
+                    <div class="title-small"><?php printf('Description : ') ?></div>
+                    <div><?php printf('%s', $rental->getDescription()); ?></div>
+                </div>
+            </li>
+            <li>
+                <div class="elements-rental">
+                    <div class="title-small"><?php printf('Nombre de couchage : ') ?></div>
+                    <div><?php printf('%s', $rental->getBeddings()); ?></div>
+                </div>
+            </li>
+            <li>
+                <div class="elements-rental">
+                    <div class="title-small"><?php printf('Adresse : ') ?></div>
+                    <div><?php printf('%s - %s', $rental->getAddress()->getCity(), $rental->getAddress()->getCountry()); ?></div>
+                </div>
+            </li>
+            <li>
+                <div class="elements-rental">
+                    <div class="title-small"><?php printf('Equipements : ') ?></div>
+                    <div>
+                        <ul>
+                            <?php foreach ($rental->getEquipments() as $equipment): ?>
+                                <li>- <?php echo $equipment->getName(); ?></li>
+                            <?php endforeach; ?>
+                        </ul>
+                    </div>
+                </div>
+            </li>
         </ul>
     </div>
     <?php if ($auth::isAuth() && $rental->getOwnerId() == $user->getId()): ?>

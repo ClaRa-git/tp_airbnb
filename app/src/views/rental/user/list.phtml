@@ -23,9 +23,9 @@
             <?php foreach ($rentals as $rental): ?>
                 <div class="post-rental">
                     <a href="/rentals/<?php echo $rental->getId(); ?>">
-                        <p>Titre : <?php echo $rental->getTitle(); ?></p>
-                        <img src="<?php echo $rental->getImage() ?>" alt="Photo de la location">
-                        <p>Adresse : <?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry(); ?></p>
+                        <h3><?php echo $rental->getTitle(); ?></h3>
+                        <p><img class="rental-picture" src="<?php echo $rental->getImage() ?>" alt="Photo de la location"></p>
+                        <p><?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry(); ?></p>
                     </a>
                     <?php if ($auth::isAuth() && !$auth::isOwner()): ?>
                         <div class="button">

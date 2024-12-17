@@ -101,6 +101,10 @@ button {
     align-items: center;
 }
 
+.rental-picture {
+    max-width: 200px;
+}
+
 .rentals-list {
     display: flex;
     flex-direction: row;
@@ -130,8 +134,23 @@ button {
     width: 75%;
     height: 100px;
     border-radius: 10px;
-
+    padding: 5px;
     margin: 5px;
+}
+
+.elements-rental {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.elements-rental div {
+    text-align: left;
+}
+
+.title-small {
+    font-weight: bold;
+    margin-right: 5px;
 }
 
 .equipments-div

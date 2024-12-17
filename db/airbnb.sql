@@ -28,7 +28,7 @@ CREATE TABLE `addresses` (
   `city` varchar(50) NOT NULL,
   `country` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +41,10 @@ INSERT INTO `addresses` VALUES
 (10,'MILLAS','FRANCE'),
 (11,'LE SOLER','FRANCE'),
 (12,'MILLAS','FRANCE'),
-(13,'MILLAS','FRANCE');
+(13,'MILLAS','FRANCE'),
+(14,'LES ANGLES','FRANCE'),
+(15,'LES ANGLES','FRANCE'),
+(16,'LES ANGLES','FRANCE');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -98,7 +101,7 @@ CREATE TABLE `rentals` (
   CONSTRAINT `fk_rentals_addresses` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`),
   CONSTRAINT `fk_rentals_types` FOREIGN KEY (`typeLogement_id`) REFERENCES `typesLogement` (`id`),
   CONSTRAINT `fk_rentals_users` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -108,9 +111,10 @@ CREATE TABLE `rentals` (
 LOCK TABLES `rentals` WRITE;
 /*!40000 ALTER TABLE `rentals` DISABLE KEYS */;
 INSERT INTO `rentals` VALUES
-(8,'Appartement',50.00,25,'Petit appartement en centre ville',1,1,10,5,''),
-(9,'Maison de campagne',150.00,125,'Maison en bordure de Perpignan',3,1,11,8,''),
-(10,'Studio',25.00,9,'Petit studio',1,1,12,5,'');
+(8,'APPARTEMENT',50.00,25,'Petit appartement en centre ville',1,1,10,5,'assets/images/default.jpg'),
+(9,'MAISON DE CAMPAGNE',150.00,125,'Maison en bordure de Perpignan',3,1,11,8,'assets/images/default.jpg'),
+(10,'STUDIO',25.00,9,'Petit studio',1,1,12,5,'assets/images/default.jpg'),
+(14,'CHALET',200.50,75,'Petit chalet à la montagne',2,1,16,5,'assets/images/6761d08e346f1chalet.jpg');
 /*!40000 ALTER TABLE `rentals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -249,4 +253,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2024-12-17 16:12:06
+-- Dump completed on 2024-12-17 20:29:54
