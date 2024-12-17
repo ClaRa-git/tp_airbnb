@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Classe de démarrage de l'application
  */
@@ -104,7 +105,8 @@ final class App
 
         $this->router->group($visitorAttributes, function (Router $router) {
             // Logout
-            $router->get('/sign-out', [AuthController::class,
+            $router->get('/sign-out', [
+                AuthController::class,
                 'signOut'
             ]);
         });
@@ -141,7 +143,7 @@ final class App
         }
         // Page 404 avec status HTTP adequat pour les pages non listée dans le routeur
         catch (RouteNotFoundException $e) {
-            View::renderError(404);
+            View::renderError(404, AuthController::class);
         }
         // Erreur 500 pour tout autre problème temporaire ou non
         catch (Throwable $e) {
