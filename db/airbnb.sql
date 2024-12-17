@@ -90,6 +90,7 @@ CREATE TABLE `rentals` (
   `typeLogement_id` int(11) DEFAULT NULL,
   `address_id` int(11) DEFAULT NULL,
   `owner_id` int(11) DEFAULT NULL,
+  `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_rentals_types` (`typeLogement_id`),
   KEY `fk_rentals_addresses` (`address_id`),
@@ -107,9 +108,9 @@ CREATE TABLE `rentals` (
 LOCK TABLES `rentals` WRITE;
 /*!40000 ALTER TABLE `rentals` DISABLE KEYS */;
 INSERT INTO `rentals` VALUES
-(8,'Appartement',50.00,25,'Petit appartement en centre ville',1,1,10,5),
-(9,'Maison de campagne',150.00,125,'Maison en bordure de Perpignan',3,1,11,8),
-(10,'Studio',25.00,9,'Petit studio',1,1,12,5);
+(8,'Appartement',50.00,25,'Petit appartement en centre ville',1,1,10,5,''),
+(9,'Maison de campagne',150.00,125,'Maison en bordure de Perpignan',3,1,11,8,''),
+(10,'Studio',25.00,9,'Petit studio',1,1,12,5,'');
 /*!40000 ALTER TABLE `rentals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -248,4 +249,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2024-12-16 14:30:13
+-- Dump completed on 2024-12-17 16:12:06

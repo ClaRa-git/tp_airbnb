@@ -6,8 +6,8 @@
 <h1>Accueil</h1>
 
 <div class="container-body">
-    <?php if ( $auth::isAuth() ):
-        if ( $user->getTypeAccount() == $userConst[ 'ROLE_OWNER' ] ): ?>
+    <?php if ($auth::isAuth()):
+        if ($user->getTypeAccount() == $userConst['ROLE_OWNER']): ?>
             <div>
                 <h2>Locations mise en ligne :</h2>
             </div>
@@ -18,21 +18,22 @@
         <?php endif;
     endif;
 
-    if ( !empty( $rentals ) ): ?>
+    if (!empty($rentals)): ?>
         <div class="rentals-list">
-            <?php foreach ( $rentals as $rental ): ?>
+            <?php foreach ($rentals as $rental): ?>
                 <div class="post-rental">
                     <a href="/rentals/<?php echo $rental->getId(); ?>">
-                        Titre : <?php echo $rental->getTitle(); ?><br>
-                        Adresse : <?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry(); ?><br>
+                        <p>Titre : <?php echo $rental->getTitle(); ?></p>
+                        <img src="<?php echo $rental->getImage() ?>" alt="Photo de la location">
+                        <p>Adresse : <?php echo $rental->getAddress()->getCity() . " - " . $rental->getAddress()->getCountry(); ?></p>
                     </a>
-                    <?php if ( $auth::isAuth() && !$auth::isOwner() ): ?>
+                    <?php if ($auth::isAuth() && !$auth::isOwner()): ?>
                         <div class="button">
                             <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
                         </div>
-                    <?php elseif ( $auth::isAuth() && $auth::isOwner() ): ?>
+                    <?php elseif ($auth::isAuth() && $auth::isOwner()): ?>
                         <div class="button">
-                            <a href="<?php printf( '/rentals/%s/delete', $rental->getId() ) ?>"> Supprimer</a>
+                            <a href="<?php printf('/rentals/%s/delete', $rental->getId()) ?>"> Supprimer</a>
                         </div>
                     <?php endif; ?>
                 </div>

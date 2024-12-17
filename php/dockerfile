@@ -27,3 +27,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
 # Déclaration du répertoire de travail
 WORKDIR /var/www/html
+
+# Modifier la taille des uploads dans php.ini
+RUN echo "upload_max_filesize = 50M" >> /usr/local/etc/php/conf.d/uploads.ini
+RUN echo "post_max_size = 100M" >> /usr/local/etc/php/conf.d/uploads.ini

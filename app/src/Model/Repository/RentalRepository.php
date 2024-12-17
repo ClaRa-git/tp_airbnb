@@ -13,25 +13,30 @@ class RentalRepository extends Repository
      * pas de paramètre
      * @return string
      */
-    protected function getTableName(): string { return 'rentals'; }
+    protected function getTableName(): string
+    {
+        return 'rentals';
+    }
 
     /**
      * Créer une annonce
      * @param Rental $rental
      * @return Rental|null
      */
-    public function create( Rental $rental ): ?Rental
+    public function create(Rental $rental): ?Rental
     {
         $query = sprintf(
             'INSERT INTO `%s`
-            (`title`, `price`, `surface`, `description`, `beddings`, `typeLogement_id`, `address_id`, `owner_id`) 
-            VALUES (:title, :price, :surface, :description, :beddings, :typeLogement_id, :address_id, :owner_id)',
+            (`title`, `price`, `surface`, `description`, `beddings`, `typeLogement_id`, `address_id`, `owner_id`, `image`) 
+            VALUES (:title, :price, :surface, :description, :beddings, :typeLogement_id, :address_id, :owner_id, :image)',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) { return null; }
+        if (!$sth) {
+            return null;
+        }
 
         $success = $sth->execute([
             'title' => $rental->getTitle(),
@@ -41,12 +46,15 @@ class RentalRepository extends Repository
             'beddings' => $rental->getBeddings(),
             'typeLogement_id' => $rental->getTypeLogementId(),
             'address_id' => $rental->getAddressId(),
-            'owner_id' => $rental->getOwnerId()
+            'owner_id' => $rental->getOwnerId(),
+            'image' => $rental->getImage()
         ]);
 
-        if ( !$success ) { return null; }
+        if (!$success) {
+            return null;
+        }
 
-        $rental->setId( $this->pdo->lastInsertId() );
+        $rental->setId($this->pdo->lastInsertId());
 
         return $rental;
     }
@@ -58,7 +66,7 @@ class RentalRepository extends Repository
      */
     public function getAll(): array
     {
-        return $this->readAll( Rental::class );
+        return $this->readAll(Rental::class);
     }
 
     /**
@@ -66,9 +74,9 @@ class RentalRepository extends Repository
      * @param int $id
      * @return Rental|null
      */
-    public function getById( int $id ): ?Rental
+    public function getById(int $id): ?Rental
     {
-        return $this->readById( Rental::class, $id );
+        return $this->readById(Rental::class, $id);
     }
 
     /**
@@ -76,28 +84,31 @@ class RentalRepository extends Repository
      * @param int $id
      * @return array
      */
-    public function getAllById( int $id ): array
+    public function getAllById(int $id): array
     {
         $query = sprintf(
             'SELECT * FROM %s WHERE owner_id=:id',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) { return []; }
+        if (!$sth) {
+            return [];
+        }
 
-        $success = $sth->execute( [
+        $success = $sth->execute([
             'id' => $id
-        ] );
+        ]);
 
-        if ( !$success ) { return []; }
+        if (!$success) {
+            return [];
+        }
 
         $rentals = [];
 
-        while( $rental = $sth->fetch() )
-        {
-            $rentals[] = new Rental( $rental );
+        while ($rental = $sth->fetch()) {
+            $rentals[] = new Rental($rental);
         }
 
         return $rentals;
@@ -108,18 +119,20 @@ class RentalRepository extends Repository
      * @param Rental $rental
      * @return Rental|null
      */
-    public function update( Rental $rental ): ?Rental
+    public function update(Rental $rental): ?Rental
     {
         $query = sprintf(
             'UPDATE `%s` SET
-            title=:title, price=:price, surface=:surface, description=:description, beddings=:beddings, typeLogement_id=:typeLogement_id, address_id=:address_id, owner_id=:owner_id
+            title=:title, price=:price, surface=:surface, description=:description, beddings=:beddings, typeLogement_id=:typeLogement_id, address_id=:address_id, owner_id=:owner_id, image=:image
             WHERE id=:id',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) { return null; }
+        if (!$sth) {
+            return null;
+        }
 
         $success = $sth->execute([
             'id' => $rental->getId(),
@@ -130,10 +143,13 @@ class RentalRepository extends Repository
             'beddings' => $rental->getBeddings(),
             'typeLogement_id' => $rental->getTypeLogementId(),
             'address_id' => $rental->getAddressId(),
-            'owner_id' => $rental->getOwnerId()
+            'owner_id' => $rental->getOwnerId(),
+            'image' => $rental->getImage()
         ]);
 
-        if ( !$success ) { return null; }
+        if (!$success) {
+            return null;
+        }
 
         return $rental;
     }
@@ -143,13 +159,15 @@ class RentalRepository extends Repository
      * @param int $id
      * @return bool
      */
-    public function deleteOne( int $id ): bool 
+    public function deleteOne(int $id): bool
     {
         // On supprime d'abord toutes les liaisons avec les locations
-        $success = RepoManager::getRM()->getEquipmentRepo()->detachAllForRental( $id );
-        
+        $success = RepoManager::getRM()->getEquipmentRepo()->detachAllForRental($id);
+
         // Si cela a fonctionné, on invoque la méthode deleteOne parente
-        if ( $success ) { return parent::deleteOne( $id ); }
+        if ($success) {
+            return parent::deleteOne($id);
+        }
 
         return $success;
     }

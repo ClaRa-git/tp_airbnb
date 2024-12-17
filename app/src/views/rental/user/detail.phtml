@@ -1,28 +1,29 @@
 <!-- Page affichant les détails d'une location -->
 
-<h1><?php printf( 'Location : %s', $rental->getTitle() ); ?></h1>
+<h1><?php printf('Location : %s', $rental->getTitle()); ?></h1>
 
 <div class="container-body post-rental">
     <div class="rental-info">
         <ul>
-            <li><?php printf( 'Prix : %s € / nuit', $rental->getPrice() ); ?></li>
-            <li><?php printf( 'Surface : %s m²', $rental->getSurface() ); ?></li>
-            <li><?php printf( 'Description : %s', $rental->getDescription() ); ?></li>
-            <li><?php printf( 'Nombre de couchage(s) : %s', $rental->getBeddings() ); ?></li>
+            <li><img src="<?php echo $rental->getImage() ?>" alt="Photo de la location"></li>
+            <li><?php printf('Prix : %s € / nuit', $rental->getPrice()); ?></li>
+            <li><?php printf('Surface : %s m²', $rental->getSurface()); ?></li>
+            <li><?php printf('Description : %s', $rental->getDescription()); ?></li>
+            <li><?php printf('Nombre de couchage(s) : %s', $rental->getBeddings()); ?></li>
         </ul>
     </div>
-    <?php if ( $auth::isAuth() && $rental->getOwnerId() == $user->getId() ): ?>
+    <?php if ($auth::isAuth() && $rental->getOwnerId() == $user->getId()): ?>
         <div class="button">
-            <a href="<?php printf( '/rentals/%s/delete', $rental->getId() ) ?>"> Supprimer</a>
+            <a href="<?php printf('/rentals/%s/delete', $rental->getId()) ?>"> Supprimer</a>
         </div>
-    <?php endif;
+        <?php endif;
 
     // Si l'utilisateur est connecté en tant qu'utilisateur, il voit le bouton pour réserver
-    if ( $auth::isAuth() ):
-        if ( $rental->getOwnerId() != $user->getId() ): ?>
+    if ($auth::isAuth()):
+        if ($rental->getOwnerId() != $user->getId()): ?>
             <div class="button">
                 <a href="/reservations/add/<?php echo $rental->getId() ?>">Réserver</a>
             </div>
-        <?php endif;
+    <?php endif;
     endif; ?>
 </div>

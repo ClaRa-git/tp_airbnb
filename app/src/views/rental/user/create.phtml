@@ -3,12 +3,12 @@
 <h1>Créer une location</h1>
 
 <div id="container-body">
-    <form action="/rentals/add" id="form-create-rental" method="post">
+    <form action="/rentals/add" id="form-create-rental" method="post" enctype="multipart/form-data">
 
         <!-- Gestion des messages d'erreur -->
-        <?php if ( isset( $_GET[ 'error' ] ) ): ?>
-            <div class="error-message">
-                <p class="error"><?php echo $_GET['error'] ?></p>
+        <?php if (isset($_GET['error'])): ?>
+            <div class=" error-message ">
+                <p class=" error"><?php echo $_GET['error'] ?></p>
             </div>
         <?php endif; ?>
 
@@ -40,7 +40,7 @@
             <div>
                 <label for="typeLogement">Type de logement : </label>
                 <select name="typeLogement_id" id="typeLogement">
-                    <?php foreach ( $types as $type ):
+                    <?php foreach ($types as $type):
                         echo "<option value='" . $type->getId() . "'>" . $type->getName() . "</option>";
                     endforeach; ?>
                 </select>
@@ -60,12 +60,19 @@
         <fieldset>
             <legend>Equipements disponibles</legend>
             <div class="equipments-div">
-                <?php foreach ( $equipments as $equipment ): ?>
+                <?php foreach ($equipments as $equipment): ?>
                     <div>
-                        <label for='equipments[]'><?php echo $equipment->getName();?></label>
+                        <label for='equipments[]'><?php echo $equipment->getName(); ?></label>
                         <input type='checkbox' name='equipments[]' value='<?php echo $equipment->getId(); ?>'>
                     </div>
                 <?php endforeach; ?>
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>Photos de la location</legend>
+            <div>
+                <label for="image">Photos : </label>
+                <input type="file" name="image" id="image">
             </div>
         </fieldset>
         <div class="button">
