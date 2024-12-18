@@ -153,7 +153,8 @@ class ReservationController extends Controller
             'title' => 'Réservation - PasChezMoi.com',
             'reservation' => $reservation,
             'user' => $userSession,
-            'userConst' => $userConst
+            'userConst' => $userConst,
+            'tools' => Functions::class
         ];
 
         $view->render($data);
