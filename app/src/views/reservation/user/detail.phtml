@@ -9,7 +9,10 @@
 
     <div class="list-reservations">
         <div class="post-rental">
-            <div><?php echo $reservation->getRental()->getTitle(); ?></div>
+            <div class="title-small"><a href="/rentals/<?php echo $reservation->getRental()->getId() ?>"><?php echo $reservation->getRental()->getTitle(); ?></a></div>
+            <div>
+                <a href="/<?php echo $reservation->getRental()->getImage() ?>"><img class="rental-picture" src="/<?php echo $reservation->getRental()->getImage() ?>" alt="Photo de la location"></a>
+            </div>
             <div><?php echo $reservation->getStringDateStart() ?> - <?php echo $reservation->getStringDateEnd(); ?></div>
             <?php if ($user->getTypeAccount() == $userConst['ROLE_OWNER']): ?>
                 <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName(); ?></div>

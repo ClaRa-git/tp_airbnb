@@ -13,19 +13,25 @@ class ReservationRepository extends Repository
      * pas de paramètre
      * @return string
      */
-    protected function getTableName(): string { return 'reservations'; }
+    protected function getTableName(): string
+    {
+        return 'reservations';
+    }
 
     /**
      * Retourne le nom de la table liée à celle des réservations
      */
-    private function getMappingRental(): string { return 'rentals'; }
+    private function getMappingRental(): string
+    {
+        return 'rentals';
+    }
 
     /**
      * Créer une réservation
      * @param Reservation $reservation
      * @return Reservation|null
      */
-    public function create( Reservation $reservation ): ?Reservation
+    public function create(Reservation $reservation): ?Reservation
     {
         $query = sprintf(
             'INSERT INTO `%s`
@@ -34,20 +40,24 @@ class ReservationRepository extends Repository
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) { return null; }
+        if (!$sth) {
+            return null;
+        }
 
-        $success = $sth->execute( [
-            'dateStart' => $reservation->getDateStart(),
-            'dateEnd' => $reservation->getDateEnd(),
+        $success = $sth->execute([
+            'dateStart' => $reservation->getStringDateStart(),
+            'dateEnd' => $reservation->getStringDateEnd(),
             'user_id' => $reservation->getUserId(),
             'rental_id' => $reservation->getRentalId()
-        ] );
+        ]);
 
-        if ( !$success ) { return null; }
+        if (!$success) {
+            return null;
+        }
 
-        $reservation->setId( $this->pdo->lastInsertId() );
+        $reservation->setId($this->pdo->lastInsertId());
 
         return $reservation;
     }
@@ -59,7 +69,7 @@ class ReservationRepository extends Repository
      */
     public function getAll(): array
     {
-        return $this->readAll( Reservation::class );
+        return $this->readAll(Reservation::class);
     }
 
     /**
@@ -67,9 +77,9 @@ class ReservationRepository extends Repository
      * @param int $id
      * @return Reservation|null
      */
-    public function getById( int $id ): ?Reservation
+    public function getById(int $id): ?Reservation
     {
-        return $this->readById( Reservation::class, $id );
+        return $this->readById(Reservation::class, $id);
     }
 
     /**
@@ -77,27 +87,30 @@ class ReservationRepository extends Repository
      * @param int $id
      * @return array
      */
-    public function getAllForUser( int $id ): array
+    public function getAllForUser(int $id): array
     {
         $query = sprintf(
             'SELECT  * FROM %s WHERE user_id=:id',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) { return []; }
+        if (!$sth) {
+            return [];
+        }
 
-        $success = $sth->execute( [
+        $success = $sth->execute([
             'id' => $id
-        ] );
+        ]);
 
-        if(!$success) { return []; }
+        if (!$success) {
+            return [];
+        }
 
         $reservations = [];
-        while ( $reservation = $sth->fetch() )
-        {
-            $reservations[] = new Reservation( $reservation );
+        while ($reservation = $sth->fetch()) {
+            $reservations[] = new Reservation($reservation);
         }
 
         return $reservations;
@@ -108,7 +121,7 @@ class ReservationRepository extends Repository
      * @param int $owner_id
      * @return array
      */
-    public function getAllForOwner( int $owner_id ): array
+    public function getAllForOwner(int $owner_id): array
     {
         $query = sprintf(
             'SELECT res.* FROM `%1$s` as res
@@ -118,20 +131,23 @@ class ReservationRepository extends Repository
             $this->getMappingRental()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) { return []; }
+        if (!$sth) {
+            return [];
+        }
 
-        $success = $sth->execute( [
+        $success = $sth->execute([
             'owner_id' => $owner_id
-        ] );
+        ]);
 
-        if ( !$success ) { return []; }
+        if (!$success) {
+            return [];
+        }
 
         $reservations = [];
-        while ( $reservation = $sth->fetch() )
-        {
-            $reservations[] = new Reservation( $reservation );
+        while ($reservation = $sth->fetch()) {
+            $reservations[] = new Reservation($reservation);
         }
 
         return $reservations;
@@ -142,7 +158,7 @@ class ReservationRepository extends Repository
      * @param Reservation $reservation
      * @return Reservation|null
      */
-    public function update( Reservation $reservation ): ?Reservation
+    public function update(Reservation $reservation): ?Reservation
     {
         $query = sprintf(
             'UPDATE `%s` 
@@ -151,19 +167,23 @@ class ReservationRepository extends Repository
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) { return null; }
+        if (!$sth) {
+            return null;
+        }
 
-        $success = $sth->execute( [
+        $success = $sth->execute([
             'dateStart' => $reservation->getDateStart(),
             'dateEnd' => $reservation->getDateEnd(),
             'user_id' => $reservation->getUserId(),
             'rental_id' => $reservation->getRentalId(),
             'id' => $reservation->getId()
-        ] );
+        ]);
 
-        if ( !$success ) { return null; }
+        if (!$success) {
+            return null;
+        }
 
         return $reservation;
     }
@@ -173,22 +193,22 @@ class ReservationRepository extends Repository
      * @param int $id
      * @return bool
      */
-    public function deleteOne( int $id ): bool
+    public function deleteOne(int $id): bool
     {
         $query = sprintf(
             'DELETE FROM `%s` WHERE id=:id',
             $this->getTableName()
         );
 
-        $sth = $this->pdo->prepare( $query );
+        $sth = $this->pdo->prepare($query);
 
-        if ( !$sth ) {
+        if (!$sth) {
             return false;
         }
 
-        $success = $sth->execute( [
+        $success = $sth->execute([
             'id' => $id
-        ] );
+        ]);
 
         return $success;
     }

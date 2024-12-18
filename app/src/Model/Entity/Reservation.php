@@ -23,7 +23,7 @@ class Reservation extends Entity
     public function getStringDateStart(): string
     {
         $date = ConversionTools::dateToSQLFormat($this->dateStart);
-        return Functions::formatDate($date);
+        return $date;
     }
 
     public function setDateStart(DateTime $value): self
@@ -45,7 +45,7 @@ class Reservation extends Entity
     public function getStringDateEnd(): string
     {
         $date = ConversionTools::dateToSQLFormat($this->dateEnd);
-        return Functions::formatDate($date);
+        return $date;
     }
     public function setDateEnd(DateTime $value): self
     {
