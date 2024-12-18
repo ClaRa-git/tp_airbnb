@@ -132,14 +132,16 @@ class RentalController extends Controller
                 $this->redirect('/rentals/add?error=Le format de l\'image n\'est pas valide');
             }
 
-            $image_name = $dir_name . uniqid() . $image;
+            $image_name = "assets/images/" . uniqid() . $image;
+
+            if (!move_uploaded_file($tmp_name, $image_name)) {
+                $this->redirect('/rentals/add?error=Une erreur est survenue lors de l\'upload de l\'image');
+            }
         } else {
-            $image_name = 'default.jpg';
+            $image_name = "assets/images/default.jpg";
         }
 
-        if (!move_uploaded_file($tmp_name, $image_name)) {
-            $this->redirect('/rentals/add?error=Une erreur est survenue lors de l\'upload de l\'image');
-        }
+
 
         $rental = new Rental([
             'title' => $title,
