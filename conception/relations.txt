@@ -1,7 +1,7 @@
 USERS( id, firstName, lastName, email, password, typeAccount ) id [pk]
 ADDRESSES( id, city, country ) id [pk]
 EQUIPMENTS( id, labelEquipment) id [pk]
-RENTALS( id, title, price, surface, description, beddings, #typeLogement_id, #address_id, #owner_id) id [pk]
+RENTALS( id, title, price, surface, description, beddings, image, #typeLogement_id, #address_id, #owner_id) id [pk]
 RESERVATIONS( id, dateStart, dateEnd, #user_id,#rental_id ) id [pk]
 TYPESLOGEMENT( id, labelTypeEquipment) id [pk]
 RENTALS_EQUIPMENTS( #rental_id, #equipment_id ) ( #rental_id, #equipment_id ) [pk]
