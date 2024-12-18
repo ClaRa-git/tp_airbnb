@@ -1,6 +1,6 @@
 /* ----- Variables ----- */
 :root {
-    --bg-light: lightseagreen;
+    --bg-light: rgb(1, 110, 160);
     --bg-dark: black;
     --text-light: white;
     --text-dark: black;
