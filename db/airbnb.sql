@@ -41,16 +41,9 @@ INSERT INTO `addresses` VALUES
 (10,'MILLAS','FRANCE'),
 (11,'LE SOLER','FRANCE'),
 (12,'MILLAS','FRANCE'),
-(13,'MILLAS','FRANCE'),
-(14,'LES ANGLES','FRANCE'),
-(15,'LES ANGLES','FRANCE'),
 (16,'LES ANGLES','FRANCE'),
-(17,'PAPEETE','FRANCE'),
 (18,'PAPEETE','FRANCE'),
-(19,'TAURINYA','FRANCE'),
 (20,'TAURINYA','FRANCE'),
-(21,'AZDDZ','AZDZDZA'),
-(22,'CHATEAUROUX','FRANCE'),
 (23,'AZDAZDAZ','DADAZDAZ'),
 (24,'CHATEAUROUX','FRANCE');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
@@ -124,9 +117,7 @@ INSERT INTO `rentals` VALUES
 (10,'STUDIO',25.00,9,'Petit studio',1,1,12,5,'assets/images/default.jpg'),
 (14,'CHALET',200.50,75,'Petit chalet à la montagne',2,1,16,5,'assets/images/6761d08e346f1chalet.jpg'),
 (15,'BUNGALOW',300.00,100,'Bungalow sur pilotis',2,1,18,8,'assets/images/67628a8971131bungalow.jpg'),
-(16,'BULLE',25.00,9,'Chambre en forme de bulle en campagne',2,2,20,8,'assets/images/default.jpg'),
-(19,'AZDDAZDAZ',12.00,12,'fezzefzefezf',12,2,23,9,'assets/images/default.jpg'),
-(20,'STUDIO DE FOU',200.00,50,'Logez dans un studio où vous aurez l&#039;occasion de rencontrer les plus grands chanteurs de cette génération comme Dali ou Luther.',2,3,24,10,'assets/images/default.jpg');
+(16,'BULLE',25.00,9,'Chambre en forme de bulle en campagne',2,2,20,8,'assets/images/default.jpg');
 /*!40000 ALTER TABLE `rentals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -158,12 +149,10 @@ INSERT INTO `rentals_equipments` VALUES
 (9,1),
 (10,1),
 (15,1),
-(20,1),
 (9,2),
 (9,3),
 (8,4),
-(9,4),
-(20,4);
+(9,4);
 /*!40000 ALTER TABLE `rentals_equipments` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -196,8 +185,7 @@ LOCK TABLES `reservations` WRITE;
 /*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
 INSERT INTO `reservations` VALUES
 (8,'2024-12-15 17:28:00','2024-12-19 17:28:00',6,9),
-(10,'2024-12-16 11:24:00','2024-12-18 11:24:00',6,10),
-(16,'2024-12-20 10:12:00','2026-12-18 10:12:00',7,19);
+(10,'2024-12-16 11:24:00','2024-12-18 11:24:00',6,10);
 /*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -256,9 +244,7 @@ INSERT INTO `users` VALUES
 (5,'James','Doe','james@doe.com','c9a422e3c3864e346d795a0aeb316339a3f5d987d6de15b3756061685fc6001e223d8a90134cbd1b3a634126f03c783bb4ed421335b8d6cee8b0b821ace492b9',2),
 (6,'Jane','Doe','jane@doe.com','678555d8e8bc48d10bc78b1a44e31a2935cce0e758221471afe59579fd5e66341f0edbdaec8181194624a0452e32908b285785ecf5b9d79c03ebbf6817ccba9a',1),
 (7,'James','Doe','james@doe.com','c9a422e3c3864e346d795a0aeb316339a3f5d987d6de15b3756061685fc6001e223d8a90134cbd1b3a634126f03c783bb4ed421335b8d6cee8b0b821ace492b9',1),
-(8,'Jake','Doe','jake@doe.com','d090a7b217f4bb8c7548768281ff321d4115c07b2eb565235923a94db8c56015e2dd88ea11b52c7365a00b6f20acd38b5a303c799764422edb163f41d6f1cffd',2),
-(9,'azddazd','azddzadaz','azdazdaz@gmail.com','a59f67c82954e9b541b894f82fd69c00334963fe741f6a3634025ade4d95e8dce41d4935dc7d45d9e310139e09c8b8638701ffea039b5e627d09785e75c4ed52',2),
-(10,'Julien','Dali','julien@dali.fr','3da21d6c421dc86e36c108fc26f752634e261194f008e1446ee41b992cb09523981e41a4ff5eb7c292385ec369e7d7e71fe3a9859344cdcc137bf9eba39bd40d',2);
+(8,'Jake','Doe','jake@doe.com','d090a7b217f4bb8c7548768281ff321d4115c07b2eb565235923a94db8c56015e2dd88ea11b52c7365a00b6f20acd38b5a303c799764422edb163f41d6f1cffd',2);
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -271,4 +257,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2024-12-18 11:42:30
+-- Dump completed on 2024-12-18 11:58:20
