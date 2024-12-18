@@ -2,6 +2,10 @@
 
 Site de réservations de locations en ligne
 
+# -- en cas de problème de permission pour ajouter une image à une location (linux) --
+Dans l'explorateur de fichier, donner au dossier public et à tous ses dossiers enfants les permissions
+(Création et suppression des) pour tous les utilisateurs (Propriétaire, Groupe et Autres)
+
 # -- à mettre dans le .env --
 
 # Connexion à la base de données
