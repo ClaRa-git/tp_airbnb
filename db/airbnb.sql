@@ -28,7 +28,7 @@ CREATE TABLE `addresses` (
   `city` varchar(50) NOT NULL,
   `country` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -45,7 +45,8 @@ INSERT INTO `addresses` VALUES
 (18,'PAPEETE','FRANCE'),
 (20,'TAURINYA','FRANCE'),
 (23,'AZDAZDAZ','DADAZDAZ'),
-(24,'CHATEAUROUX','FRANCE');
+(24,'CHATEAUROUX','FRANCE'),
+(25,'MILLAS','FRANCE');
 /*!40000 ALTER TABLE `addresses` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -91,9 +92,9 @@ CREATE TABLE `rentals` (
   `surface` int(11) NOT NULL,
   `description` text NOT NULL,
   `beddings` int(11) NOT NULL,
-  `typeLogement_id` int(11) DEFAULT NULL,
-  `address_id` int(11) DEFAULT NULL,
-  `owner_id` int(11) DEFAULT NULL,
+  `typeLogement_id` int(11) NOT NULL,
+  `address_id` int(11) NOT NULL,
+  `owner_id` int(11) NOT NULL,
   `image` varchar(255) NOT NULL,
   PRIMARY KEY (`id`),
   KEY `fk_rentals_types` (`typeLogement_id`),
@@ -102,7 +103,7 @@ CREATE TABLE `rentals` (
   CONSTRAINT `fk_rentals_addresses` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`),
   CONSTRAINT `fk_rentals_types` FOREIGN KEY (`typeLogement_id`) REFERENCES `typesLogement` (`id`),
   CONSTRAINT `fk_rentals_users` FOREIGN KEY (`owner_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -112,12 +113,12 @@ CREATE TABLE `rentals` (
 LOCK TABLES `rentals` WRITE;
 /*!40000 ALTER TABLE `rentals` DISABLE KEYS */;
 INSERT INTO `rentals` VALUES
-(8,'APPARTEMENT',50.00,25,'Petit appartement en centre ville',1,1,10,5,'assets/images/default.jpg'),
 (9,'MAISON DE CAMPAGNE',150.00,125,'Maison en bordure de Perpignan',3,1,11,8,'assets/images/default.jpg'),
 (10,'STUDIO',25.00,9,'Petit studio',1,1,12,5,'assets/images/default.jpg'),
 (14,'CHALET',200.50,75,'Petit chalet à la montagne',2,1,16,5,'assets/images/6761d08e346f1chalet.jpg'),
 (15,'BUNGALOW',300.00,100,'Bungalow sur pilotis',2,1,18,8,'assets/images/67628a8971131bungalow.jpg'),
-(16,'BULLE',25.00,9,'Chambre en forme de bulle en campagne',2,2,20,8,'assets/images/default.jpg');
+(16,'BULLE',25.00,9,'Chambre en forme de bulle en campagne',2,2,20,8,'assets/images/default.jpg'),
+(21,'APPARTEMENT',50.00,16,'Petit appartement en centre ville',2,1,25,5,'assets/images/default.jpg');
 /*!40000 ALTER TABLE `rentals` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -145,13 +146,12 @@ CREATE TABLE `rentals_equipments` (
 LOCK TABLES `rentals_equipments` WRITE;
 /*!40000 ALTER TABLE `rentals_equipments` DISABLE KEYS */;
 INSERT INTO `rentals_equipments` VALUES
-(8,1),
 (9,1),
 (10,1),
 (15,1),
+(21,1),
 (9,2),
 (9,3),
-(8,4),
 (9,4);
 /*!40000 ALTER TABLE `rentals_equipments` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -174,7 +174,7 @@ CREATE TABLE `reservations` (
   KEY `fk_reservations_rentals` (`rental_id`),
   CONSTRAINT `fk_reservations_rentals` FOREIGN KEY (`rental_id`) REFERENCES `rentals` (`id`),
   CONSTRAINT `fk_reservations_users` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_uca1400_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -184,8 +184,9 @@ CREATE TABLE `reservations` (
 LOCK TABLES `reservations` WRITE;
 /*!40000 ALTER TABLE `reservations` DISABLE KEYS */;
 INSERT INTO `reservations` VALUES
-(8,'2024-12-15 17:28:00','2024-12-19 17:28:00',6,9),
-(10,'2024-12-16 11:24:00','2024-12-18 11:24:00',6,10);
+(10,'2024-12-16 11:24:00','2024-12-18 11:24:00',6,10),
+(17,'2024-12-24 12:12:00','2024-12-28 12:12:00',6,21),
+(18,'2024-12-20 12:12:00','2024-12-21 12:12:00',7,14);
 /*!40000 ALTER TABLE `reservations` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -257,4 +258,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*M!100616 SET NOTE_VERBOSITY=@OLD_NOTE_VERBOSITY */;
 
--- Dump completed on 2024-12-18 11:58:20
+-- Dump completed on 2024-12-19 13:53:34
