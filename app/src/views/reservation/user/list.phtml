@@ -5,15 +5,15 @@
 <h1>Réservations</h1>
 
 <div class="container-body">
-    <?php if ( $user->getTypeAccount() == $userConst[ 'ROLE_USER' ] ): ?>
-         <h2>Mes réservations</h2>
+    <?php if ($user->getTypeAccount() == $userConst['ROLE_USER']): ?>
+        <h2>Mes réservations</h2>
     <?php else: ?>
         <h2>Réservations de mes biens</h2>
     <?php endif; ?>
-    
-    
+
+
     <div class="list-reservations">
-        <?php if ( !empty( $reservations ) ): ?>
+        <?php if (!empty($reservations)): ?>
             <ul>
                 <?php foreach ($reservations as $reservation): ?>
                     <li>
@@ -21,9 +21,9 @@
                             <a href="/reservations/<?php echo $reservation->getId(); ?>">
                                 <div><?php echo $reservation->getRental()->getTitle(); ?></div>
                             </a>
-                            <?php if ( $auth::isAuth() && $reservation->getUserId() == $user->getId() ): ?>
+                            <?php if ($auth::isAuth() && $reservation->getUserId() == $user->getId()): ?>
                                 <div class="button">
-                                    <a href="<?php printf( '/reservations/%s/delete', $reservation->getId() ) ?>">Supprimer</a>
+                                    <a href="<?php printf('/reservations/%s/delete', $reservation->getId()) ?>">Supprimer</a>
                                 </div>
                             <?php endif; ?>
                         </div>
@@ -36,9 +36,9 @@
         <?php endif; ?>
     </div>
 
-    <?php if ( $user->getTypeAccount() == $userConst[ 'ROLE_USER' ] ): ?>
+    <?php if ($user->getTypeAccount() == $userConst['ROLE_USER']): ?>
         <div class="button">
-        <a href="/">Faire une réservation</a>            
+            <a href="/">Faire une réservation</a>
         </div>
     <?php endif; ?>
 </div>

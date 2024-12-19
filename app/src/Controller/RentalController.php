@@ -106,6 +106,11 @@ class RentalController extends Controller
             $this->redirect('/rentals/add?error=Les données ne sont pas cohérentes');
         }
 
+        // On bloque le plafond des prix
+        if ($price >= 10000) {
+            $this->redirect('/rentals/add?error=Le prix ne peut pas dépasser 9999,99 €');
+        }
+
         $address = new Address([
             'city' => $city,
             'country' => $country
