@@ -1,7 +1,7 @@
 <!-- Page de création d'un compte utilisateur ou annoceur -->
 
 <div>
-    <a href="/">↩ Retour</a>
+    <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>">↩ Retour</a>
 </div>
 
 <h1>Créer mon compte</h1>
@@ -9,9 +9,9 @@
 <div class="container-body">
 
     <!-- Gestion des messages d'erreur -->
-    <?php if ( isset( $_GET[ 'error' ] ) ): ?>
+    <?php if (isset($_GET['error'])): ?>
         <div class="error-message">
-            <p class="error"><?php echo $_GET[ 'error' ] ?></p>
+            <p class="error"><?php echo $_GET['error'] ?></p>
         </div>
     <?php endif; ?>
 

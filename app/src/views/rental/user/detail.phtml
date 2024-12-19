@@ -1,5 +1,9 @@
 <!-- Page affichant les détails d'une location -->
 
+<div>
+    <a href="<?php echo $_SERVER['HTTP_REFERER']; ?>">↩ Retour</a>
+</div>
+
 <h1><?php printf('Location : %s', $rental->getTitle()); ?></h1>
 
 <div class="container-body post-rental">
