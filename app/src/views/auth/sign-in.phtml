@@ -26,13 +26,6 @@
             <label for="password">Mot de passe : </label>
             <input type="password" id="password" name="password" required>
         </div>
-        <div>
-            <label for="typeAccount">Type de compte : </label>
-            <select name="typeAccount" id="typeAccount">
-                <option value=<?php echo $userConst['ROLE_USER'] ?>>Utilisateur</option>
-                <option value=<?php echo $userConst['ROLE_OWNER'] ?>>Propriétaire</option>
-            </select>
-        </div>
         <div class="button">
             <button type="submit">Se connecter</button>
         </div>

@@ -27,15 +27,9 @@ class UserController extends Controller
     public function signUp(): void
     {
         $view = new View('user:sign-up', auth_controller: AuthController::class);
-        $userConst = [
-            'ROLE_USER' => User::ROLE_USER,
-            'ROLE_OWNER' => User::ROLE_OWNER,
-            'ROLE_ADMIN' => User::ROLE_ADMIN
-        ];
 
         $data = [
-            'title' => 'Créer mon compte - PasChezMoi.com',
-            'userConst' => $userConst
+            'title' => 'Créer mon compte - PasChezMoi.com'
         ];
 
         $view->render($data);
@@ -55,8 +49,7 @@ class UserController extends Controller
             !isset($user_data['firstName']) ||
             !isset($user_data['lastName']) ||
             !isset($user_data['email']) ||
-            !isset($user_data['password']) ||
-            !isset($user_data['typeAccount'])
+            !isset($user_data['password'])
         ) {
             $this->redirect('/sign-up?error=Erreurlors de la création des champs');
         }
@@ -65,15 +58,13 @@ class UserController extends Controller
         $lastName = Functions::secureData($user_data['lastName']);
         $email = strtolower(Functions::secureData($user_data['email']));
         $password = Functions::secureData($user_data['password']);
-        $typeAccount = Functions::secureData($user_data['typeAccount']);
 
         // On vérifie si les données sont vides
         if (
             empty($firstName) ||
             empty($lastName) ||
             empty($email) ||
-            empty($password) ||
-            empty($typeAccount)
+            empty($password)
         ) {
             $this->redirect('/sign-up?error=Veuillez remplir tous les champs');
         }
@@ -92,7 +83,7 @@ class UserController extends Controller
         $pass_hash = App::strHash($password);
 
         // On vérifie si l'email n'est pas déjà utilisé pour le type de compte choisi
-        $user = RepoManager::getRM()->getUserRepo()->getByEmailAndType($email, $typeAccount);
+        $user = RepoManager::getRM()->getUserRepo()->getByEmail($email);
 
         if (!is_null($user)) {
             $this->redirect('/sign-up?error=Cet email n\'est pas disponible');
@@ -102,8 +93,7 @@ class UserController extends Controller
             'firstName' => $firstName,
             'lastName' => $lastName,
             'email' => $email,
-            'password' => $pass_hash,
-            'typeAccount' => $typeAccount
+            'password' => $pass_hash
         ]);
 
         $user_created = RepoManager::getRM()->getUserRepo()->create($user);

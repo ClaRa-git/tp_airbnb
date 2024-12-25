@@ -61,6 +61,22 @@ class AuthController extends Controller
     }
 
     /**
+     * Change le rôle de l'utilisateur connecté
+     * @param void
+     * @return void
+     */
+    public static function changeRole(): void
+    {
+        if (Session::get(Session::USER)->getTypeAccount() === User::ROLE_USER) {
+            Session::get(Session::USER)->setTypeAccount(User::ROLE_OWNER);
+        } else {
+            Session::get(Session::USER)->setTypeAccount(User::ROLE_USER);
+        }
+
+        header('Location: /');
+    }
+
+    /**
      * Renvoie l'utilisateur s'il est connecté, sinon null
      * pas de paramètre
      * @return bool
@@ -87,15 +103,9 @@ class AuthController extends Controller
     public function signUp(): void
     {
         $view = new View('user:sign-up', auth_controller: self::class);
-        $userConst = [
-            'ROLE_USER' => User::ROLE_USER,
-            'ROLE_OWNER' => User::ROLE_OWNER,
-            'ROLE_ADMIN' => User::ROLE_ADMIN
-        ];
 
         $data = [
-            'title' => 'Créer mon compte - PasChezMoi.com',
-            'userConst' => $userConst
+            'title' => 'Créer mon compte - PasChezMoi.com'
         ];
 
         $view->render($data);
@@ -115,8 +125,7 @@ class AuthController extends Controller
             !isset($user_data['firstName']) ||
             !isset($user_data['lastName']) ||
             !isset($user_data['email']) ||
-            !isset($user_data['password']) ||
-            !isset($user_data['typeAccount'])
+            !isset($user_data['password'])
         ) {
             $this->redirect('/sign-up?error=Erreurlors de la création des champs');
         }
@@ -125,15 +134,13 @@ class AuthController extends Controller
         $lastName = Functions::secureData($user_data['lastName']);
         $email = strtolower(Functions::secureData($user_data['email']));
         $password = Functions::secureData($user_data['password']);
-        $typeAccount = Functions::secureData($user_data['typeAccount']);
 
         // On vérifie si les données sont vides
         if (
             empty($firstName) ||
             empty($lastName) ||
             empty($email) ||
-            empty($password) ||
-            empty($typeAccount)
+            empty($password)
         ) {
             $this->redirect('/sign-up?error=Veuillez remplir tous les champs');
         }
@@ -152,7 +159,7 @@ class AuthController extends Controller
         $pass_hash = App::strHash($password);
 
         // On vérifie si l'email n'est pas déjà utilisé pour le type de compte choisi
-        $user = RepoManager::getRM()->getUserRepo()->getByEmailAndType($email, $typeAccount);
+        $user = RepoManager::getRM()->getUserRepo()->getByEmail($email);
 
         if (!is_null($user)) {
             $this->redirect('/sign-up?error=Cet email n\'est pas disponible');
@@ -162,8 +169,7 @@ class AuthController extends Controller
             'firstName' => $firstName,
             'lastName' => $lastName,
             'email' => $email,
-            'password' => $pass_hash,
-            'typeAccount' => $typeAccount
+            'password' => $pass_hash
         ]);
 
         $user_created = RepoManager::getRM()->getUserRepo()->create($user);
@@ -173,12 +179,13 @@ class AuthController extends Controller
             $this->redirect('/sign-up?error=Une erreur est survenue lors de la création de votre compte');
         } else {
             $user_created->setPassword("");
+            $user_created->setTypeAccount(User::ROLE_USER);
 
             // On enregistre l'utilisateur correspondant dans la session
-            Session::set(Session::USER, $user);
+            Session::set(Session::USER, $user_created);
 
             // On redirige vers une page en fonction du rôle de l'utilisateur
-            $redirect_url = match ($user->getTypeAccount()) {
+            $redirect_url = match ($user_created->getTypeAccount()) {
                 User::ROLE_USER => '/',
                 User::ROLE_OWNER => '/'
             };
@@ -195,15 +202,9 @@ class AuthController extends Controller
     public function signIn(): void
     {
         $view = new View('auth:sign-in', auth_controller: self::class);
-        $userConst = [
-            'ROLE_USER' => User::ROLE_USER,
-            'ROLE_OWNER' => User::ROLE_OWNER,
-            'ROLE_ADMIN' => User::ROLE_ADMIN
-        ];
 
         $data = [
-            'title' => 'Se connecter - PasChezMoi.com',
-            'userConst' => $userConst
+            'title' => 'Se connecter - PasChezMoi.com'
         ];
 
         $view->render($data);
@@ -221,8 +222,7 @@ class AuthController extends Controller
         // On vérifie que l'on recoit bien les données du formulaire
         if (
             !isset($user_data['email']) &&
-            !isset($user_data['password']) &&
-            !isset($user_data['typeAccount'])
+            !isset($user_data['password'])
         ) {
             $this->redirect('/sign-in?error=Erreur lors de la création des champs');
         }
@@ -230,13 +230,11 @@ class AuthController extends Controller
         // On sécurise les données
         $email = strtolower(Functions::secureData($user_data['email']));
         $password = Functions::secureData($user_data['password']);
-        $typeAccount = Functions::secureData($user_data['typeAccount']);
 
         // On vérifie si les données sont vides
         if (
             empty($email) ||
-            empty($password) ||
-            empty($typeAccount)
+            empty($password)
         ) {
             $this->redirect('/sign-in?error=Veuillez remplir tous les champs');
         }
@@ -250,12 +248,13 @@ class AuthController extends Controller
         $password = App::strHash($password);
 
         // On vérifie si le compte existe
-        $verifiedUser = RepoManager::getRM()->getUserRepo()->checkAuth($email, $password, $typeAccount);
+        $verifiedUser = RepoManager::getRM()->getUserRepo()->checkAuth($email, $password);
         if (is_null($verifiedUser)) {
             $this->redirect('/sign-in?error=Ce compte n\'existe pas');
         }
 
         $verifiedUser->setPassword("");
+        $verifiedUser->setTypeAccount(User::ROLE_USER);
         // On connecte l'utilisateur
         Session::set(Session::USER, $verifiedUser);
 

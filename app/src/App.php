@@ -111,6 +111,9 @@ final class App
             ]);
         });
 
+        // Changement de mode
+        $this->router->get('/change-role', [AuthController::class, 'changeRole']);
+
         // Page d'affichage d'une location
         $this->router->get('/rentals/{id}', [RentalController::class, 'show']);
 

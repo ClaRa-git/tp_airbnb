@@ -25,7 +25,7 @@
             <a href="/">PasChezMoi</a>
         </div>
 
-        <?php if ( $auth::isAuth() ): ?>
+        <?php if ($auth::isAuth()): ?>
             <!-- Informations de l'utilisateur authentifié -->
             <div class="user-info">
                 <!-- Affiche le prénom de l'utilisateur -->
@@ -39,10 +39,11 @@
 
             <!-- Liens spécifiques aux actions d'un utilisateur authentifié -->
             <div class="actions">
-                <?php if ( $auth::isOwner() ): ?>
+                <?php if ($auth::isOwner()): ?>
                     <a href="/rentals/add">Ajouter une location</a>
                 <?php endif; ?>
                 <a id="reservations-button" href="/reservations/list">Mes réservations</a></li>
+                <a id="change-role-button" href="/change-role">Changer de mode</a>
                 <a id="signout-button" href="/sign-out">Se déconnecter</a>
             </div>
 
