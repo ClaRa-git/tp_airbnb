@@ -115,6 +115,41 @@ class RentalRepository extends Repository
     }
 
     /**
+     * Récupère toutes les annonces qui ne sont pas les annonces du propriétaire
+     * @param int $id
+     * @return array
+     */
+    public function getAllExceptById(int $id): array
+    {
+        $query = sprintf(
+            'SELECT * FROM %s WHERE owner_id!=:id',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if (!$sth) {
+            return [];
+        }
+
+        $success = $sth->execute([
+            'id' => $id
+        ]);
+
+        if (!$success) {
+            return [];
+        }
+
+        $rentals = [];
+
+        while ($rental = $sth->fetch()) {
+            $rentals[] = new Rental($rental);
+        }
+
+        return $rentals;
+    }
+
+    /**
      * Mise à jour d'une annonce
      * @param Rental $rental
      * @return Rental|null

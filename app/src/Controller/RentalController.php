@@ -194,8 +194,8 @@ class RentalController extends Controller
     {
         $view = new View('rental:user:list', auth_controller: AuthController::class);
 
-        // Si l'utilisateur n'est pas connecté ou si c'est un utilisateur, on affiche toutes les locations
-        if (!AuthController::isAuth() || Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER) {
+        // Si l'utilisateur n'est pas connecté, on affiche toutes les locations
+        if (!AuthController::isAuth()) {
             $rentals = RepoManager::getRM()->getRentalRepo()->getAll();
 
             foreach ($rentals as $rental) {
@@ -206,9 +206,20 @@ class RentalController extends Controller
                 $rental->getEquipments();
             }
         }
-        // Sinon on affiche les locations proposées par l'utilisateur connecté
-        else {
+        // Sinon on affiche les locations proposées par l'utilisateur connecté en mode propriétaire
+        elseif (AuthController::isOwner()) {
             $rentals = RepoManager::getRM()->getRentalRepo()->getAllById(Session::get(Session::USER)->getId());
+
+            foreach ($rentals as $rental) {
+                $rental->setOwner(RepoManager::getRM()->getUserRepo()->getById($rental->getOwnerId()));
+                $rental->getOwner()->setPassword('');
+                $rental->setAddress(RepoManager::getRM()->getAddressRepo()->getById($rental->getAddressId()));
+                $rental->setTypeLogement(RepoManager::getRM()->getTypeLogementRepo()->getById($rental->getTypeLogementId()));
+                $rental->getEquipments();
+            }
+            // Sinon on affiche les locations non proposées par l'utilisateur connecté en mode utilisateur
+        } else {
+            $rentals = RepoManager::getRM()->getRentalRepo()->getAllExceptById(Session::get(Session::USER)->getId());
 
             foreach ($rentals as $rental) {
                 $rental->setOwner(RepoManager::getRM()->getUserRepo()->getById($rental->getOwnerId()));

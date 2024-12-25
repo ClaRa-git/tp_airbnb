@@ -24,6 +24,7 @@
                         <div class="post-rental">
                             <a href="/reservations/<?php echo $reservation->getId(); ?>">
                                 <div><?php echo $reservation->getRental()->getTitle(); ?></div>
+                                <div><?php echo $tools::formatDate($reservation->getStringDateStart()); ?> - <?php echo $tools::formatDate($reservation->getStringDateEnd()); ?></div>
                             </a>
                             <?php if ($auth::isAuth() && $reservation->getUserId() == $auth::getUser()->getId()): ?>
                                 <div class="button">

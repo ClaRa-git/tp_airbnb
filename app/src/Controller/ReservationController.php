@@ -92,6 +92,14 @@ class ReservationController extends Controller
             $this->redirect($route);
         }
 
+        $reservations = RepoManager::getRM()->getReservationRepo()->getAllForRental($rental->getId());
+
+        // On vérifie si la location est déjà réservée pour ces dates
+        if (!Functions::isReservationPossible($reservations, $dateStart, $dateEnd)) {
+            $route = '/reservations/add/' . $id . '?error=La location est déjà réservée pour ces dates';
+            $this->redirect($route);
+        }
+
         $reservation = new Reservation([
             'dateStart' => $dateStart,
             'dateEnd' => $dateEnd,
@@ -190,7 +198,8 @@ class ReservationController extends Controller
 
         $data = [
             'title' => 'Mes réservations - PasChezMoi.com',
-            'reservations' => $reservations
+            'reservations' => $reservations,
+            'tools' => Functions::class
         ];
 
         $view->render($data);

@@ -21,11 +21,10 @@
             <?php if ($auth::isOwner()): ?>
                 <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName(); ?></div>
 
-                <?php if ($reservation->getUserId() == $user->getId()): ?>
-                    <div class="button">
-                        <a href="<?php printf('/reservations/%s/delete', $reservation->getId()) ?>">Supprimer</a>
-                    </div>
-                <?php endif; ?>
+            <?php elseif ($reservation->getUserId() == $auth::getUser()->getId()): ?>
+                <div class="button">
+                    <a href="<?php printf('/reservations/%s/delete', $reservation->getId()) ?>">Supprimer</a>
+                </div>
             <?php endif; ?>
         </div>
     </div>

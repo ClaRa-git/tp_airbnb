@@ -43,9 +43,8 @@ abstract class Functions
     {
         $date_array = explode(' ', $date);
         $date = explode('-', $date_array[0]);
-        $time = explode(':', $date_array[1]);
 
-        return $date[2] . '/' . $date[1] . '/' . $date[0] . ' à ' . $time[0] . 'h' . $time[1];
+        return $date[2] . '/' . $date[1] . '/' . $date[0];
     }
 
     /**
@@ -55,7 +54,7 @@ abstract class Functions
      */
     public static function dateIsSuperior($date): bool
     {
-        $today = date("Y-m-d H:i:s");
+        $today = date("Y-m-d");
         $timestamp_today = strtotime($today);
         $timestamp_date = strtotime($date);
 
@@ -76,5 +75,33 @@ abstract class Functions
 
         // On compare les deux dates, si la date de fin est supérieure à la date de début, on retourne true
         return $timestamp_dateEnd > $timestamp_dateStart;
+    }
+
+    /**
+     * Méthode qui teste si une réservation est possible pour les dates choisies
+     * @param array $reservations
+     * @param string $dateStart
+     * @param string $dateEnd
+     * @return bool
+     */
+    public static function isReservationPossible(array $reservations, string $dateStart, string $dateEnd): bool
+    {
+        $tsDateStart = strtotime($dateStart);
+        $tsDateEnd = strtotime($dateEnd);
+
+        foreach ($reservations as $reservation) {
+            $tsReservationStart = strtotime($reservation->getStringDateStart());
+            $tsReservationEnd = strtotime($reservation->getStringDateEnd());
+            if (
+                ($tsDateStart <= $tsReservationStart && $tsDateEnd >= $tsReservationStart) ||
+                ($tsDateStart <= $tsReservationEnd && $tsDateEnd >= $tsReservationEnd) ||
+                ($tsDateStart >= $tsReservationStart && $tsDateEnd <= $tsReservationEnd) ||
+                ($tsDateStart <= $tsReservationStart && $tsDateEnd >= $tsReservationEnd)
+            ) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

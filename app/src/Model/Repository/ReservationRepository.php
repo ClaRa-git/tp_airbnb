@@ -154,6 +154,40 @@ class ReservationRepository extends Repository
     }
 
     /**
+     * Récupère toutes les réservations pour une location par son id
+     * @param int $id
+     * @return array
+     */
+    public function getAllForRental(int $id): array
+    {
+        $query = sprintf(
+            'SELECT * FROM %s WHERE rental_id=:id',
+            $this->getTableName()
+        );
+
+        $sth = $this->pdo->prepare($query);
+
+        if (!$sth) {
+            return [];
+        }
+
+        $success = $sth->execute([
+            'id' => $id
+        ]);
+
+        if (!$success) {
+            return [];
+        }
+
+        $reservations = [];
+        while ($reservation = $sth->fetch()) {
+            $reservations[] = new Reservation($reservation);
+        }
+
+        return $reservations;
+    }
+
+    /**
      * Met à jour une réservation
      * @param Reservation $reservation
      * @return Reservation|null
