@@ -18,13 +18,14 @@
                 <a href="/<?php echo $reservation->getRental()->getImage() ?>"><img class="rental-picture" src="/<?php echo $reservation->getRental()->getImage() ?>" alt="Photo de la location"></a>
             </div>
             <div><?php echo $tools::formatDate($reservation->getStringDateStart()) ?> - <?php echo $tools::formatDate($reservation->getStringDateEnd()); ?></div>
-            <?php if ($user->getTypeAccount() == $userConst['ROLE_OWNER']): ?>
+            <?php if ($auth::isOwner()): ?>
                 <div><?php echo "Fait par : " . $reservation->getUser()->getFirstName() . " " . $reservation->getUser()->getLastName(); ?></div>
-            <?php endif; ?>
-            <?php if ($auth::isAuth() && $reservation->getUserId() == $user->getId()): ?>
-                <div class="button">
-                    <a href="<?php printf('/reservations/%s/delete', $reservation->getId()) ?>">Supprimer</a>
-                </div>
+
+                <?php if ($reservation->getUserId() == $user->getId()): ?>
+                    <div class="button">
+                        <a href="<?php printf('/reservations/%s/delete', $reservation->getId()) ?>">Supprimer</a>
+                    </div>
+                <?php endif; ?>
             <?php endif; ?>
         </div>
     </div>

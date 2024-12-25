@@ -193,12 +193,6 @@ class RentalController extends Controller
     public function displayRentals(): void
     {
         $view = new View('rental:user:list', auth_controller: AuthController::class);
-        $user = Session::get(Session::USER);
-        $userConst = [
-            'ROLE_USER' => User::ROLE_USER,
-            'ROLE_OWNER' => User::ROLE_OWNER,
-            'ROLE_ADMIN' => User::ROLE_ADMIN
-        ];
 
         // Si l'utilisateur n'est pas connecté ou si c'est un utilisateur, on affiche toutes les locations
         if (!AuthController::isAuth() || Session::get(Session::USER)->getTypeAccount() == User::ROLE_USER) {
@@ -227,9 +221,7 @@ class RentalController extends Controller
 
         $data = [
             'title' => 'Locations - PasChezMoi.com',
-            'rentals' => $rentals,
-            'user' => $user,
-            'userConst' => $userConst
+            'rentals' => $rentals
         ];
 
         $view->render($data);
@@ -253,12 +245,9 @@ class RentalController extends Controller
             return;
         }
 
-        $user = Session::get(Session::USER);
-
         $data = [
             'title' => $rental->getTitle() . ' - PasChezMoi.com',
-            'rental' => $rental,
-            'user' => $user
+            'rental' => $rental
         ];
 
         $view->render($data);

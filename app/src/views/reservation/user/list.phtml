@@ -9,7 +9,7 @@
 <h1>Réservations</h1>
 
 <div class="container-body">
-    <?php if ($user->getTypeAccount() == $userConst['ROLE_USER']): ?>
+    <?php if ($auth::isAuth() && !$auth::isOwner()): ?>
         <h2>Mes réservations</h2>
     <?php else: ?>
         <h2>Réservations de mes biens</h2>
@@ -25,7 +25,7 @@
                             <a href="/reservations/<?php echo $reservation->getId(); ?>">
                                 <div><?php echo $reservation->getRental()->getTitle(); ?></div>
                             </a>
-                            <?php if ($auth::isAuth() && $reservation->getUserId() == $user->getId()): ?>
+                            <?php if ($auth::isAuth() && $reservation->getUserId() == $auth::getUser()->getId()): ?>
                                 <div class="button">
                                     <a href="<?php printf('/reservations/%s/delete', $reservation->getId()) ?>">Supprimer</a>
                                 </div>
@@ -40,7 +40,7 @@
         <?php endif; ?>
     </div>
 
-    <?php if ($user->getTypeAccount() == $userConst['ROLE_USER']): ?>
+    <?php if ($auth::isAuth() && !$auth::isOwner()): ?>
         <div class="button">
             <a href="/">Faire une réservation</a>
         </div>

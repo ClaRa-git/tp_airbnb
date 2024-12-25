@@ -125,11 +125,6 @@ class ReservationController extends Controller
     public function show(int $id): void
     {
         $view = new View('reservation:user:detail', auth_controller: AuthController::class);
-        $userSession = Session::get(Session::USER);
-        $userConst = [
-            'ROLE_USER' => User::ROLE_USER,
-            'ROLE_OWNER' => User::ROLE_OWNER
-        ];
 
         $reservation = RepoManager::getRM()->getReservationRepo()->getById($id);
 
@@ -152,8 +147,6 @@ class ReservationController extends Controller
         $data = [
             'title' => 'Réservation - PasChezMoi.com',
             'reservation' => $reservation,
-            'user' => $userSession,
-            'userConst' => $userConst,
             'tools' => Functions::class
         ];
 
@@ -168,11 +161,6 @@ class ReservationController extends Controller
     public function displayReservations(): void
     {
         $view = new View('reservation:user:list', auth_controller: AuthController::class);
-        $userSession = Session::get(Session::USER);
-        $userConst = [
-            'ROLE_USER' => User::ROLE_USER,
-            'ROLE_OWNER' => User::ROLE_OWNER
-        ];
 
         // Récupération des réservations
         if (AuthController::isOwner()) {
@@ -202,9 +190,7 @@ class ReservationController extends Controller
 
         $data = [
             'title' => 'Mes réservations - PasChezMoi.com',
-            'reservations' => $reservations,
-            'user' => $userSession,
-            'userConst' => $userConst
+            'reservations' => $reservations
         ];
 
         $view->render($data);

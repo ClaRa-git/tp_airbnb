@@ -102,7 +102,7 @@ button {
 }
 
 .rental-picture {
-    max-width: 250px;
+    height: 150px;
 }
 
 .rentals-list {
@@ -153,8 +153,7 @@ button {
     margin-right: 5px;
 }
 
-.equipments-div
-{
+.equipments-div {
     text-align: center;
 }
 
@@ -209,4 +208,3 @@ select {
 }
 
 /* ----- Responsive ----- */
-

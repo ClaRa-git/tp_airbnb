@@ -7,7 +7,7 @@
 
 <div class="container-body">
     <?php if ($auth::isAuth()):
-        if ($user->getTypeAccount() == $userConst['ROLE_OWNER']): ?>
+        if ($auth::isOwner()): ?>
             <div>
                 <h2>Locations mise en ligne :</h2>
             </div>
