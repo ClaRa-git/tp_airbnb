@@ -30,3 +30,19 @@ security_pepper = "8d746680fd4d7cbac57fa9f033115fc52196" # Chaîne "poivre" pour
 - jane@doe.com
 - james@doe.com
 
+# Démarrage du projet
+
+1. Faire un docker compose up -d
+
+2. Faire :
+```bash
+cd app
+cp .env.dev .env
+```
+et le compléter avec les valeurs ci-dessus
+
+3. Faire à la racine du projet :
+```bash
+./composer-install
+./db-restore
+```
